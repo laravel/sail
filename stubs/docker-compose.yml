@@ -2,7 +2,7 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/docker/docker
+            context: ./vendor/laravel/sail/docker
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'

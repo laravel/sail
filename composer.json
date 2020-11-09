@@ -1,11 +1,11 @@
 {
-    "name": "laravel/docker",
+    "name": "laravel/sail",
     "description": "Docker files for running a basic Laravel application.",
     "keywords": ["laravel", "docker"],
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/laravel/docker/issues",
-        "source": "https://github.com/laravel/docker"
+        "issues": "https://github.com/laravel/sail/issues",
+        "source": "https://github.com/laravel/sail"
     },
     "authors": [
         {
