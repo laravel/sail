@@ -57,6 +57,11 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
         }
 
         Artisan::command('sail:install', function () {
+            copy(__DIR__.'/../stubs/docker-compose.yml', base_path('docker-compose.yml'));
+            copy(__DIR__.'/../stubs/sail.sh', base_path('sail.sh'));
+        })->purpose('Install Laravel Sail\'s default Docker Compose file');
+
+        Artisan::command('sail:publish', function () {
             $this->call('vendor:publish', ['--tag' => 'sail']);
 
             file_put_contents(base_path('docker-compose.yml'), str_replace(
@@ -64,7 +69,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 './docker',
                 file_get_contents(base_path('docker-compose.yml'))
             ));
-        });
+        })->purpose('Publish the Laravel Sail Docker files');
     }
 
     /**
@@ -74,6 +79,9 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function provides()
     {
-        return ['sail.install-command'];
+        return [
+            'sail.install-command',
+            'sail.publish-command',
+        ];
     }
 }
