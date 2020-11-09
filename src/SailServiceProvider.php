@@ -59,6 +59,8 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
         Artisan::command('sail:install', function () {
             copy(__DIR__.'/../stubs/docker-compose.yml', base_path('docker-compose.yml'));
             copy(__DIR__.'/../stubs/sail', base_path('sail'));
+
+            chmod(base_path('sail'), 0755);
         })->purpose('Install Laravel Sail\'s default Docker Compose file');
 
         Artisan::command('sail:publish', function () {
