@@ -20,7 +20,7 @@ Laravel Sail is inspired by and derived from [Vessel](https://github.com/shippin
 
 ## Contributing
 
-Thank you for considering contributing to Breeze! You can read the contribution guide [here](.github/CONTRIBUTING.md).
+Thank you for considering contributing to Sail! You can read the contribution guide [here](.github/CONTRIBUTING.md).
 
 ## Code of Conduct
 
@@ -28,8 +28,8 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 ## Security Vulnerabilities
 
-Please review [our security policy](https://github.com/laravel/breeze/security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/laravel/sail/security/policy) on how to report security vulnerabilities.
 
 ## License
 
-Laravel Breeze is open-sourced software licensed under the [MIT license](LICENSE.md).
+Laravel Sail is open-sourced software licensed under the [MIT license](LICENSE.md).
