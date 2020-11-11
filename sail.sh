@@ -26,6 +26,15 @@ elif [ "$MACHINE" == "mac" ]; then
     SEDCMD="sed -i .bak"
 fi
 
+# Ensure that Docker is running...
+docker info > /dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+    echo "Docker is not running."
+
+    exit 1
+fi
+
 # Determine if Sail is currently up...
 PSRESULT="$(docker-compose ps -q)"
 
