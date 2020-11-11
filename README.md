@@ -18,6 +18,10 @@ Sail provides a Docker powered local development experience for Laravel that is 
 
 Laravel Sail is inspired by and derived from [Vessel](https://github.com/shipping-docker/vessel) by [Chris Fidao](https://github.com/fideloper). If you're looking for a thorough introduction to Docker, check out Chris' course: [Shipping Docker](https://serversforhackers.com/shipping-docker).
 
+## Official Documentation
+
+Documentation for Sail can be found on the [Laravel website](https://laravel.com/docs/installation).
+
 ## Contributing
 
 Thank you for considering contributing to Sail! You can read the contribution guide [here](.github/CONTRIBUTING.md).
