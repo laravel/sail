@@ -60,11 +60,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php "$@"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Proxy Composer commands to the "composer" binary on the application container...
@@ -77,11 +75,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 composer "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                composer "$@"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Proxy Artisan commands to the "artisan" binary on the application container...
@@ -94,11 +90,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php artisan "$@"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Proxy the "test" command to the "php artisan test" Artisan command...
@@ -111,11 +105,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan test "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php artisan test "$@"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Proxy the "dusk" command to the "php artisan dusk" Artisan command...
@@ -129,7 +121,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan dusk "$@"
         else
-            echo "Start Sail in the backgroud before running your Dusk tests: './sail up' or './sail up -d'"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -144,11 +136,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan tinker
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php artisan tinker
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Proxy Node commands to the "node" binary on the application container...
@@ -161,11 +151,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 node "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                node "$@"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Proxy NPM commands to the "npm" binary on the application container...
@@ -178,11 +166,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 npm "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                npm "$@"
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Initiate a MySQL CLI terminal session within the "mysql" container...
@@ -194,8 +180,9 @@ if [ $# -gt 0 ]; then
                 mysql \
                 bash -c 'MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -u root $MYSQL_DATABASE'
         else
-            echo "Error: This command can only be run while a MySQL container is running mysqld (mysql server)."
-            echo "This command cannot run the server and the mysql client at the same time."
+            echo "Sail is not running: './sail up' or './sail up -d'"
+
+            exit 1
         fi
 
     # Initiate a Bash shell within the application container...
@@ -208,11 +195,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 bash
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                bash
+            echo "Sail is not running: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Pass unknown commands to the "docker-compose" binary...
