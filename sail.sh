@@ -2,6 +2,9 @@
 
 UNAMEOUT="$(uname -s)"
 
+WHITE='\033[1;37m'
+NC='\033[0m'
+
 # Verify operating system is supported...
 case "${UNAMEOUT}" in
     Linux*)             MACHINE=linux;;
@@ -30,7 +33,7 @@ fi
 docker info > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
-    echo "Docker is not running."
+    echo -e "${WHITE}Docker is not running.${NC}"
 
     exit 1
 fi
@@ -52,9 +55,6 @@ fi
 
 # Function that outputs Sail is not running...
 function sail_is_not_running {
-    WHITE='\033[1;37m'
-    NC='\033[0m'
-
     echo -e "${WHITE}Sail is not running.${NC}"
     echo ""
     echo -e "${WHITE}You may Sail using the following commands:${NC} './sail up' or './sail up -d'"
