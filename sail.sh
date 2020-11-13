@@ -60,7 +60,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -75,7 +77,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 composer "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -90,7 +94,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -105,7 +111,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan test "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -121,7 +129,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan dusk "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -136,7 +146,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan tinker
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -151,7 +163,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 node "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -166,7 +180,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 npm "$@"
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -180,7 +196,9 @@ if [ $# -gt 0 ]; then
                 mysql \
                 bash -c 'MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -u root $MYSQL_DATABASE'
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
@@ -195,7 +213,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 bash
         else
-            echo "Sail is not running: './sail up' or './sail up -d'"
+            echo "Sail is not running."
+            echo ""
+            echo "Start Sail using: './sail up' or './sail up -d'"
 
             exit 1
         fi
