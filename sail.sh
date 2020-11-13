@@ -129,12 +129,9 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan dusk "$@"
         else
-            docker-compose run --rm \
-                -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
-                $APP_SERVICE \
-                php artisan dusk "$@"
+            echo "Start Sail in the backgroud before running your Dusk tests: './sail up' or './sail up -d'"
 
-            docker-compose down > /dev/null 2>&1
+            exit 1
         fi
 
     # Initiate a Laravel Tinker session within the application container...
