@@ -50,6 +50,12 @@ services:
             - 'sailredis:/data'
         networks:
             - sail
+    # memcached:
+    #     image: 'memcached:alpine'
+    #     ports:
+    #         - '11211:11211'
+    #     networks:
+    #         - sail
     mailhog:
         image: 'mailhog/mailhog:latest'
         ports:
