@@ -2,7 +2,7 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/docker
+            context: ./vendor/laravel/sail/runtimes/7.4
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -19,6 +19,7 @@ services:
         depends_on:
             - mysql
             - redis
+            # - selenium
     # selenium:
     #     image: 'selenium/standalone-chrome'
     #     volumes:
@@ -49,6 +50,12 @@ services:
             - 'sailredis:/data'
         networks:
             - sail
+    # memcached:
+    #     image: 'memcached:alpine'
+    #     ports:
+    #         - '11211:11211'
+    #     networks:
+    #         - sail
     mailhog:
         image: 'mailhog/mailhog:latest'
         ports:

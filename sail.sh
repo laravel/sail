@@ -2,6 +2,9 @@
 
 UNAMEOUT="$(uname -s)"
 
+WHITE='\033[1;37m'
+NC='\033[0m'
+
 # Verify operating system is supported...
 case "${UNAMEOUT}" in
     Linux*)             MACHINE=linux;;
@@ -26,14 +29,38 @@ elif [ "$MACHINE" == "mac" ]; then
     SEDCMD="sed -i .bak"
 fi
 
+# Ensure that Docker is running...
+docker info > /dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+    echo -e "${WHITE}Docker is not running.${NC}"
+
+    exit 1
+fi
+
 # Determine if Sail is currently up...
 PSRESULT="$(docker-compose ps -q)"
 
-if [ ! -z "$PSRESULT" ]; then
+docker-compose ps | grep 'Exit' &> /dev/null
+
+if [ $? == 0 ]; then
+    docker-compose down > /dev/null 2>&1
+
+    EXEC="no"
+elif [ ! -z "$PSRESULT" ]; then
     EXEC="yes"
 else
     EXEC="no"
 fi
+
+# Function that outputs Sail is not running...
+function sail_is_not_running {
+    echo -e "${WHITE}Sail is not running.${NC}"
+    echo ""
+    echo -e "${WHITE}You may Sail using the following commands:${NC} './sail up' or './sail up -d'"
+
+    exit 1
+}
 
 if [ $# -gt 0 ]; then
     # Source the ".env" file so Laravel's environment variables are available...
@@ -51,11 +78,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Proxy Composer commands to the "composer" binary on the application container...
@@ -68,11 +91,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 composer "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                composer "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Proxy Artisan commands to the "artisan" binary on the application container...
@@ -85,11 +104,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php artisan "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Proxy the "test" command to the "php artisan test" Artisan command...
@@ -102,11 +117,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan test "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php artisan test "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Proxy the "dusk" command to the "php artisan dusk" Artisan command...
@@ -120,12 +131,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan dusk "$@"
         else
-            docker-compose run --rm \
-                -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
-                $APP_SERVICE \
-                php artisan dusk "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Initiate a Laravel Tinker session within the application container...
@@ -138,11 +144,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 php artisan tinker
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                php artisan tinker
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Proxy Node commands to the "node" binary on the application container...
@@ -155,11 +157,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 node "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                node "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Proxy NPM commands to the "npm" binary on the application container...
@@ -172,11 +170,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 npm "$@"
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                npm "$@"
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Initiate a MySQL CLI terminal session within the "mysql" container...
@@ -188,8 +182,7 @@ if [ $# -gt 0 ]; then
                 mysql \
                 bash -c 'MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -u root $MYSQL_DATABASE'
         else
-            echo "Error: This command can only be run while a MySQL container is running mysqld (mysql server)."
-            echo "This command cannot run the server and the mysql client at the same time."
+            sail_is_not_running
         fi
 
     # Initiate a Bash shell within the application container...
@@ -202,11 +195,7 @@ if [ $# -gt 0 ]; then
                 $APP_SERVICE \
                 bash
         else
-            docker-compose run --rm \
-                $APP_SERVICE \
-                bash
-
-            docker-compose down > /dev/null 2>&1
+            sail_is_not_running
         fi
 
     # Pass unknown commands to the "docker-compose" binary...
