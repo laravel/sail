@@ -41,7 +41,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
         }
 
         $this->publishes([
-            __DIR__.'/../docker' => base_path('docker'),
+            __DIR__.'/../runtimes' => base_path('docker'),
         ], 'sail');
     }
 
@@ -67,7 +67,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
             $this->call('vendor:publish', ['--tag' => 'sail']);
 
             file_put_contents(base_path('docker-compose.yml'), str_replace(
-                './vendor/laravel/sail/docker/7.4',
+                './vendor/laravel/sail/runtimes/7.4',
                 './docker/7.4',
                 file_get_contents(base_path('docker-compose.yml'))
             ));
