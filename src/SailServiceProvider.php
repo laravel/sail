@@ -61,17 +61,35 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
             copy(__DIR__.'/../stubs/sail', base_path('sail'));
 
             chmod(base_path('sail'), 0755);
+
+            $this->updateEnvironmentVariables();
         })->purpose('Install Laravel Sail\'s default Docker Compose file');
 
         Artisan::command('sail:publish', function () {
             $this->call('vendor:publish', ['--tag' => 'sail']);
 
             file_put_contents(base_path('docker-compose.yml'), str_replace(
-                './vendor/laravel/sail/runtimes/7.4',
-                './docker/7.4',
+                './vendor/laravel/sail/runtimes/8.0',
+                './docker/8.0',
                 file_get_contents(base_path('docker-compose.yml'))
             ));
         })->purpose('Publish the Laravel Sail Docker files');
+    }
+
+    /**
+     * Update the application's environment variables to use Sail appropriate values.
+     *
+     * @return void
+     */
+    protected function updateEnvironmentVariables()
+    {
+        $environment = file_get_contents(base_path('.env'));
+
+        $environment = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=mysql', $environment);
+        $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=redis');
+        $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis');
+
+        file_put_contents(base_path('.env'), $environment);
     }
 
     /**
