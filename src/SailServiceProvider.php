@@ -36,12 +36,12 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function configurePublishing()
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             return;
         }
 
         $this->publishes([
-            __DIR__.'/../runtimes' => base_path('docker'),
+            __DIR__ . '/../runtimes' => base_path('docker'),
         ], 'sail');
     }
 
@@ -52,21 +52,37 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function registerCommands()
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             return;
         }
 
         Artisan::command('sail:install', function () {
-            copy(__DIR__.'/../stubs/docker-compose.yml', base_path('docker-compose.yml'));
-            copy(__DIR__.'/../stubs/sail', base_path('sail'));
+            copy(__DIR__ . '/../stubs/docker-compose.yml', base_path('docker-compose.yml'));
+            copy(__DIR__ . '/../stubs/sail', base_path('sail'));
 
             chmod(base_path('sail'), 0755);
+
+            if (!is_file('.env') && is_file('.env.example')) {
+                copy('.env.example', '.env');
+                $this->call('key:generate');
+            }
+
 
             $environment = file_get_contents(base_path('.env'));
 
             $environment = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=mysql', $environment);
-            $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=redis', $environment);
-            $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
+
+
+            if (strpos($environment, "MEMCACHED_HOST=127.0.0.1"))
+                $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=redis', $environment);
+            else
+                $environment = $environment . "\nMEMCACHED_HOST=redis";
+
+            if (strpos($environment, "REDIS_HOST=127.0.0.1"))
+                $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
+            else
+                $environment = $environment . "\nREDIS_HOST=redis";
+
 
             file_put_contents(base_path('.env'), $environment);
         })->purpose('Install Laravel Sail\'s default Docker Compose file');
