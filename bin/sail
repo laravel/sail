@@ -123,6 +123,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
+                -e "APP_URL=http://laravel.test" \
                 -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
                 "$APP_SERVICE" \
                 php artisan dusk "$@"
