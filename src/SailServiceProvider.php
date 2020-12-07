@@ -9,16 +9,6 @@ use Illuminate\Support\ServiceProvider;
 class SailServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
      * Bootstrap any application services.
      *
      * @return void
@@ -27,22 +17,6 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->registerCommands();
         $this->configurePublishing();
-    }
-
-    /**
-     * Configure publishing for the package.
-     *
-     * @return void
-     */
-    protected function configurePublishing()
-    {
-        if (! $this->app->runningInConsole()) {
-            return;
-        }
-
-        $this->publishes([
-            __DIR__.'/../runtimes' => base_path('docker'),
-        ], 'sail');
     }
 
     /**
@@ -80,6 +54,22 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 file_get_contents(base_path('docker-compose.yml'))
             ));
         })->purpose('Publish the Laravel Sail Docker files');
+    }
+
+    /**
+     * Configure publishing for the package.
+     *
+     * @return void
+     */
+    protected function configurePublishing()
+    {
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
+        $this->publishes([
+            __DIR__.'/../runtimes' => base_path('docker'),
+        ], 'sail');
     }
 
     /**
