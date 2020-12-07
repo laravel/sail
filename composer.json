@@ -18,6 +18,9 @@
         "illuminate/contracts": "^8.0|^9.0",
         "illuminate/support": "^8.0|^9.0"
     },
+    "bin": [
+        "bin/sail"
+    ],
     "autoload": {
         "psr-4": {
             "Laravel\\Sail\\": "src/"
