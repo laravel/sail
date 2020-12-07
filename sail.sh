@@ -24,15 +24,13 @@ export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
 
 if [ "$MACHINE" == "linux" ]; then
-    SEDCMD="sed -i"
+    export SEDCMD="sed -i"
 elif [ "$MACHINE" == "mac" ]; then
-    SEDCMD="sed -i .bak"
+    export SEDCMD="sed -i .bak"
 fi
 
 # Ensure that Docker is running...
-docker info > /dev/null 2>&1
-
-if [ $? -ne 0 ]; then
+if ! docker info > /dev/null 2>&1; then
     echo -e "${WHITE}Docker is not running.${NC}"
 
     exit 1
@@ -41,13 +39,11 @@ fi
 # Determine if Sail is currently up...
 PSRESULT="$(docker-compose ps -q)"
 
-docker-compose ps | grep 'Exit' &> /dev/null
-
-if [ $? == 0 ]; then
+if docker-compose ps | grep 'Exit' &> /dev/null; then
     docker-compose down > /dev/null 2>&1
 
     EXEC="no"
-elif [ ! -z "$PSRESULT" ]; then
+elif [ -n "$PSRESULT" ]; then
     EXEC="yes"
 else
     EXEC="no"
@@ -75,7 +71,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 php "$@"
         else
             sail_is_not_running
@@ -88,7 +84,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 composer "$@"
         else
             sail_is_not_running
@@ -101,7 +97,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 php artisan "$@"
         else
             sail_is_not_running
@@ -114,7 +110,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 php artisan test "$@"
         else
             sail_is_not_running
@@ -128,7 +124,7 @@ if [ $# -gt 0 ]; then
             docker-compose exec \
                 -u sail \
                 -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 php artisan dusk "$@"
         else
             sail_is_not_running
@@ -141,7 +137,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 php artisan tinker
         else
             sail_is_not_running
@@ -154,7 +150,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 node "$@"
         else
             sail_is_not_running
@@ -167,7 +163,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 npm "$@"
         else
             sail_is_not_running
@@ -180,7 +176,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 mysql \
-                bash -c 'MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -u root $MYSQL_DATABASE'
+                bash -c "MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root ${MYSQL_DATABASE}"
         else
             sail_is_not_running
         fi
@@ -192,7 +188,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail \
-                $APP_SERVICE \
+                "$APP_SERVICE" \
                 bash
         else
             sail_is_not_running
