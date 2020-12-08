@@ -20,7 +20,7 @@ Laravel Sail is inspired by and derived from [Vessel](https://github.com/shippin
 
 ## Official Documentation
 
-Documentation for Sail can be found on the [Laravel website](https://laravel.com/docs/installation).
+Documentation for Sail can be found on the [Laravel website](https://laravel.com/docs/8.x/sail).
 
 ## Contributing
 
