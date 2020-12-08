@@ -15,8 +15,10 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function boot()
     {
-        $this->registerCommands();
-        $this->configurePublishing();
+        if ($this->app->runningInConsole()) {
+            $this->registerCommands();
+            $this->configurePublishing();
+        }
     }
 
     /**
@@ -26,10 +28,6 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function registerCommands()
     {
-        if (! $this->app->runningInConsole()) {
-            return;
-        }
-
         Artisan::command('sail:install', function () {
             copy(__DIR__.'/../stubs/docker-compose.yml', base_path('docker-compose.yml'));
 
@@ -60,10 +58,6 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function configurePublishing()
     {
-        if (! $this->app->runningInConsole()) {
-            return;
-        }
-
         $this->publishes([
             __DIR__.'/../runtimes' => base_path('docker'),
         ], 'sail');
