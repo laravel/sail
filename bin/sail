@@ -195,6 +195,19 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Share the site...
+    elif [ "$1" == "share" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker run --init beyondcodegmbh/expose-server share http://host.docker.internal:"$APP_PORT" \
+            --server-host=laravel-sail.site \
+            --server-port=8080 \
+            "$@"
+        else
+            sail_is_not_running
+        fi
+
     # Pass unknown commands to the "docker-compose" binary...
     else
         docker-compose "$@"
