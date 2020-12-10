@@ -1,3 +1,4 @@
+# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
     laravel.test:
@@ -31,7 +32,7 @@ services:
     mysql:
         image: 'mysql:8.0'
         ports:
-            - '${DB_PORT}:3306'
+            - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_DATABASE: '${DB_DATABASE}'
@@ -45,7 +46,7 @@ services:
     redis:
         image: 'redis:alpine'
         ports:
-            - '${REDIS_PORT}:6379'
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
             - 'sailredis:/data'
         networks:
