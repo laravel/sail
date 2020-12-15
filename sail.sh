@@ -198,6 +198,17 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+     # Refresh the current stack
+    elif [ "$1" == "refresh" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose build \
+            && docker-compose restart
+        else
+            sail_is_not_running
+        fi
+
     # Pass unknown commands to the "docker-compose" binary...
     else
         docker-compose "$@"
