@@ -74,7 +74,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 php "$@"
         else
@@ -87,7 +87,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 composer "$@"
         else
@@ -100,7 +100,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 php artisan "$@"
         else
@@ -113,7 +113,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 php artisan test "$@"
         else
@@ -126,7 +126,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
                 $APP_SERVICE \
                 php artisan dusk "$@"
@@ -140,7 +140,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 php artisan tinker
         else
@@ -153,7 +153,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 node "$@"
         else
@@ -166,7 +166,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 npm "$@"
         else
@@ -191,7 +191,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -T -u sail \
                 $APP_SERVICE \
                 bash
         else
