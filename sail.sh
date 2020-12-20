@@ -173,6 +173,19 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Proxy Yarn commands to the "yarn" binary on the application container...
+    elif [ "$1" == "yarn" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                -u sail \
+                $APP_SERVICE \
+                yarn "$@"
+        else
+            sail_is_not_running
+        fi
+
     # Initiate a MySQL CLI terminal session within the "mysql" container...
     elif [ "$1" == "mysql" ]; then
         shift 1
