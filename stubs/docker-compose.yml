@@ -64,6 +64,18 @@ services:
             - 8025:8025
         networks:
             - sail
+    # phpmyadmin:
+    #     image: phpmyadmin/phpmyadmin
+    #     restart: unless-stopped
+    #     environment:
+    #         PMA_HOST: mysql
+    #         PMA_USER: '${DB_USERNAME}'
+    #         PMA_PASSWORD: '${DB_PASSWORD}'
+    #         PMA_PORT: 3306
+    #     ports:
+    #         - 8082:80
+    #     networks:
+    #         - sail
 networks:
     sail:
         driver: bridge
