@@ -27,8 +27,6 @@ services:
     #         - '/dev/shm:/dev/shm'
     #     networks:
     #         - sail
-    #     depends_on:
-    #         - laravel.test
     mysql:
         image: 'mysql:8.0'
         ports:
