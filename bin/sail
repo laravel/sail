@@ -215,16 +215,9 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-
-            # This does not work, somehow docker-compose env variables are not passed here (but it's the same for MySQL above, try to echo "MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root ${MYSQL_DATABASE}")
-            # docker-compose exec \
-            #     pgsql \
-            #     bash -c "PGPASSWORD=${PGPASSWORD} psql -U root ${POSTGRES_DATABASE}"
-
-            # but we can use project's env variables with no prob
             docker-compose exec \
-                pgsql \
-                psql -U ${DB_USERNAME} -h localhost ${DB_DATABASE} "$@"
+                 pgsql \
+                 bash -c 'PGPASSWORD=${PGPASSWORD} psql -U root ${POSTGRES_DATABASE}'
         else
             sail_is_not_running
         fi
