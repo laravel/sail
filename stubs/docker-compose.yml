@@ -19,6 +19,7 @@ services:
             - sail
         depends_on:
             - mysql
+            # - pgsql
             - redis
             # - selenium
     # selenium:
@@ -27,6 +28,8 @@ services:
     #         - '/dev/shm:/dev/shm'
     #     networks:
     #         - sail
+    #     depends_on:
+    #         - laravel.test
     mysql:
         image: 'mysql:8.0'
         ports:
@@ -43,6 +46,19 @@ services:
             - sail
         healthcheck:
           test: ["CMD", "mysqladmin", "ping"]
+#    pgsql:
+#        image: postgres:12
+#        ports:
+#            - '${FORWARD_DB_PORT:-5432}:5432'
+#        environment:
+#            PGPASSWORD: '${DB_PASSWORD}'
+#            POSTGRES_DATABASE: '${DB_DATABASE}'
+#            POSTGRES_USER: '${DB_USERNAME}'
+#            POSTGRES_PASSWORD: '${DB_PASSWORD:secret}'
+#        volumes:
+#            - 'sailpostgresql:/var/lib/postgresql/data'
+#        networks:
+#            - sail
     redis:
         image: 'redis:alpine'
         ports:
@@ -72,5 +88,7 @@ networks:
 volumes:
     sailmysql:
         driver: local
+#    sailpostgresql:
+#        driver: local
     sailredis:
         driver: local
