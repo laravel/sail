@@ -14,7 +14,7 @@ esac
 
 if [ "$MACHINE" == "UNKNOWN" ]; then
     echo "Unsupported operating system [$(uname -s)]. Laravel Sail supports macOS, Linux, and Windows (WSL2)."
-    
+
     exit 1
 fi
 
@@ -181,6 +181,19 @@ if [ $# -gt 0 ]; then
                 -u sail \
                 "$APP_SERVICE" \
                 npx "$@"
+        else
+            sail_is_not_running
+        fi
+
+    # Proxy YARN commands to the "yarn" binary on the application container...
+    elif [ "$1" == "yarn" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                -u sail \
+                "$APP_SERVICE" \
+                yarn "$@"
         else
             sail_is_not_running
         fi
