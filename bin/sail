@@ -198,7 +198,7 @@ if [ $# -gt 0 ]; then
         fi
 
     # Initiate a Bash shell within the application container...
-    elif [ "$1" == "shell" ]; then
+    elif [ "$1" == "shell" ] || [ "$1" == "bash" ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
