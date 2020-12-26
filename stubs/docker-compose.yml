@@ -38,7 +38,7 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         volumes:
-            - 'sailmysql:/var/lib/mysql'
+            - 'sailmysql:/var/lib/mysql:cached'
         networks:
             - sail
     redis:
@@ -46,7 +46,7 @@ services:
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sailredis:/data'
+            - 'sailredis:/data:cached'
         networks:
             - sail
     # memcached:
