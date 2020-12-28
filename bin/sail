@@ -13,7 +13,7 @@ case "${UNAMEOUT}" in
 esac
 
 if [ "$MACHINE" == "UNKNOWN" ]; then
-    echo "Unsupported operating system [$(uname -s)]. Laravel Sail supports macOS, Linux, and Windows (WSL2)."
+    echo "Unsupported operating system [$(uname -s)]. Laravel Sail supports macOS, Linux, and Windows (WSL2)." >&2
 
     exit 1
 fi
@@ -33,7 +33,7 @@ fi
 
 # Ensure that Docker is running...
 if ! docker info > /dev/null 2>&1; then
-    echo -e "${WHITE}Docker is not running.${NC}"
+    echo -e "${WHITE}Docker is not running.${NC}" >&2
 
     exit 1
 fi
@@ -53,9 +53,9 @@ fi
 
 # Function that outputs Sail is not running...
 function sail_is_not_running {
-    echo -e "${WHITE}Sail is not running.${NC}"
-    echo ""
-    echo -e "${WHITE}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'"
+    echo -e "${WHITE}Sail is not running.${NC}" >&2
+    echo "" >&2
+    echo -e "${WHITE}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
 
     exit 1
 }
