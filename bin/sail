@@ -223,7 +223,7 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
-    # Initiate a root bash shell within the application container...
+    # Initiate a root user Bash shell within the application container...
     elif [ "$1" == "root-shell" ] ; then
         shift 1
 
