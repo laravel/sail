@@ -38,11 +38,19 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
-# Determine if Sail is currently up...
-PSRESULT="$(docker-compose ps -q)"
+# Append yaml files from sail.d to extends base docker-compose.yml
+YAML_FILES="-f docker-compose.yml"
+if [[ -d "sail.d" ]]; then
+    for yml in "sail.d"/*.yml; do
+        YAML_FILES="$YAML_FILES -f $yml"
+    done
+fi
 
-if docker-compose ps | grep 'Exit' &> /dev/null; then
-    docker-compose down > /dev/null 2>&1
+# Determine if Sail is currently up...
+PSRESULT="$(docker-compose $YAML_FILES ps -q)"
+
+if docker-compose $YAML_FILES ps | grep 'Exit' &> /dev/null; then
+    docker-compose $YAML_FILES down > /dev/null 2>&1
 
     EXEC="no"
 elif [ -n "$PSRESULT" ]; then
@@ -71,7 +79,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 php "$@"
@@ -84,7 +92,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 composer "$@"
@@ -97,7 +105,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 php artisan "$@"
@@ -110,7 +118,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 php artisan test "$@"
@@ -123,7 +131,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 -e "APP_URL=http://laravel.test" \
                 -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
@@ -138,7 +146,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 php artisan tinker
@@ -151,7 +159,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 node "$@"
@@ -164,7 +172,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 npm "$@"
@@ -177,7 +185,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 npx "$@"
@@ -190,7 +198,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 yarn "$@"
@@ -203,7 +211,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 mysql \
                 bash -c 'MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
         else
@@ -215,7 +223,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 -u sail \
                 "$APP_SERVICE" \
                 bash
@@ -228,7 +236,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec \
+            docker-compose $YAML_FILES exec \
                 "$APP_SERVICE" \
                 bash
         else
@@ -250,8 +258,8 @@ if [ $# -gt 0 ]; then
 
     # Pass unknown commands to the "docker-compose" binary...
     else
-        docker-compose "$@"
+        docker-compose $YAML_FILES "$@"
     fi
 else
-    docker-compose ps
+    docker-compose $YAML_FILES ps
 fi
