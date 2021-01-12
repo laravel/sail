@@ -210,6 +210,18 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Initiate a PostgreSQL CLI terminal session within the "pgsql" container...
+    elif [ "$1" == "psql" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                 pgsql \
+                 bash -c 'PGPASSWORD=${PGPASSWORD} psql -U ${POSTGRES_USER} ${POSTGRES_DB}'
+        else
+            sail_is_not_running
+        fi
+
     # Initiate a Bash shell within the application container...
     elif [ "$1" == "shell" ] || [ "$1" == "bash" ]; then
         shift 1
