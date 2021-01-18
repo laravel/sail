@@ -13,6 +13,7 @@ services:
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
+            SUPERVISORD_ARTISAN_COMMAND: 'serve --host=0.0.0.0 --port=80'
         volumes:
             - '.:/var/www/html'
         networks:
@@ -22,6 +23,24 @@ services:
             # - pgsql
             - redis
             # - selenium
+#    cron:
+#      build:
+#        context: ./docker/8.0
+#        dockerfile: Dockerfile
+#        args:
+#          WWWGROUP: '${WWWGROUP}'
+#      image: sail-8.0/app
+#      environment:
+#        WWWUSER: '${WWWUSER}'
+#        LARAVEL_SAIL: 1
+#        SUPERVISORD_ARTISAN_COMMAND: 'schedule:work'
+#      volumes:
+#        - '.:/var/www/html'
+#      networks:
+#        - sail
+#      depends_on:
+#        - mysql
+#        - redis
     # selenium:
     #     image: 'selenium/standalone-chrome'
     #     volumes:
