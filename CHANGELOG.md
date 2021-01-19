@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.1.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.2.0...1.x)
+
+
+## [v1.1.0 (2021-01-19](https://github.com/laravel/sail/compare/v1.1.0...v1.2.0)
+
+### Added
+- PostgreSQL Support ([#28](https://github.com/laravel/sail/pull/28))
+
+### Changed
+- Add healthcheck for mysql and redis service in docker-compose ([#36](https://github.com/laravel/sail/pull/36))
+- Update Mailhog env variables ([bf10c80](https://github.com/laravel/sail/commit/bf10c804057f8d0be615c71acbc46c7328cd652c))
 
 
 ## [v1.1.0 (2021-01-05)](https://github.com/laravel/sail/compare/v1.0.1...v1.1.0)
