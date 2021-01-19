@@ -3,7 +3,7 @@
 ## [Unreleased](https://github.com/laravel/sail/compare/v1.2.0...1.x)
 
 
-## [v1.1.0 (2021-01-19](https://github.com/laravel/sail/compare/v1.1.0...v1.2.0)
+## [v1.2.0 (2021-01-19](https://github.com/laravel/sail/compare/v1.1.0...v1.2.0)
 
 ### Added
 - PostgreSQL Support ([#28](https://github.com/laravel/sail/pull/28))
