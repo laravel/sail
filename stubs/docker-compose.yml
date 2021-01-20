@@ -57,6 +57,8 @@ services:
 #            - 'sailpostgresql:/var/lib/postgresql/data'
 #        networks:
 #            - sail
+#        healthcheck:
+#          test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
     redis:
         image: 'redis:alpine'
         ports:
