@@ -23,8 +23,8 @@ export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
 export APP_USER=${APP_USER:-"sail"}
 export DB_PORT=${DB_PORT:-3306}
-export MYSQL_SERVICE=${MYSQL_SERVICE:-mysql}
-export PGSQL_SERVICE=${PGSQL_SERVICE:-pgsql}
+export MYSQL_SERVICE=${MYSQL_SERVICE:-"mysql"}
+export PGSQL_SERVICE=${PGSQL_SERVICE:-"pgsql"}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
 
