@@ -220,7 +220,7 @@ if [ $# -gt 0 ]; then
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 mysql \
-                bash -c 'MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
+                bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
         else
             sail_is_not_running
         fi
