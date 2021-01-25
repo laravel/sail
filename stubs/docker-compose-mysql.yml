@@ -19,7 +19,6 @@ services:
             - sail
         depends_on:
             - mysql
-            # - pgsql
             - redis
             # - selenium
     # selenium:
@@ -44,21 +43,6 @@ services:
             - sail
         healthcheck:
           test: ["CMD", "mysqladmin", "ping"]
-#    pgsql:
-#        image: postgres:13
-#        ports:
-#            - '${FORWARD_DB_PORT:-5432}:5432'
-#        environment:
-#            PGPASSWORD: '${DB_PASSWORD:-secret}'
-#            POSTGRES_DB: '${DB_DATABASE}'
-#            POSTGRES_USER: '${DB_USERNAME}'
-#            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-#        volumes:
-#            - 'sailpostgresql:/var/lib/postgresql/data'
-#        networks:
-#            - sail
-#        healthcheck:
-#          test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
     redis:
         image: 'redis:alpine'
         ports:
@@ -88,7 +72,5 @@ networks:
 volumes:
     sailmysql:
         driver: local
-#    sailpostgresql:
-#        driver: local
     sailredis:
         driver: local

@@ -29,11 +29,18 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerCommands()
     {
         Artisan::command('sail:install', function () {
-            copy(__DIR__.'/../stubs/docker-compose.yml', base_path('docker-compose.yml'));
-
             $environment = file_get_contents(base_path('.env'));
 
-            $environment = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=mysql', $environment);
+            if(str_contains($environment, 'DB_CONNECTION=pgsql')){
+                copy(__DIR__.'/../stubs/docker-compose-pgsql.yml', base_path('docker-compose.yml'));
+
+                $environment = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=pgsql', $environment);
+            }else {
+                copy(__DIR__.'/../stubs/docker-compose-mysql.yml', base_path('docker-compose.yml'));
+
+                $environment = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=mysql', $environment);
+            }
+
             $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=memcached', $environment);
             $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
 
