@@ -1,9 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.2.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.3.0...1.x)
 
 
-## [v1.2.0 (2021-01-19](https://github.com/laravel/sail/compare/v1.1.0...v1.2.0)
+## [v1.3.0 (2021-01-26)](https://github.com/laravel/sail/compare/v1.2.0...v1.3.0)
+
+### Added
+- Add support for `dusk:fails` ([#43](https://github.com/laravel/sail/pull/43))
+
+### Fixed
+- Append PostgreSQL HealthCheck ([#41](https://github.com/laravel/sail/pull/41))
+- Use non-root MySQL password for `sail mysql` ([#45](https://github.com/laravel/sail/pull/45))
+
+
+## [v1.2.0 (2021-01-19)](https://github.com/laravel/sail/compare/v1.1.0...v1.2.0)
 
 ### Added
 - PostgreSQL Support ([#28](https://github.com/laravel/sail/pull/28))
