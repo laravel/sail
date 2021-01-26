@@ -1,18 +1,20 @@
-# Laravel Sail
+<p align="center"><img src="/art/logo.svg" alt="Logo Laravel Sail"></p>
 
-<a href="https://packagist.org/packages/laravel/sail">
-    <img src="https://img.shields.io/packagist/dt/laravel/sail" alt="Total Downloads">
-</a>
-<a href="https://packagist.org/packages/laravel/sail">
-    <img src="https://img.shields.io/packagist/v/laravel/sail" alt="Latest Stable Version">
-</a>
-<a href="https://packagist.org/packages/laravel/sail">
-    <img src="https://img.shields.io/packagist/l/laravel/sail" alt="License">
-</a>
+<p align="center">
+    <a href="https://packagist.org/packages/laravel/sail">
+        <img src="https://img.shields.io/packagist/dt/laravel/sail" alt="Total Downloads">
+    </a>
+    <a href="https://packagist.org/packages/laravel/sail">
+        <img src="https://img.shields.io/packagist/v/laravel/sail" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/laravel/sail">
+        <img src="https://img.shields.io/packagist/l/laravel/sail" alt="License">
+    </a>
+</p>
 
 ## Introduction
 
-Sail provides a Docker powered local development experience for Laravel that is compatible with MacOS, Windows (WSL2), and Linux. Other than Docker, no software or libraries are required to be installed on your local computer before using Sail. Sail's simple CLI means you can start building your Laravel application without any previous Docker experience.
+Sail provides a Docker powered local development experience for Laravel that is compatible with macOS, Windows (WSL2), and Linux. Other than Docker, no software or libraries are required to be installed on your local computer before using Sail. Sail's simple CLI means you can start building your Laravel application without any previous Docker experience.
 
 #### Inspiration
 
@@ -20,7 +22,7 @@ Laravel Sail is inspired by and derived from [Vessel](https://github.com/shippin
 
 ## Official Documentation
 
-Documentation for Sail can be found on the [Laravel website](https://laravel.com/docs/installation).
+Documentation for Sail can be found on the [Laravel website](https://laravel.com/docs/sail).
 
 ## Contributing
 
