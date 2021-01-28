@@ -12,6 +12,8 @@ services:
             - '${APP_PORT:-80}:80'
         environment:
             WWWUSER: '${WWWUSER}'
+            XDEBUG: '${SAIL_XDEBUG:-false}'
+            XDEBUG_PORT: '${SAIL_XDEBUG_PORT:-9000}'
             LARAVEL_SAIL: 1
         volumes:
             - '.:/var/www/html'

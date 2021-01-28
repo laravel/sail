@@ -40,6 +40,22 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG XDEBUG
+ARG XDEBUG_PORT
+RUN if [ "${XDEBUG}" = 'true' ]; then \
+    apt-get update \
+    && apt-get install -y php-xdebug \
+    && echo "[XDebug]" > /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "zend_extension="$(find /usr/lib/php/ -name xdebug.so | sort -z | head -n 1)" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini" \
+    && echo "xdebug.client_port = ${XDEBUG_PORT}" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.mode = debug" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request = yes" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.client_host = host.docker.internal" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ;\
+fi;
+
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 RUN groupadd --force -g $WWWGROUP sail
