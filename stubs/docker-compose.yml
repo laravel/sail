@@ -43,7 +43,7 @@ services:
         networks:
             - sail
         healthcheck:
-          test: ["CMD", "mysqladmin", "ping"]
+          test: ["CMD", "mysqladmin", "-p${DB_PASSWORD}", "ping"]
 #    pgsql:
 #        image: postgres:13
 #        ports:
