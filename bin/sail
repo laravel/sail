@@ -237,6 +237,19 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Proxy PHPStan commands to the "phpstan" binary on the application container...
+    elif [ "$1" == "phpstan" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                -u sail \
+                "$APP_SERVICE" \
+                ./vendor/bin/phpstan "$@"
+        else
+            sail_is_not_running
+        fi
+
     # Initiate a Bash shell within the application container...
     elif [ "$1" == "shell" ] || [ "$1" == "bash" ]; then
         shift 1
