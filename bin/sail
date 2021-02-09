@@ -65,7 +65,7 @@ function sail_is_not_running {
 if [ $# -gt 0 ]; then
     # Source the ".env" file so Laravel's environment variables are available...
     if [ -f ./.env ]; then
-        source ./.env
+        export $(cat ./.env | xargs)
     fi
 
     # Proxy PHP commands to the "php" binary on the application container...
