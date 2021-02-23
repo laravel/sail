@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.3.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.0...1.x)
+
+
+## [v1.4.0 (2021-02-23)](https://github.com/laravel/sail/compare/v1.3.1...v1.4.0)
+
+### Added
+- Implement interactive choice and Meilisearch ([#58](https://github.com/laravel/sail/pull/58), [b78093b](https://github.com/laravel/sail/commit/b78093b02c328d82e27cdacfb20568c49cd980c4))
+
+### Changed
+- Display message after installing Sail ([#56](https://github.com/laravel/sail/pull/56))
+
+### Fixed
+- Change supervisord logfile and pidfile settings ([#57](https://github.com/laravel/sail/pull/57))
+
+### Removed
+- Remove memcached stub ([3a4fac1](https://github.com/laravel/sail/commit/3a4fac159b92424d2ff3472ce182be14fc1cb080))
 
 
 ## [v1.3.1 (2021-02-09)](https://github.com/laravel/sail/compare/v1.3.0...v1.3.1)
