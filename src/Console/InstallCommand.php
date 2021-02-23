@@ -11,7 +11,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'sail:install';
+    protected $signature = 'sail:install {--services= : The services that should be included in the installation}';
 
     /**
      * The console command description.
@@ -27,19 +27,35 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $services = $this->choice('Which services would you like to install?', [
-            'mysql',
-            'pgsql',
-            'redis',
-            'selenium',
-            'mailhog',
-            'meilisearch',
-        ], 0, null, true);
+        if ($this->option('services')) {
+            $services = $this->option('services') == 'none' ? [] : explode(',', $this->option('services'));
+        } elseif ($this->option('no-interaction')) {
+            $services = ['mysql', 'redis', 'selenium', 'mailhog'];
+        } else {
+            $services = $this->gatherServicesWithSymfonyMenu();
+        }
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
 
         $this->info('Sail scaffolding installed successfully.');
+    }
+
+    /**
+     * Gather the desired Sail services using a Symfony menu.
+     *
+     * @return array
+     */
+    protected function gatherServicesWithSymfonyMenu()
+    {
+        return $this->choice('Which services would you like to install?', [
+             'mysql',
+             'pgsql',
+             'redis',
+             'selenium',
+             'mailhog',
+             'meilisearch',
+         ], 0, null, true);
     }
 
     /**
@@ -74,9 +90,12 @@ class InstallCommand extends Command
 
         $dockerCompose = file_get_contents(__DIR__ . '/../../stubs/docker-compose.stub');
 
-        $dockerCompose = str_replace('{{depends}}', $depends, $dockerCompose);
+        $dockerCompose = str_replace('{{depends}}', empty($depends) ? '' : '        '.$depends, $dockerCompose);
         $dockerCompose = str_replace('{{services}}', $stubs, $dockerCompose);
         $dockerCompose = str_replace('{{volumes}}', $volumes, $dockerCompose);
+
+        // Remove empty lines...
+        $dockerCompose = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $dockerCompose);
 
         file_put_contents($this->laravel->basePath('docker-compose.yml'), $dockerCompose);
     }

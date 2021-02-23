@@ -17,7 +17,7 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
-        {{depends}}
+{{depends}}
 {{services}}
 networks:
     sail:
