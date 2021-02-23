@@ -19,15 +19,15 @@ services:
             - sail
         depends_on:
             - mysql
-            # - pgsql
+#            - pgsql
             - redis
-            # - selenium
-    # selenium:
-    #     image: 'selenium/standalone-chrome'
-    #     volumes:
-    #         - '/dev/shm:/dev/shm'
-    #     networks:
-    #         - sail
+#            - selenium
+#    selenium:
+#       image: 'selenium/standalone-chrome'
+#       volumes:
+#            - '/dev/shm:/dev/shm'
+#       networks:
+#           - sail
     mysql:
         image: 'mysql:8.0'
         ports:
