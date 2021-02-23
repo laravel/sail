@@ -1,6 +1,6 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.0...master)
 
 
 ## [v1.4.0 (2021-02-23)](https://github.com/laravel/sail/compare/v1.3.1...v1.4.0)
