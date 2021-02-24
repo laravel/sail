@@ -27,15 +27,13 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        // if ($this->option('services')) {
-        //     $services = $this->option('services') == 'none' ? [] : explode(',', $this->option('services'));
-        // } elseif ($this->option('no-interaction')) {
-        //     $services = ['mysql', 'redis', 'selenium', 'mailhog'];
-        // } else {
-        //     $services = $this->gatherServicesWithSymfonyMenu();
-        // }
-
-        $services = ['mysql', 'redis', 'selenium', 'mailhog'];
+        if ($this->option('services')) {
+            $services = $this->option('services') == 'none' ? [] : explode(',', $this->option('services'));
+        } elseif ($this->option('no-interaction')) {
+            $services = ['mysql', 'redis', 'selenium', 'mailhog'];
+        } else {
+            $services = $this->gatherServicesWithSymfonyMenu();
+        }
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
