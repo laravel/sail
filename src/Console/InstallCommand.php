@@ -11,7 +11,9 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'sail:install {--services= : The services that should be included in the installation}';
+    protected $signature = 'sail:install
+                            {--runtime= : The PHP runtime to use}
+                            {--services= : The services that should be included in the installation}';
 
     /**
      * The console command description.
@@ -76,16 +78,14 @@ class InstallCommand extends Command
      */
     protected function chooseRuntimeWithSymfonyMenu()
     {
-        $availableRuntimes = array_map(
+        $availableRuntimes = array_reverse(array_map(
             'basename',
             glob(__DIR__.'/../../runtimes/*', GLOB_ONLYDIR)
-        );
+        ));
         return $this->choice(
             'Which runtime would you like to use?',
             $availableRuntimes,
-            0,
-            null,
-            true
+            0
         );
     }
 
