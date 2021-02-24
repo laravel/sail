@@ -27,6 +27,14 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+        // if ($this->option('runtime')) {
+        //     $runtime = $this->option('runtime');
+        // } elseif ($this->option('no-interaction')) {
+        //     $runtime = '8.0';
+        // } else {
+        //     $runtime = $this->chooseRuntimeWithSymfonyMenu();
+        // }
+
         // if ($this->option('services')) {
         //     $services = $this->option('services') == 'none' ? [] : explode(',', $this->option('services'));
         // } elseif ($this->option('no-interaction')) {
@@ -35,9 +43,10 @@ class InstallCommand extends Command
         //     $services = $this->gatherServicesWithSymfonyMenu();
         // }
 
+        $runtime = '8.0';
         $services = ['mysql', 'redis', 'selenium', 'mailhog'];
 
-        $this->buildDockerCompose($services);
+        $this->buildDockerCompose($runtime, $services);
         $this->replaceEnvVariables($services);
 
         $this->info('Sail scaffolding installed successfully.');
@@ -61,12 +70,33 @@ class InstallCommand extends Command
     }
 
     /**
+     * Choose the desired php runtime
+     *
+     * @return array
+     */
+    protected function chooseRuntimeWithSymfonyMenu()
+    {
+        $availableRuntimes = array_map(
+            'basename',
+            glob(__DIR__.'/../../runtimes/*', GLOB_ONLYDIR)
+        );
+        return $this->choice(
+            'Which runtime would you like to use?',
+            $availableRuntimes,
+            0,
+            null,
+            true
+        );
+    }
+
+    /**
      * Build the Docker Compose file.
      *
+     * @param  string $runtime
      * @param  array  $services
      * @return void
      */
-    protected function buildDockerCompose(array $services)
+    protected function buildDockerCompose(string $runtime, array $services)
     {
         $depends = collect($services)
             ->filter(function ($service) {
@@ -92,6 +122,7 @@ class InstallCommand extends Command
 
         $dockerCompose = file_get_contents(__DIR__ . '/../../stubs/docker-compose.stub');
 
+        $dockerCompose = str_replace('{{runtime}}', $runtime, $dockerCompose);
         $dockerCompose = str_replace('{{depends}}', empty($depends) ? '' : '        '.$depends, $dockerCompose);
         $dockerCompose = str_replace('{{services}}', $stubs, $dockerCompose);
         $dockerCompose = str_replace('{{volumes}}', $volumes, $dockerCompose);
