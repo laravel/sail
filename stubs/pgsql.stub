@@ -8,7 +8,7 @@
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
-            - 'sailpostgresql:/var/lib/postgresql/data'
+            - 'sailpgsql:/var/lib/postgresql/data'
         networks:
             - sail
         healthcheck:
