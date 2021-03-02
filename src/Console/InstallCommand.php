@@ -55,6 +55,7 @@ class InstallCommand extends Command
              'selenium',
              'mailhog',
              'meilisearch',
+             'memcached',
          ], 0, null, true);
     }
 
