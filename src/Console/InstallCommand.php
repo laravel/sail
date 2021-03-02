@@ -52,10 +52,10 @@ class InstallCommand extends Command
              'mysql',
              'pgsql',
              'redis',
-             'selenium',
-             'mailhog',
-             'meilisearch',
              'memcached',
+             'meilisearch',
+             'mailhog',
+             'selenium',
          ], 0, null, true);
     }
 
