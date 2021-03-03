@@ -111,9 +111,14 @@ class InstallCommand extends Command
     {
         $environment = file_get_contents($this->laravel->basePath('.env'));
 
-        $host = in_array('pgsql', $services) ? 'pgsql' : 'mysql';
-
-        $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=$host", $environment);
+        if (in_array('pgsql', $services)) {
+            $environment = str_replace('DB_CONNECTION=mysql', "DB_CONNECTION=pgsql", $environment);
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
+            $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
+        } else {
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
+        }
+        
         $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=memcached', $environment);
         $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
 
