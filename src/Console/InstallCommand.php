@@ -56,6 +56,7 @@ class InstallCommand extends Command
              'meilisearch',
              'mailhog',
              'selenium',
+             'pgadmin',
          ], 0, null, true);
     }
 
