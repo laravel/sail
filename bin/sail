@@ -272,7 +272,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker run --init beyondcodegmbh/expose-server share http://host.docker.internal:"$APP_PORT" \
+            docker run --init beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
             --server-host=laravel-sail.site \
             --server-port=8080 \
             "$@"
