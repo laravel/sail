@@ -1,6 +1,26 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.7...1.x)
+
+
+## [v1.4.7 (2021-03-09)](https://github.com/laravel/sail/compare/v1.4.6...v1.4.7)
+
+### Fixed
+- Add missing PostgreSQL clients ([#64(https://github.com/laravel/sail/pull/64))
+- Use latest expose container ([cebaebc](https://github.com/laravel/sail/commit/cebaebc0bb3806f4cf7bc71564acbfe8c12a8923))
+
+
+## [v1.4.6 (2021-03-03)](https://github.com/laravel/sail/compare/v1.4.5...v1.4.6)
+
+### Fixed
+- Update share command ([59ee7e2](https://github.com/laravel/sail/commit/59ee7e2b2efeb644eabea719186db91d11666733))
+
+
+## [v1.4.5 (2021-03-03)](https://github.com/laravel/sail/compare/v1.4.4...v1.4.5)
+
+### Fixes
+- Replace `DB_PORT` and `DB_CONNECTION` for pgsql ([#63](https://github.com/laravel/sail/pull/63))
+- Update share command ([0348ec8](https://github.com/laravel/sail/commit/0348ec8c13fedc4bafc917b9d65721cd475390bf))
 
 
 ## [v1.4.4 (2021-03-02)](https://github.com/laravel/sail/compare/v1.4.3...v1.4.4)
