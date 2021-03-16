@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.7...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.8...master)
+
+
+## [v1.4.8 (2021-03-16)](https://github.com/laravel/sail/compare/v1.4.7...v1.4.8)
+
+### Fixed
+- Update the publish command to consider PHP 7.4 ([#68](https://github.com/laravel/sail/pull/68))
 
 
 ## [v1.4.7 (2021-03-09)](https://github.com/laravel/sail/compare/v1.4.6...v1.4.7)
