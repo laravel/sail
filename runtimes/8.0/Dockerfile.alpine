@@ -1,55 +1,53 @@
-FROM ubuntu:20.04
+FROM node:15-alpine3.13 as nodejs
 
-LABEL maintainer="Taylor Otwell"
+FROM php:8-fpm-alpine
 
-ARG WWWGROUP
+LABEL maintainer="Wang Junhua"
 
 WORKDIR /var/www/html
 
-ENV DEBIAN_FRONTEND noninteractive
+COPY --from=nodejs /opt /opt
+COPY --from=nodejs /usr/local /usr/local
+
 ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
-    && mkdir -p ~/.gnupg \
-    && chmod 600 ~/.gnupg \
-    && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
-    && apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E5267A6C \
-    && apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C300EE8C \
-    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
-    && apt-get update \
-    && apt-get install -y php8.0-cli php8.0-dev \
-       php8.0-pgsql php8.0-sqlite3 php8.0-gd \
-       php8.0-curl php8.0-memcached \
-       php8.0-imap php8.0-mysql php8.0-mbstring \
-       php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap \
-       php8.0-intl php8.0-readline \
-       php8.0-msgpack php8.0-igbinary php8.0-ldap \
-       php8.0-redis \
-    && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
-    && curl -sL https://deb.nodesource.com/setup_15.x | bash - \
-    && apt-get install -y nodejs \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y yarn \
-    && apt-get install -y mysql-client \
-    && apt-get install -y postgresql-client \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ENV PHP8_MODULE_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev libpng-dev libxml2-dev krb5-dev curl-dev icu-dev libzip-dev openldap-dev imap-dev postgresql-dev
 
-RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
+RUN curl http://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
+    && apk add --no-cache php8-cli php8-dev libstdc++ mysql-client bash bash-completion shadow \
+        supervisor git zip unzip python2 coreutils libpng libmemcached-libs krb5-libs icu-libs \
+        icu c-client libzip openldap-clients imap postgresql-client postgresql-libs libcap \
+    && set -xe \
+    && apk add --no-cache --update --virtual .phpize-deps $PHPIZE_DEPS \
+    && apk add --no-cache --update --virtual .all-deps $PHP8_MODULE_DEPS \
+    && docker-php-ext-install gd bcmath intl soap tokenizer mysqli pdo_mysql zip ldap imap \
+    && printf "\n\n\n\n" | pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis \
+    && pecl install msgpack && docker-php-ext-enable msgpack \
+    && pecl install igbinary && docker-php-ext-enable igbinary \
+    && printf "\n\n\n\n\n\n\n\n\n\n" | pecl install memcached \
+    && docker-php-ext-enable memcached \
+    && apk del .all-deps .phpize-deps \
+    # smoke tests
+    && node --version \
+    && npm --version \
+    && yarn --version \
+    && cd /usr/local \
+    && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
-RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+RUN setcap 'cap_net_bind_service=+ep' /usr/local/bin/php
+
+RUN adduser -s /bin/bash -g 82 -D sail
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
-RUN chmod +x /usr/local/bin/start-container
+RUN chmod +x /usr/local/bin/start-container \
+    && mkdir -p /var/log/supervisor \
+    && sed -i 's/usr\/bin\/php/usr\/local\/bin\/php/g' /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8000
 
