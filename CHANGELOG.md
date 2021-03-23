@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.8...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.9...1.x)
+
+
+## [v1.4.9 (2021-03-23)](https://github.com/laravel/sail/compare/v1.4.8...v1.4.9)
+
+### Fixed
+- Use different DB user & password for Sail ([#75](https://github.com/laravel/sail/pull/75))
 
 
 ## [v1.4.8 (2021-03-16)](https://github.com/laravel/sail/compare/v1.4.7...v1.4.8)
