@@ -189,9 +189,6 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
-<<<<<<< HEAD:sail.sh
-    # Proxy Yarn commands to the "yarn" binary on the application container...
-=======
     # Proxy NPX commands to the "npx" binary on the application container...
     elif [ "$1" == "npx" ]; then
         shift 1
@@ -205,7 +202,7 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
-    # Proxy YARN commands to the "yarn" binary on the application container...
+    # Proxy Yarn commands to the "yarn" binary on the application container...
     elif [ "$1" == "yarn" ]; then
         shift 1
 
