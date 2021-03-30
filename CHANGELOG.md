@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.9...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.10...1.x)
+
+
+## [v1.4.10 (2021-03-30)](https://github.com/laravel/sail/compare/v1.4.9...v1.4.10)
+
+### Changed
+- Database default user name and password ([#84](https://github.com/laravel/sail/pull/84))
+
+### Fixed
+- Patch issue with environment database password replacement ([#87](https://github.com/laravel/sail/pull/87))
 
 
 ## [v1.4.9 (2021-03-23)](https://github.com/laravel/sail/compare/v1.4.8...v1.4.9)
