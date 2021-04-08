@@ -1,0 +1,16 @@
+    phpmyadmin:
+        image: 'phpmyadmin'
+        environment:
+            - PMA_ARBITRARY=1
+            - UPLOAD_LIMIT=2G
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        ports:
+            - '${FORWARD_PHPMYADMIN_PORT:-8081}:80'
+        volumes:
+            - 'sailphpmyadmin:/session'
+        networks:
+            - sail
+        depends_on:
+            - mysql

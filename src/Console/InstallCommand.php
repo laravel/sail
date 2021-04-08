@@ -30,7 +30,7 @@ class InstallCommand extends Command
         if ($this->option('with')) {
             $services = $this->option('with') == 'none' ? [] : explode(',', $this->option('with'));
         } elseif ($this->option('no-interaction')) {
-            $services = ['mysql', 'redis', 'selenium', 'mailhog'];
+            $services = ['mysql', 'redis', 'selenium', 'mailhog', 'phpmyadmin'];
         } else {
             $services = $this->gatherServicesWithSymfonyMenu();
         }
@@ -56,6 +56,7 @@ class InstallCommand extends Command
              'meilisearch',
              'mailhog',
              'selenium',
+             'phpmyadmin'
          ], 0, null, true);
     }
 
@@ -82,7 +83,7 @@ class InstallCommand extends Command
 
         $volumes = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'redis', 'meilisearch']);
+                return in_array($service, ['mysql', 'pgsql', 'redis', 'meilisearch', 'phpmyadmin']);
             })->map(function ($service) {
                 return "    sail{$service}:\n        driver: local";
             })->whenNotEmpty(function ($collection) {
