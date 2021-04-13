@@ -117,9 +117,10 @@ class InstallCommand extends Command
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
         } else {
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
-            $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
-            $environment = str_replace('DB_PASSWORD=', "DB_PASSWORD=password", $environment);
         }
+
+        $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
+        $environment = preg_replace("/DB_PASSWORD=(.*)/", "DB_PASSWORD=password", $environment);
 
         $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=memcached', $environment);
         $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);

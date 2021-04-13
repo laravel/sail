@@ -1,6 +1,27 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.8...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.4.12...master)
+
+
+## [v1.4.12 (2021-04-13)](https://github.com/laravel/sail/compare/v1.4.11...v1.4.12)
+
+### Fixed
+- Load missing PECL package index before installing Swoole ([#94](https://github.com/laravel/sail/pull/94))
+
+
+## [v1.4.11 (2021-04-06)](https://github.com/laravel/sail/compare/v1.4.10...v1.4.11)
+
+### Changed
+- Add Swoole ([9cf7a28](https://github.com/laravel/sail/commit/9cf7a289fbae184f8468188c582ea5a604ac1012), [0706de0](https://github.com/laravel/sail/commit/0706de0c6a80e6f04861ffb875f9e13c63568ccb))
+
+
+## [v1.4.10 (2021-03-30)](https://github.com/laravel/sail/compare/v1.4.9...v1.4.10)
+
+### Changed
+- Database default user name and password ([#84](https://github.com/laravel/sail/pull/84))
+
+### Fixed
+- Patch issue with environment database password replacement ([#87](https://github.com/laravel/sail/pull/87))
 
 
 ## [v1.4.9 (2021-03-23)](https://github.com/laravel/sail/compare/v1.4.8...v1.4.9)
