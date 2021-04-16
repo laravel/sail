@@ -3,6 +3,6 @@
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
         volumes:
-            - 'sailmeilisearch:/data.ms'
+            - '${FORWARD_VOLUMES:-sail}meilisearch:/data.ms'
         networks:
             - sail
