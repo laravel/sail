@@ -46,6 +46,8 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
             $this->publishes([
                 __DIR__ . '/../runtimes' => $this->app->basePath('docker'),
             ], 'sail');
+
+            $this->replaceDockerBuildContext();
         }
     }
 
@@ -60,5 +62,34 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
             InstallCommand::class,
             PublishCommand::class,
         ];
+    }
+
+    /**
+     * Replace docker build context with exported docker files.
+     *
+     * @return void
+     */
+    public function replaceDockerBuildContext()
+    {
+        $dockerComposeFilePath = $this->app->basePath('docker-compose.yml');
+
+        if (!file_exists($dockerComposeFilePath)) {
+            return;
+        }
+
+        file_put_contents(
+            $dockerComposeFilePath,
+            str_replace(
+                [
+                    './vendor/laravel/sail/runtimes/8.0',
+                    './vendor/laravel/sail/runtimes/7.4',
+                ],
+                [
+                    './docker/8.0',
+                    './docker/7.4',
+                ],
+                file_get_contents($dockerComposeFilePath)
+            )
+        );
     }
 }
