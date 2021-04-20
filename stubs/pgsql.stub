@@ -1,5 +1,5 @@
     pgsql:
-        image: postgres:13
+        image: 'postgres:13'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
