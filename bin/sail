@@ -227,6 +227,18 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Initiate a MySQL CLI terminal session within the "mariadb" container...
+    elif [ "$1" == "mariadb" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                mariadb \
+                bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
+        else
+            sail_is_not_running
+        fi
+        
     # Initiate a PostgreSQL CLI terminal session within the "pgsql" container...
     elif [ "$1" == "psql" ]; then
         shift 1
