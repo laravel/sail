@@ -13,4 +13,4 @@
         networks:
             - sail
         healthcheck:
-          test: ["CMD", "mysqladmin", "ping"]
+          test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
