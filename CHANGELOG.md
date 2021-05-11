@@ -1,9 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.4.13...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.5.1...1.x)
 
 
-## [v1.5.0 (2021-04-20)](https://github.com/laravel/sail/compare/v1.4.12...v1.4.13)
+## [v1.5.1 (2021-05-11)](https://github.com/laravel/sail/compare/v1.5.0...v1.5.1)
+
+### Changed
+- Use MySQL shell when running mariadb ([#119](https://github.com/laravel/sail/pull/119))
+
+### Fixed
+- Fix mysql health check ([#125](https://github.com/laravel/sail/pull/125))
+
+
+## [v1.5.0 (2021-04-20)](https://github.com/laravel/sail/compare/v1.4.12...v1.5.0)
 
 ### Added
 - MariaDB support ([#111](https://github.com/laravel/sail/pull/111))
