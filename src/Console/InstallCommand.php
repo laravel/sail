@@ -57,6 +57,7 @@ class InstallCommand extends Command
              'meilisearch',
              'mailhog',
              'selenium',
+             'minio',
          ], 0, null, true);
     }
 
@@ -83,7 +84,7 @@ class InstallCommand extends Command
 
         $volumes = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
             })->map(function ($service) {
                 return "    sail{$service}:\n        driver: local";
             })->whenNotEmpty(function ($collection) {
@@ -131,6 +132,11 @@ class InstallCommand extends Command
         if (in_array('meilisearch', $services)) {
             $environment .= "\nSCOUT_DRIVER=meilisearch";
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
+        }
+
+        if (in_array('minio', $services)) {
+            $environment .= "\nMINIO_ROOT_USER=sail";
+            $environment .= "\nMINIO_ROOT_PASSWORD=password\n";
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
