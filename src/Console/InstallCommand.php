@@ -134,11 +134,6 @@ class InstallCommand extends Command
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
         }
 
-        if (in_array('minio', $services)) {
-            $environment .= "\nMINIO_ROOT_USER=sail";
-            $environment .= "\nMINIO_ROOT_PASSWORD=password\n";
-        }
-
         file_put_contents($this->laravel->basePath('.env'), $environment);
     }
 }
