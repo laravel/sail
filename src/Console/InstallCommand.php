@@ -55,9 +55,9 @@ class InstallCommand extends Command
              'redis',
              'memcached',
              'meilisearch',
+             'minio',
              'mailhog',
              'selenium',
-             'minio',
          ], 0, null, true);
     }
 
