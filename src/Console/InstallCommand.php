@@ -55,6 +55,7 @@ class InstallCommand extends Command
              'redis',
              'memcached',
              'meilisearch',
+             'minio',
              'mailhog',
              'selenium',
          ], 0, null, true);
@@ -83,7 +84,7 @@ class InstallCommand extends Command
 
         $volumes = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
             })->map(function ($service) {
                 return "    sail{$service}:\n        driver: local";
             })->whenNotEmpty(function ($collection) {
