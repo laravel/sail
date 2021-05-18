@@ -1,0 +1,14 @@
+    minio:
+        image: 'minio/minio:latest'
+        ports:
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
+        environment:
+            MINIO_ROOT_USER: 'sail'
+            MINIO_ROOT_PASSWORD: 'password'
+        volumes:
+            - 'sailminio:/data/minio'
+        networks:
+            - sail
+        command: minio server /data/minio
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
