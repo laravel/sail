@@ -7,6 +7,10 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
+                XDEBUG: '${SAIL_XDEBUG:-false}'
+                XDEBUG_PORT: '${SAIL_XDEBUG_PORT:-9000}'
+                XDEBUG_CLIENT: '${SAIL_XDEBUG_CLIENT:-host.docker.internal}'
+                XDEBUG_START: '${SAIL_XDEBUG_START:-yes}'
         image: sail-8.0/app
         ports:
             - '${APP_PORT:-80}:80'

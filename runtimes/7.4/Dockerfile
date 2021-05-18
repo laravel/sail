@@ -41,6 +41,23 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG XDEBUG
+ARG XDEBUG_START
+ARG XDEBUG_PORT
+ARG XDEBUG_CLIENT
+RUN if [ "${XDEBUG}" = 'true' ]; then \
+    pecl channel-update https://pecl.php.net/channel.xml \
+    && pecl install xdebug \
+    && pecl clear-cache \
+    && echo "[XDebug]" > /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "zend_extension = \"$(find /usr/lib/php/ -name xdebug.so | sort -z | head -n 1)\"" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.client_port = ${XDEBUG_PORT}" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.mode = debug" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request = ${XDEBUG_START}" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && echo "xdebug.client_host = ${XDEBUG_CLIENT}" >> /etc/php/8.0/cli/conf.d/php-ext-xdebug.ini \
+    && rm -rf /tmp/* /var/tmp/* ; \
+fi;
+
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php7.4
 
 RUN groupadd --force -g $WWWGROUP sail
