@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.5.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.6.0...1.x)
+
+
+## [v1.6.0 (2021-05-18)](https://github.com/laravel/sail/compare/v1.5.1...v1.6.0)
+
+### Added
+- Add MinIO to sail:install Command ([#128](https://github.com/laravel/sail/pull/128))
+
+### Changed
+- Clear pecl caches & tmp files during Swoole extension install ([#134](https://github.com/laravel/sail/pull/134))
+
+### Fixed
+- Fix mariaDB Health check ([#126](https://github.com/laravel/sail/pull/126))
 
 
 ## [v1.5.1 (2021-05-11)](https://github.com/laravel/sail/compare/v1.5.0...v1.5.1)
