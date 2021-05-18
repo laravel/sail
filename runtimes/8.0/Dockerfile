@@ -42,7 +42,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN pecl channel-update https://pecl.php.net/channel.xml \
-    && pecl install swoole
+    && pecl install swoole \
+    && pecl clear-cache \
+    && rm -rf /tmp/* /var/tmp/*
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
