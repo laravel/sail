@@ -238,7 +238,7 @@ if [ $# -gt 0 ]; then
         else
             sail_is_not_running
         fi
-        
+
     # Initiate a PostgreSQL CLI terminal session within the "pgsql" container...
     elif [ "$1" == "psql" ]; then
         shift 1
@@ -272,6 +272,18 @@ if [ $# -gt 0 ]; then
             docker-compose exec \
                 "$APP_SERVICE" \
                 bash
+        else
+            sail_is_not_running
+        fi
+
+    # Initiate a Redis CLI terminal session within the "redis" container...
+    elif [ "$1" == "redis" ] ; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                redis \
+                redis-cli
         else
             sail_is_not_running
         fi
