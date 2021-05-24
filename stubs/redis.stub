@@ -8,3 +8,5 @@
             - sail
         healthcheck:
           test: ["CMD", "redis-cli", "ping"]
+          retries: 3
+          timeout: 5s
