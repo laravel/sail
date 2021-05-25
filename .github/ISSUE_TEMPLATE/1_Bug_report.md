@@ -6,7 +6,7 @@ about: 'Report a general library issue. Please ensure your version is still supp
 - Sail Version: #.#.#
 - Laravel Version: #.#.#
 - PHP Version: #.#.#
-- Database Driver & Version:
+- OS: Windows / Linux / macOS #.#.#
 
 ### Description:
 
