@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.6.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.7.0...1.x)
+
+
+## [v1.7.0 (2021-05-25)](https://github.com/laravel/sail/compare/v1.6.0...v1.7.0)
+
+### Added
+- Add Redis CLI command ([#140](https://github.com/laravel/sail/pull/140))
+
+### Fixed
+- Add retries & timeout to healthcheck ([#143](https://github.com/laravel/sail/pull/143))
 
 
 ## [v1.6.0 (2021-05-18)](https://github.com/laravel/sail/compare/v1.5.1...v1.6.0)
