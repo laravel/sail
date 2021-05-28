@@ -301,6 +301,15 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Check is running...
+    elif [ "$1" == "is-running" ]; then
+
+        if [ "$EXEC" == "yes" ]; then
+            exit 0;
+        else
+            sail_is_not_running
+        fi
+
     # Pass unknown commands to the "docker-compose" binary...
     else
         docker-compose "$@"
