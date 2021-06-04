@@ -113,27 +113,74 @@ class InstallCommand extends Command
     {
         $environment = file_get_contents($this->laravel->basePath('.env'));
 
-        if (in_array('pgsql', $services)) {
-            $environment = str_replace('DB_CONNECTION=mysql', "DB_CONNECTION=pgsql", $environment);
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
-            $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
-        } elseif (in_array('mariadb', $services)) {
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
-        } else {
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
-        }
-
-        $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
-        $environment = preg_replace("/DB_PASSWORD=(.*)/", "DB_PASSWORD=password", $environment);
-
-        $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=memcached', $environment);
-        $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
-
-        if (in_array('meilisearch', $services)) {
-            $environment .= "\nSCOUT_DRIVER=meilisearch";
-            $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
+        foreach (static::sailEnvVariables($services) as $key => $value) {
+            if (strstr($environment, $key.'=')) {
+                $environment = preg_replace("/$key=(.*)/", "$key=$value", $environment);
+            } else {
+                $environment .= "\n$key=$value\n";
+            }
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    protected static function sailEnvVariables(array $services): array
+    {
+        $variables = [];
+        $defaults = [
+            'mailhog' => [
+                'MAIL_HOST' => 'mailhog',
+                'MAIL_PORT' => '1025',
+            ],
+            'mariadb' => [
+                'DB_CONNECTION' => 'mysql',
+                'DB_HOST' => 'mariadb',
+                'DB_PORT' => '3306',
+                'DB_USERNAME' => 'sail',
+                'DB_PASSWORD' => 'password',
+            ],
+            'meilisearch' => [
+                'SCOUT_DRIVER' => 'meilisearch',
+                'MEILISEARCH_HOST' => 'http://meilisearch:7700',
+            ],
+            'memcached' => [
+                'MEMCACHED_HOST' => 'memcached',
+            ],
+            'minio' => [
+                'FILESYSTEM_DRIVER' => 's3',
+                'AWS_ACCESS_KEY_ID' => 'sail',
+                'AWS_SECRET_ACCESS_KEY' => 'password',
+                'AWS_DEFAULT_REGION' => 'us-east-1',
+                'AWS_BUCKET' => 'local',
+                'AWS_ENDPOINT' => 'http://minio:9000',
+                'AWS_USE_PATH_STYLE_ENDPOINT' => 'true',
+            ],
+            'mysql' => [
+                'DB_CONNECTION' => 'mysql',
+                'DB_HOST' => 'mysql',
+                'DB_PORT' => '3306',
+                'DB_USERNAME' => 'sail',
+                'DB_PASSWORD' => 'password',
+            ],
+            'pgsql' => [
+                'DB_CONNECTION' => 'pgsql',
+                'DB_HOST' => 'pgsql',
+                'DB_PORT' => '5432',
+                'DB_USERNAME' => 'sail',
+                'DB_PASSWORD' => 'password',
+            ],
+            'redis' => [
+                'REDIS_HOST' => 'redis',
+            ],
+            'selenium' => [
+
+            ],
+        ];
+
+        foreach ($services as $service) {
+            $variables += $defaults[$service] ?? [];
+        }
+
+        return $variables;
     }
 }
