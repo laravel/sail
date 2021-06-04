@@ -71,7 +71,7 @@ class InstallCommand extends Command
     {
         $depends = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'selenium']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium']);
             })->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
