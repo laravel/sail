@@ -81,6 +81,19 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Proxy the vendor binaries commands on the application container...
+    if [ "$1" == "bin" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec -T \
+                -u sail \
+                "$APP_SERVICE" \
+                ./vendor/bin/"$@"
+        else
+            sail_is_not_running
+        fi
+
     # Proxy Composer commands to the "composer" binary on the application container...
     elif [ "$1" == "composer" ]; then
         shift 1
