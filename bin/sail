@@ -86,7 +86,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec -T \
+            docker-compose exec \
                 -u sail \
                 "$APP_SERVICE" \
                 ./vendor/bin/"$@"
