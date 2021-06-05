@@ -81,7 +81,7 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
-    # Proxy the vendor binaries commands on the application container...
+    # Proxy vendor binary commands on the application container...
     if [ "$1" == "bin" ]; then
         shift 1
 
