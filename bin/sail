@@ -41,7 +41,7 @@ fi
 # Determine if Sail is currently up...
 PSRESULT="$(docker-compose ps -q)"
 
-if docker-compose ps | grep 'Exit'; then
+if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
     echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
 
     docker-compose down > /dev/null 2>&1
@@ -77,6 +77,19 @@ if [ $# -gt 0 ]; then
                 -u sail \
                 "$APP_SERVICE" \
                 php "$@"
+        else
+            sail_is_not_running
+        fi
+
+    # Proxy vendor binary commands on the application container...
+    if [ "$1" == "bin" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                -u sail \
+                "$APP_SERVICE" \
+                ./vendor/bin/"$@"
         else
             sail_is_not_running
         fi

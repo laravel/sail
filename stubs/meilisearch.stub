@@ -6,3 +6,7 @@
             - 'sailmeilisearch:/data.ms'
         networks:
             - sail
+        healthcheck:
+          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+          retries: 3
+          timeout: 5s

@@ -1,6 +1,20 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.7.0...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.8.0...master)
+
+
+## [v1.8.0 (2021-06-08)](https://github.com/laravel/sail/compare/v1.7.0...v1.8.0)
+
+### Added
+- Add proxy to vendor binaries ([#154](https://github.com/laravel/sail/pull/154))
+
+### Changed
+- Use node.js v16.x ([#155](https://github.com/laravel/sail/pull/155))
+- Update Sail script to only exit if Main Exits ([#156](https://github.com/laravel/sail/pull/156))
+
+### Fixed
+- Append MeiliSearch and MinIO to depends ([#151](https://github.com/laravel/sail/pull/151))
+- Append MeiliSearch HealthCheck ([#150](https://github.com/laravel/sail/pull/150))
 
 
 ## [v1.7.0 (2021-05-25)](https://github.com/laravel/sail/compare/v1.6.0...v1.7.0)
