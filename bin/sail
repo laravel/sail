@@ -82,7 +82,7 @@ if [ $# -gt 0 ]; then
         fi
 
     # Proxy vendor binary commands on the application container...
-    if [ "$1" == "bin" ]; then
+    elif [ "$1" == "bin" ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
