@@ -6,12 +6,12 @@ services:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
             args:
-                WWWGROUP: '${WWWGROUP}'
+                WWWGROUP: '${WWWGROUP:-{{usergid}}}'
         image: sail-8.0/app
         ports:
             - '${APP_PORT:-80}:80'
         environment:
-            WWWUSER: '${WWWUSER}'
+            WWWUSER: '${WWWUSER:-{{useruid}}}'
             LARAVEL_SAIL: 1
         volumes:
             - '.:/var/www/html'

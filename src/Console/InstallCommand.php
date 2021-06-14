@@ -93,6 +93,8 @@ class InstallCommand extends Command
 
         $dockerCompose = file_get_contents(__DIR__ . '/../../stubs/docker-compose.stub');
 
+        $dockerCompose = str_replace('{{useruid}}', getmyuid(), $dockerCompose);
+        $dockerCompose = str_replace('{{usergid}}', getmygid(), $dockerCompose);
         $dockerCompose = str_replace('{{depends}}', empty($depends) ? '' : '        '.$depends, $dockerCompose);
         $dockerCompose = str_replace('{{services}}', $stubs, $dockerCompose);
         $dockerCompose = str_replace('{{volumes}}', $volumes, $dockerCompose);
