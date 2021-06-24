@@ -24,9 +24,10 @@ export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
 export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
-export SHARE_DASHBOARD=${SHARE_DASHBOARD:-4040}
-export SHARE_SERVER_HOST=${SHARE_SERVER_HOST:-"laravel-sail.site"}
-export SHARE_SERVER_PORT=${SHARE_SERVER_PORT:-8080}
+
+export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
+export SAIL_SHARE_SERVER_HOST=${SAIL_SHARE_SERVER_HOST:-"laravel-sail.site"}
+export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
 
 if [ "$MACHINE" == "linux" ]; then
     export SEDCMD="sed -i"
@@ -309,10 +310,10 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker run --init --rm -p $SHARE_DASHBOARD:4040 beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
-            --server-host="$SHARE_SERVER_HOST" \
-            --server-port="$SHARE_SERVER_PORT" \
-            --auth="$SHARE_TOKEN" \
+            docker run --init --rm -p $SAIL_SHARE_DASHBOARD:4040 beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
+            --server-host="$SAIL_SHARE_SERVER_HOST" \
+            --server-port="$SAIL_SHARE_SERVER_PORT" \
+            --auth="$SAIL_SHARE_TOKEN" \
             "$@"
         else
             sail_is_not_running
