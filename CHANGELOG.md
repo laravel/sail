@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.8.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.8.2...1.x)
+
+
+## [v1.8.2 (2021-06-29)](https://github.com/laravel/sail/compare/v1.8.1...v1.8.2)
+
+### Changed
+- Share/Expose options and cleanup on exit ([#168](https://github.com/laravel/sail/pull/168), [44c7087](https://github.com/laravel/sail/commit/44c7087026a0637471e544237d608a2e1173dc77))
+- Update to Ubuntu 21.04 ([#169](https://github.com/laravel/sail/pull/169), [0df641d](https://github.com/laravel/sail/commit/0df641dd2d7f2f42d24aef638e2e579f6ac7e57c), [484b928](https://github.com/laravel/sail/commit/484b9284d46bfe3e1e6a2ed71477bb4b70166070))
 
 
 ## [v1.8.1 (2021-06-08)](https://github.com/laravel/sail/compare/v1.8.0...v1.8.1)
