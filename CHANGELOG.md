@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.8.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.8.3...1.x)
+
+
+## [v1.8.3 (2021-06-29)](https://github.com/laravel/sail/compare/v1.8.2...v1.8.3)
+
+### Fixed
+- Revert Ubuntu 21.04 changes ([#174](https://github.com/laravel/sail/pull/174))
 
 
 ## [v1.8.2 (2021-06-29)](https://github.com/laravel/sail/compare/v1.8.1...v1.8.2)
