@@ -25,6 +25,10 @@ export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
 
+export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
+export SAIL_SHARE_SERVER_HOST=${SAIL_SHARE_SERVER_HOST:-"laravel-sail.site"}
+export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
+
 if [ "$MACHINE" == "linux" ]; then
     export SEDCMD="sed -i"
 elif [ "$MACHINE" == "mac" ]; then
@@ -82,7 +86,7 @@ if [ $# -gt 0 ]; then
         fi
 
     # Proxy vendor binary commands on the application container...
-    if [ "$1" == "bin" ]; then
+    elif [ "$1" == "bin" ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
@@ -319,9 +323,11 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker run --init beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
-            --server-host=laravel-sail.site \
-            --server-port=8080 \
+            docker run --init --rm -p $SAIL_SHARE_DASHBOARD:4040 -t beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
+            --server-host="$SAIL_SHARE_SERVER_HOST" \
+            --server-port="$SAIL_SHARE_SERVER_PORT" \
+            --auth="$SAIL_SHARE_TOKEN" \
+            --subdomain=""
             "$@"
         else
             sail_is_not_running
