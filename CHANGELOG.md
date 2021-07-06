@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.8.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.8.4...1.x)
+
+
+## [v1.8.4 (2021-07-06)](https://github.com/laravel/sail/compare/v1.8.3...v1.8.4)
+
+### Changed
+- Update to Ubuntu 21.04 ([#177](https://github.com/laravel/sail/pull/177))
+- Add pcov to php 8.0 runtime ([#183](https://github.com/laravel/sail/pull/183))
+
+### Fixed
+- Append random subdomain by default ([#175](https://github.com/laravel/sail/pull/175))
+
+### Removed
+- Remove Unused SEDCMD ([#179](https://github.com/laravel/sail/pull/179))
 
 
 ## [v1.8.3 (2021-06-29)](https://github.com/laravel/sail/compare/v1.8.2...v1.8.3)
