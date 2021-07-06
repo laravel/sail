@@ -29,12 +29,6 @@ export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
 export SAIL_SHARE_SERVER_HOST=${SAIL_SHARE_SERVER_HOST:-"laravel-sail.site"}
 export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
 
-if [ "$MACHINE" == "linux" ]; then
-    export SEDCMD="sed -i"
-elif [ "$MACHINE" == "mac" ]; then
-    export SEDCMD="sed -i .bak"
-fi
-
 # Ensure that Docker is running...
 if ! docker info > /dev/null 2>&1; then
     echo -e "${WHITE}Docker is not running.${NC}" >&2
