@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.8.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.8.5...1.x)
+
+
+## [v1.8.5 (2021-07-13)](https://github.com/laravel/sail/compare/v1.8.4...v1.8.5)
+
+### Changed
+- Minio Console Port ([#188](https://github.com/laravel/sail/pull/188))
 
 
 ## [v1.8.4 (2021-07-06)](https://github.com/laravel/sail/compare/v1.8.3...v1.8.4)
