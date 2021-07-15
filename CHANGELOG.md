@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.8.5...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.8.6...1.x)
+
+
+## [v1.8.6 (2021-07-15)](https://github.com/laravel/sail/compare/v1.8.5...v1.8.6)
+
+### Fixed
+- Fixes missing backslash ([#196](https://github.com/laravel/sail/pull/196))
 
 
 ## [v1.8.5 (2021-07-13)](https://github.com/laravel/sail/compare/v1.8.4...v1.8.5)
