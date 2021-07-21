@@ -2,7 +2,7 @@
 
 UNAMEOUT="$(uname -s)"
 
-WHITE='\033[1;37m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Verify operating system is supported...
@@ -31,7 +31,7 @@ export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
 
 # Ensure that Docker is running...
 if ! docker info > /dev/null 2>&1; then
-    echo -e "${WHITE}Docker is not running.${NC}" >&2
+    echo -e "${YELLOW}Docker is not running.${NC}" >&2
 
     exit 1
 fi
@@ -40,7 +40,7 @@ fi
 PSRESULT="$(docker-compose ps -q)"
 
 if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
-    echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
+    echo -e "${YELLOW}Shutting down old Sail processes...${NC}" >&2
 
     docker-compose down > /dev/null 2>&1
 
@@ -53,9 +53,9 @@ fi
 
 # Function that outputs Sail is not running...
 function sail_is_not_running {
-    echo -e "${WHITE}Sail is not running.${NC}" >&2
+    echo -e "${YELLOW}Sail is not running.${NC}" >&2
     echo "" >&2
-    echo -e "${WHITE}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
+    echo -e "${YELLOW}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
 
     exit 1
 }
