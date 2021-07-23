@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+if [ $(dirname $0) != . ] && [ -f ./sail ]; then
+    if [ ! -x ./sail ]; then
+        chmod +x ./sail
+    fi
+    bash ./sail "$@"
+    exit 0
+fi
+
 UNAMEOUT="$(uname -s)"
 
 WHITE='\033[1;37m'
