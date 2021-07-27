@@ -27,7 +27,7 @@ class PublishCommand extends Command
      */
     public function handle()
     {
-        $this->call('vendor:publish', ['--tag' => 'sail']);
+        $this->call('vendor:publish', ['--tag' => 'sail-docker']);
 
         file_put_contents(
             $this->laravel->basePath('docker-compose.yml'), 
