@@ -37,6 +37,7 @@ class InstallCommand extends Command
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
+        $this->installDevContainer();
 
         $this->info('Sail scaffolding installed successfully.');
     }
@@ -135,5 +136,20 @@ class InstallCommand extends Command
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    /**
+     * Install the Dev Container file.
+     *
+     * @return void
+     */
+    protected function installDevContainer()
+    {
+        $devContainer = file_get_contents(__DIR__ . '/../../stubs/devcontainer.stub');
+        // create .devcontainer folder if it doesn't exist
+        if (!file_exists($this->laravel->basePath('.devcontainer'))) {
+            mkdir($this->laravel->basePath('.devcontainer'), 0777, true);
+        }
+        file_put_contents($this->laravel->basePath('.devcontainer/devcontainer.json'), $devContainer);
     }
 }
