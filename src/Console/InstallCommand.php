@@ -158,5 +158,12 @@ class InstallCommand extends Command
             $this->laravel->basePath('.devcontainer/devcontainer.json'),
             file_get_contents(__DIR__.'/../../stubs/devcontainer.stub')
         );
+
+        $environment = file_get_contents($this->laravel->basePath('.env'));
+
+        $environment .= "\nWWWGROUP=1000";
+        $environment .= "\nWWWUSER=1000\n";
+
+        file_put_contents($this->laravel->basePath('.env'), $environment);
     }
 }
