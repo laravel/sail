@@ -11,7 +11,9 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'sail:install {--with= : The services that should be included in the installation}';
+    protected $signature = 'sail:install
+                {--with= : The services that should be included in the installation}
+                {--devcontainer : Create a .devcontainer configuration directory}';
 
     /**
      * The console command description.
@@ -37,7 +39,10 @@ class InstallCommand extends Command
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
-        $this->installDevContainer();
+
+        if ($this->option('devcontainer')) {
+            $this->installDevContainer();
+        }
 
         $this->info('Sail scaffolding installed successfully.');
     }
@@ -139,17 +144,19 @@ class InstallCommand extends Command
     }
 
     /**
-     * Install the Dev Container file.
+     * Install the devcontainer.json configuration file.
      *
      * @return void
      */
     protected function installDevContainer()
     {
-        $devContainer = file_get_contents(__DIR__ . '/../../stubs/devcontainer.stub');
-        // create .devcontainer folder if it doesn't exist
-        if (!file_exists($this->laravel->basePath('.devcontainer'))) {
-            mkdir($this->laravel->basePath('.devcontainer'), 0777, true);
+        if (! is_dir($this->laravel->basePath('.devcontainer'))) {
+            mkdir($this->laravel->basePath('.devcontainer'), 0755, true);
         }
-        file_put_contents($this->laravel->basePath('.devcontainer/devcontainer.json'), $devContainer);
+
+        file_put_contents(
+            $this->laravel->basePath('.devcontainer/devcontainer.json'),
+            file_get_contents(__DIR__.'/../../stubs/devcontainer.stub')
+        );
     }
 }
