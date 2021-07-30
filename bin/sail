@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 UNAMEOUT="$(uname -s)"
 
 WHITE='\033[1;37m'
@@ -16,6 +15,11 @@ if [ "$MACHINE" == "UNKNOWN" ]; then
     echo "Unsupported operating system [$(uname -s)]. Laravel Sail supports macOS, Linux, and Windows (WSL2)." >&2
 
     exit 1
+fi
+
+# Source the ".env" file so Laravel's environment variables are available...
+if [ -f ./.env ]; then
+    source ./.env
 fi
 
 # Define environment variables...
@@ -61,10 +65,7 @@ function sail_is_not_running {
 }
 
 if [ $# -gt 0 ]; then
-    # Source the ".env" file so Laravel's environment variables are available...
-    if [ -f ./.env ]; then
-        source ./.env
-    fi
+
 
     # Proxy PHP commands to the "php" binary on the application container...
     if [ "$1" == "php" ]; then
