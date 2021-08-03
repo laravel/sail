@@ -1,6 +1,31 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.8.4...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.9.0...master)
+
+
+## [v1.9.0 (2021-08-03)](https://github.com/laravel/sail/compare/v1.8.6...v1.9.0)
+
+### Added
+- Xdebug 3.0 support ([#209](https://github.com/laravel/sail/pull/209))
+
+### Changed
+- Make sail script publishable ([#201](https://github.com/laravel/sail/pull/201), [#202](https://github.com/laravel/sail/pull/202))
+- Pass additional arguments to shell / root-shell commands ([#208](https://github.com/laravel/sail/pull/208))
+
+### Fixed
+- Call source `.env` before exporting bash environment variables ([#207](https://github.com/laravel/sail/pull/207))
+
+
+## [v1.8.6 (2021-07-15)](https://github.com/laravel/sail/compare/v1.8.5...v1.8.6)
+
+### Fixed
+- Fixes missing backslash ([#196](https://github.com/laravel/sail/pull/196))
+
+
+## [v1.8.5 (2021-07-13)](https://github.com/laravel/sail/compare/v1.8.4...v1.8.5)
+
+### Changed
+- Minio Console Port ([#188](https://github.com/laravel/sail/pull/188))
 
 
 ## [v1.8.4 (2021-07-06)](https://github.com/laravel/sail/compare/v1.8.3...v1.8.4)
