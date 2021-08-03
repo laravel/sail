@@ -119,6 +119,20 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Proxy the "debug" command to the "php artisan" binary on the application container with xdebug enabled...
+    elif [ "$1" == "debug" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                -u sail \
+                -e XDEBUG_SESSION=1 \
+                "$APP_SERVICE" \
+                php artisan "$@"
+        else
+            sail_is_not_running
+        fi
+
     # Proxy the "test" command to the "php artisan test" Artisan command...
     elif [ "$1" == "test" ]; then
         shift 1
