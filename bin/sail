@@ -19,8 +19,9 @@ if [ "$MACHINE" == "UNKNOWN" ]; then
 fi
 
 # Source the ".env" file so Laravel's environment variables are available...
-if [ -f ./.env ]; then
-    source ./.env
+ENV="$(readlink ./.env || echo ./.env)"
+if [ -f $ENV ]; then
+    source $ENV
 fi
 
 # Define environment variables...
