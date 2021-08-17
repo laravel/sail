@@ -41,31 +41,33 @@ if [ -z "${SAIL_CUSTOM}" ]; then
 
         exit 1
     fi
-
-    # Determine if Sail is currently up...
-    PSRESULT="$(docker-compose ps -q)"
-
-    if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
-        echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
-
-        docker-compose down > /dev/null 2>&1
-
-        EXEC="no"
-    elif [ -n "$PSRESULT" ]; then
-        EXEC="yes"
-    else
-        EXEC="no"
-    fi
-
-    # Function that outputs Sail is not running...
-    function sail_is_not_running {
-        echo -e "${WHITE}Sail is not running.${NC}" >&2
-        echo "" >&2
-        echo -e "${WHITE}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
-
-        exit 1
-    }
 fi
+
+unset SAIL_CUSTOM
+
+# Determine if Sail is currently up...
+PSRESULT="$(docker-compose ps -q)"
+
+if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
+    echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
+
+    docker-compose down > /dev/null 2>&1
+
+    EXEC="no"
+elif [ -n "$PSRESULT" ]; then
+    EXEC="yes"
+else
+    EXEC="no"
+fi
+
+# Function that outputs Sail is not running...
+function sail_is_not_running {
+    echo -e "${WHITE}Sail is not running.${NC}" >&2
+    echo "" >&2
+    echo -e "${WHITE}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
+
+    exit 1
+}
 
 if [ $# -gt 0 ]; then
     # Proxy PHP commands to the "php" binary on the application container...
