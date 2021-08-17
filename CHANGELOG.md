@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.9.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.10.0...1.x)
+
+
+## [v1.10.0 (2021-08-17)](https://github.com/laravel/sail/compare/v1.9.0...v1.10.0)
+
+### Added
+- Add devcontainer to install command ([#218](https://github.com/laravel/sail/pull/218))
+
+### Changed
+- Removes hardcoded service name from `APP_URL` in `dusk` and `dusk:fails` command ([#219](https://github.com/laravel/sail/pull/219))
 
 
 ## [v1.9.0 (2021-08-03)](https://github.com/laravel/sail/compare/v1.8.6...v1.9.0)
