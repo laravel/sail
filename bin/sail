@@ -43,7 +43,7 @@ function sail_is_not_running {
     exit 1
 }
 
-if [ -z "$SKIP_SAIL_CHECKS" ]; then
+if [ -z "$SAIL_SKIP_CHECKS" ]; then
     # Ensure that Docker is running...
     if ! docker info > /dev/null 2>&1; then
         echo -e "${WHITE}Docker is not running.${NC}" >&2
