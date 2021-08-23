@@ -53,10 +53,10 @@ if [ -z "$SKIP_SAIL_CHECKS" ]; then
 
     # Determine if Sail is currently up...
     PSRESULT="$(docker-compose ps -q)"
-    if docker_compose ps | grep $APP_SERVICE | grep 'Exit'; then
+    if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
         echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
 
-        docker_compose down > /dev/null 2>&1
+        docker-compose down > /dev/null 2>&1
 
         EXEC="no"
     elif [ -n "$PSRESULT" ]; then
