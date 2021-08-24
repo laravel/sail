@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.10.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.10.1...1.x)
+
+
+## [v1.10.1 (2021-08-24)](https://github.com/laravel/sail/compare/v1.10.0...v1.10.1)
+
+### Changed
+- Adding extra_hosts to the compose file stubs ([#222](https://github.com/laravel/sail/pull/222))
+- Allow skip of sail checks ([#224](https://github.com/laravel/sail/pull/224))
 
 
 ## [v1.10.0 (2021-08-17)](https://github.com/laravel/sail/compare/v1.9.0...v1.10.0)
