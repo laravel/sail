@@ -23,7 +23,7 @@ if [ -f ./.env ]; then
     source ./.env
 fi
 
-if [ -z "$SAIL_SET_TTY" ] || [ "$SAIL_SET_TTY" != "1" ] ; then
+if [ -z "$SAIL_TTY" ] || [ "$SAIL_TTY" != "1" ] ; then
     TTY=""
 else
     TTY="-T"
