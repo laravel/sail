@@ -19,7 +19,6 @@ if [ "$MACHINE" == "UNKNOWN" ]; then
 fi
 
 # Source the ".env" file so Laravel's environment variables are available...
-
 if [ -f ./.env ]; then
     source ./.env
 fi
