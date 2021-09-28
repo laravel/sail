@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.10.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.10.2...1.x)
+
+
+## [v1.10.2 (2021-09-28)](https://github.com/laravel/sail/compare/v1.10.1...v1.10.2)
+
+### Changed
+- Environment variable for share subdomain ([#239](https://github.com/laravel/sail/pull/239))
 
 
 ## [v1.10.1 (2021-08-24)](https://github.com/laravel/sail/compare/v1.10.0...v1.10.1)
