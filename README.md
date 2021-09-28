@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/laravel/sail/HEAD/art/logo.svg" alt="Logo Laravel Sail"></p>
+<p align="center"><img src="https://github.com/laravel/sail/raw/HEAD/art/logo.svg" alt="Logo Laravel Sail"></p>
 
 <p align="center">
     <a href="https://packagist.org/packages/laravel/sail">
