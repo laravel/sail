@@ -58,6 +58,7 @@ class InstallCommand extends Command
              'mysql',
              'pgsql',
              'mariadb',
+             'queue',
              'redis',
              'memcached',
              'meilisearch',
@@ -77,7 +78,7 @@ class InstallCommand extends Command
     {
         $depends = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'queue', 'redis', 'meilisearch', 'minio', 'selenium']);
             })->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
@@ -125,6 +126,8 @@ class InstallCommand extends Command
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
         } elseif (in_array('mariadb', $services)) {
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
+        } elseif (in_array('queue', $services) && in_array('redis', $services)) {
+            $environment = str_replace('QUEUE_CONNECTION=sync', 'QUEUE_CONNECTION=redis', $environment);
         } else {
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
         }
