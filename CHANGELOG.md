@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.10.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.11.0...1.x)
+
+## [v1.11.0 (2021-10-01)](https://github.com/laravel/sail/compare/v1.10.1...v1.11.0)
+
+### Added
+- Added support for "docker compose" command syntax
 
 
 ## [v1.10.2 (2021-09-28)](https://github.com/laravel/sail/compare/v1.10.1...v1.10.2)
