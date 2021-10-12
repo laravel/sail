@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.10.2...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12...master)
+
+
+## [v1.12.0 (2021-10-12)](https://github.com/laravel/sail/compare/v1.11.0...v1.12.0)
+
+### Added
+- PHP 8.1 support ([#254](https://github.com/laravel/sail/pull/254))
+
+
+## [v1.11.0 (2021-10-01)](https://github.com/laravel/sail/compare/v1.10.1...v1.11.0)
+
+### Added
+- Added support for "docker compose" command syntax
 
 
 ## [v1.10.2 (2021-09-28)](https://github.com/laravel/sail/compare/v1.10.1...v1.10.2)
