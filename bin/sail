@@ -337,6 +337,17 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Ensure docker uses the very latest declared docker images
+    elif [ "$1" == "build" ] ; then
+       # This will pull all the regular (non build) related images
+       # that are declared in docker-compose.yml
+       # we ignore failures to prevent offline pull errors, allowing cached images
+       docker-compose pull --ignore-pull-failures --quiet 2> /dev/null
+
+       # Force pull checks for any Dockerfiles declared images
+       docker-compose "$@" --pull
+
+
     # Pass unknown commands to the "docker-compose" binary...
     else
         docker-compose "$@"
