@@ -70,6 +70,12 @@ if [ -z "$SAIL_SKIP_CHECKS" ]; then
     else
         EXEC="no"
     fi
+
+    if [[ $(docker-compose ps --services) != *"$APP_SERVICE"* ]]; then
+        echo -e "${WHITE}The service \"$APP_SERVICE\" is not running to execute this command. See environment variable \$APP_SERVICE.${NC}" >&2
+
+        exit 1
+    fi
 else
     EXEC="yes"
 fi
