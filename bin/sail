@@ -70,6 +70,12 @@ if [ -z "$SAIL_SKIP_CHECKS" ]; then
     else
         EXEC="no"
     fi
+
+    if [[ $(docker-compose ps --services) != *"$APP_SERVICE"* ]]; then
+        echo -e "${WHITE}The \"$APP_SERVICE\" service is not running. Ensure the \$APP_SERVICE environment variable exists and corresponds to a named, running service in your docker-compose.yml file.${NC}" >&2
+
+        exit 1
+    fi
 else
     EXEC="yes"
 fi
