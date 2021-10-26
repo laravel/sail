@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.2...1.x)
+
+
+## [v1.12.2 (2021-10-26)](https://github.com/laravel/sail/compare/v1.12.1...v1.12.2)
+
+### Fixed
+- Revert "Adds a check and error for APP_SERVICE being accurate." ([#264](https://github.com/laravel/sail/pull/264))
 
 
 ## [v1.12.1 (2021-10-26)](https://github.com/laravel/sail/compare/v1.12.0...v1.12.1)
