@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.0...1.x)
+
+
+## [v1.13.0 (2021-10-26)](https://github.com/laravel/sail/compare/v1.12.0...v1.13.0)
+
+### Changed
+- Adds a check and error for `APP_SERVICE` being accurate ([#258](https://github.com/laravel/sail/pull/258))
+- Allow `NODE_VERSION` variable ([#261](https://github.com/laravel/sail/pull/261))
 
 
 ## [v1.12.0 (2021-10-12)](https://github.com/laravel/sail/compare/v1.11.0...v1.12.0)
