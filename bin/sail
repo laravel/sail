@@ -28,6 +28,11 @@ if [ -f ./.env ]; then
     source ./.env
 fi
 
+# Check to see if an APP_ENV specific ".env" file exists to mimic the behaviour of phpdotenv...
+if [ -f ./.env.$APP_ENV ]; then
+    source ./.env.$APP_ENV
+fi
+
 # Define environment variables...
 export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
@@ -339,7 +344,12 @@ if [ $# -gt 0 ]; then
 
     # Pass unknown commands to the "docker-compose" binary...
     else
-        docker-compose "$@"
+        if [ -f ./.env.$APP_ENV ]; then
+        # Povide an APP_ENV specific ".env" file to docker-compose to mimic the behaviour of phpdotenv...
+            docker-compose --env-file .env.$APP_ENV "$@"
+        else
+            docker-compose "$@"
+        fi
     fi
 else
     docker-compose ps
