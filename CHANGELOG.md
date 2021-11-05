@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.2...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.3...master)
+
+
+## [v1.12.3 (2021-11-05)](https://github.com/laravel/sail/compare/v1.12.2...v1.12.3)
+
+### Changed
+- Update MySQL stub for Apple Silicon ([#272](https://github.com/laravel/sail/pull/272))
 
 
 ## [v1.12.2 (2021-10-26)](https://github.com/laravel/sail/compare/v1.12.1...v1.12.2)
