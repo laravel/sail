@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.4...1.x)
+
+
+## [v1.12.4 (2021-11-09)](https://github.com/laravel/sail/compare/v1.12.3...v1.12.4)
+
+### Fixed
+- Fix `NODE_VERSION` on build ([#274](https://github.com/laravel/sail/pull/274))
 
 
 ## [v1.12.3 (2021-11-05)](https://github.com/laravel/sail/compare/v1.12.2...v1.12.3)
