@@ -64,6 +64,7 @@ class InstallCommand extends Command
              'minio',
              'mailhog',
              'selenium',
+             'websockets',
          ], 0, null, true);
     }
 
@@ -77,7 +78,7 @@ class InstallCommand extends Command
     {
         $depends = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium', 'websockets']);
             })->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
@@ -90,7 +91,7 @@ class InstallCommand extends Command
 
         $volumes = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'websockets']);
             })->map(function ($service) {
                 return "    sail{$service}:\n        driver: local";
             })->whenNotEmpty(function ($collection) {
@@ -140,7 +141,30 @@ class InstallCommand extends Command
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
         }
 
+        if (in_array('websockets', $services)) {
+            $environment = preg_replace("/BROADCAST_DRIVER=(.*)/", "BROADCAST_DRIVER=pusher", $environment);
+            $environment = preg_replace("/PUSHER_APP_KEY=(.*)/", "PUSHER_APP_KEY=local-app-key", $environment);
+            $environment = preg_replace("/PUSHER_APP_SECRET=(.*)/", "PUSHER_APP_SECRET=local-app-secret", $environment);
+            $environment = preg_replace("/PUSHER_APP_ID=(.*)/", "PUSHER_APP_ID=local-app-id", $environment);
+        }
+
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    /**
+     * Update the application's config/*.php files.
+     *
+     * @param  array  $services
+     * @return void
+     */
+    protected function updateConfigs(array $services)
+    {
+        if (in_array('websockets', $services)) {
+            file_put_contents(
+                $this->laravel->configPath('broadcasting.php'),
+                file_get_contents(__DIR__ . '/../../stubs/broadcasting-config.stub')
+            );
+        }
     }
 
     /**

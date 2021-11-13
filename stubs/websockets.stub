@@ -1,0 +1,17 @@
+    websockets:
+        image: 'quay.io/soketi/soketi:latest-16-alpine'
+        ports:
+            - '${FORWARD_WEBSOCKETS_PORT:-9000}:9000'
+            - '${FORWARD_WEBSOCKETS_CONSOLE_PORT:-8900}:8900'
+        environment:
+            DEFAULT_APP_ID: 'local-app-id'
+            DEFAULT_APP_KEY: 'local-app-key'
+            DEFAULT_APP_SECRET: 'local-app-secret'
+            DEFAULT_APP_ENABLE_CLIENT_MESSAGES: '1'
+        networks:
+            - sail
+        command: node /app/bin/server.js start
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:6001"]
+            retries: 3
+            timeout: 5s
