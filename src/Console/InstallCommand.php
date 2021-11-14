@@ -39,6 +39,7 @@ class InstallCommand extends Command
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
+        $this->updateConfigs($services);
 
         if ($this->option('devcontainer')) {
             $this->installDevContainer();
