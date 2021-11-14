@@ -1,8 +1,7 @@
     websockets:
         image: 'quay.io/soketi/soketi:latest-16-alpine'
         ports:
-            - '${FORWARD_WEBSOCKETS_PORT:-9000}:9000'
-            - '${FORWARD_WEBSOCKETS_CONSOLE_PORT:-8900}:8900'
+            - '${FORWARD_WEBSOCKETS_PORT:-6001}:6001'
         environment:
             DEFAULT_APP_ID: 'local-app-id'
             DEFAULT_APP_KEY: 'local-app-key'
