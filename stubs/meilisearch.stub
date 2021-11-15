@@ -1,5 +1,6 @@
     meilisearch:
         image: 'getmeili/meilisearch:latest'
+        platform: linux/x86_64
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
         volumes:
