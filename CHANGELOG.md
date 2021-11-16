@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.5...1.x)
+
+
+## [v1.12.5 (2021-11-16)](https://github.com/laravel/sail/compare/v1.12.4...v1.12.5)
+
+### Changed
+- Re-enable previously disabled PHP 8.1 extensions ([#278](https://github.com/laravel/sail/pull/278))
+- Add platform setting to Meilisearch config ([1286886](https://github.com/laravel/sail/commit/1286886ec04f9101b756221c90ec766741459db4))
 
 
 ## [v1.12.4 (2021-11-09)](https://github.com/laravel/sail/compare/v1.12.3...v1.12.4)
