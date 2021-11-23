@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.5...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.6...master)
+
+
+## [v1.12.6 (2021-11-23)](https://github.com/laravel/sail/compare/v1.12.5...v1.12.6)
+
+### Changed
+- Add npm update to Dockerfile ([#285](https://github.com/laravel/sail/pull/285))
 
 
 ## [v1.12.5 (2021-11-16)](https://github.com/laravel/sail/compare/v1.12.4...v1.12.5)
