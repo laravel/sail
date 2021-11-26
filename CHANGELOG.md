@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.7...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.8...1.x)
+
+
+## [v1.12.8 (2021-11-26)](https://github.com/laravel/sail/compare/v1.12.7...v1.12.8)
+
+## Changed
+- Revert "Switch to PHP 8.1" ([#291](https://github.com/laravel/sail/pull/291))
 
 
 ## [v1.12.7 (2021-11-26)](https://github.com/laravel/sail/compare/v1.12.6...v1.12.7)
