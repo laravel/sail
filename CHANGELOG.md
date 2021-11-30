@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.8...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.9...1.x)
+
+
+## [v1.12.9 (2021-11-30)](https://github.com/laravel/sail/compare/v1.12.8...v1.12.9)
+
+### Changed
+- Make PHP 8.1 the default runtime ([#292](https://github.com/laravel/sail/pull/292))
 
 
 ## [v1.12.8 (2021-11-26)](https://github.com/laravel/sail/compare/v1.12.7...v1.12.8)
