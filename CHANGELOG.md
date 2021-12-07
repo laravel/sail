@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.9...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.10...1.x)
+
+
+## [v1.12.10 (2021-12-07)](https://github.com/laravel/sail/compare/v1.12.9...v1.12.10)
+
+### Fixed
+- ARM based container on Apple Silicon for Selenium ([#294](https://github.com/laravel/sail/pull/294))
 
 
 ## [v1.12.9 (2021-11-30)](https://github.com/laravel/sail/compare/v1.12.8...v1.12.9)
