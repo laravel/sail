@@ -1,6 +1,24 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.7...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.10...master)
+
+
+## [v1.12.10 (2021-12-07)](https://github.com/laravel/sail/compare/v1.12.9...v1.12.10)
+
+### Fixed
+- ARM based container on Apple Silicon for Selenium ([#294](https://github.com/laravel/sail/pull/294))
+
+
+## [v1.12.9 (2021-11-30)](https://github.com/laravel/sail/compare/v1.12.8...v1.12.9)
+
+### Changed
+- Make PHP 8.1 the default runtime ([#292](https://github.com/laravel/sail/pull/292))
+
+
+## [v1.12.8 (2021-11-26)](https://github.com/laravel/sail/compare/v1.12.7...v1.12.8)
+
+## Changed
+- Revert "Switch to PHP 8.1" ([#291](https://github.com/laravel/sail/pull/291))
 
 
 ## [v1.12.7 (2021-11-26)](https://github.com/laravel/sail/compare/v1.12.6...v1.12.7)
