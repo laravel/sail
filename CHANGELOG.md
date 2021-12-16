@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.11...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.12.12...1.x)
+
+
+## [v1.12.12 (2021-12-16)](https://github.com/laravel/sail/compare/v1.12.11...v1.12.12)
+
+### Fixed
+- Revert "Set meilisearch data path" ([#301](https://github.com/laravel/sail/pull/301))
 
 
 ## [v1.12.11 (2021-12-14)](https://github.com/laravel/sail/compare/v1.12.10...v1.12.11)
