@@ -30,7 +30,7 @@ class PublishCommand extends Command
         $this->call('vendor:publish', ['--tag' => 'sail-docker']);
 
         file_put_contents(
-            $this->laravel->basePath('docker-compose.yml'),
+            $this->laravel->basePath('docker-compose.sail.yml'),
             str_replace(
                 [
                     './vendor/laravel/sail/runtimes/8.1',
@@ -42,7 +42,7 @@ class PublishCommand extends Command
                     './docker/8.0',
                     './docker/7.4',
                 ],
-                file_get_contents($this->laravel->basePath('docker-compose.yml'))
+                file_get_contents($this->laravel->basePath('docker-compose.sail.yml'))
             )
         );
     }

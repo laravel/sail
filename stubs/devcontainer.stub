@@ -2,7 +2,7 @@
 {
 	"name": "Existing Docker Compose (Extend)",
 	"dockerComposeFile": [
-		"../docker-compose.yml"
+		"../docker-compose.sail.yml"
 	],
 	"service": "laravel.test",
 	"workspaceFolder": "/var/www/html",

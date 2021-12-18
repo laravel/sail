@@ -111,7 +111,7 @@ class InstallCommand extends Command
         // Remove empty lines...
         $dockerCompose = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $dockerCompose);
 
-        file_put_contents($this->laravel->basePath('docker-compose.yml'), $dockerCompose);
+        file_put_contents($this->laravel->basePath('docker-compose.sail.yml'), $dockerCompose);
     }
 
     /**
