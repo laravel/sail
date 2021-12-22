@@ -146,7 +146,6 @@ class InstallCommand extends Command
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
-        file_put_contents($this->laravel->basePath('.env.example'), $environment);
     }
 
     /**
@@ -171,6 +170,5 @@ class InstallCommand extends Command
         $environment .= "\nWWWUSER=1000\n";
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
-        file_put_contents($this->laravel->basePath('.env.example'), $environment);
     }
 }
