@@ -157,7 +157,7 @@ if [ $# -gt 0 ]; then
     # Proxy the "phpunit" command to "php vendor/bin/phpunit"
     elif [ "$1" == "phpunit" ]; then
         shift 1
-        
+
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
                 -u sail
