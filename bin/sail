@@ -154,6 +154,19 @@ if [ $# -gt 0 ]; then
             sail_is_not_running
         fi
 
+    # Proxy the "phpunit" command to "php vendor/bin/phpunit"...
+    elif [ "$1" == "phpunit" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                -u sail
+                "$APP_SERVICE" \
+                php vendor/bin/phpunit "$@"
+        else
+            sail_is_not_running
+        fi
+
     # Proxy the "dusk" command to the "php artisan dusk" Artisan command...
     elif [ "$1" == "dusk" ]; then
         shift 1
