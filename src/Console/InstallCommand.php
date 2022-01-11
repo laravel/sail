@@ -55,16 +55,16 @@ class InstallCommand extends Command
     protected function gatherServicesWithSymfonyMenu()
     {
         return $this->choice('Which services would you like to install?', [
-             'mysql',
-             'pgsql',
-             'mariadb',
-             'redis',
-             'memcached',
-             'meilisearch',
-             'minio',
-             'mailhog',
-             'selenium',
-         ], 0, null, true);
+            'mysql',
+            'pgsql',
+            'mariadb',
+            'redis',
+            'memcached',
+            'meilisearch',
+            'minio',
+            'mailhog',
+            'selenium',
+        ], 0, null, true);
     }
 
     /**
@@ -92,7 +92,7 @@ class InstallCommand extends Command
             ->filter(function ($service) {
                 return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
             })->map(function ($service) {
-                return "    sail{$service}:\n        driver: local";
+                return "    sail-{$service}:\n        driver: local";
             })->whenNotEmpty(function ($collection) {
                 return $collection->prepend('volumes:');
             })->implode("\n");

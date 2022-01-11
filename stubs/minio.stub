@@ -7,7 +7,7 @@
             MINIO_ROOT_USER: 'sail'
             MINIO_ROOT_PASSWORD: 'password'
         volumes:
-            - 'sailminio:/data/minio'
+            - 'sail-minio:/data/minio'
         networks:
             - sail
         command: minio server /data/minio --console-address ":8900"
