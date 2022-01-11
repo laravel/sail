@@ -55,16 +55,16 @@ class InstallCommand extends Command
     protected function gatherServicesWithSymfonyMenu()
     {
         return $this->choice('Which services would you like to install?', [
-            'mysql',
-            'pgsql',
-            'mariadb',
-            'redis',
-            'memcached',
-            'meilisearch',
-            'minio',
-            'mailhog',
-            'selenium',
-        ], 0, null, true);
+             'mysql',
+             'pgsql',
+             'mariadb',
+             'redis',
+             'memcached',
+             'meilisearch',
+             'minio',
+             'mailhog',
+             'selenium',
+         ], 0, null, true);
     }
 
     /**
