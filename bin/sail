@@ -63,7 +63,7 @@ if [ -z "$SAIL_SKIP_CHECKS" ]; then
     if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
         echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
 
-        docker-compose down $DOWN_REMOVES_VOLUMES > /dev/null 2>&1
+        docker-compose down $SAIL_DOWN_PARAMS > /dev/null 2>&1
 
         EXEC="no"
     elif [ -n "$PSRESULT" ]; then
@@ -353,7 +353,7 @@ if [ $# -gt 0 ]; then
 
     # Handle the down command when no parameter string is given...
     elif [ "$1" == "down" ] && [ "$#" == "1" ]; then
-        docker-compose down $DOWN_REMOVES_VOLUMES
+        docker-compose down $SAIL_DOWN_PARAMS
 
     # Pass unknown commands to the "docker-compose" binary...
     else
