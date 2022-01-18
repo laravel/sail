@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.12...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.0...1.x)
+
+
+## [v1.13.0 (2022-01-18)](https://github.com/laravel/sail/compare/v1.12.12...v1.13.0)
+
+### Added
+- Add phpunit alias to sail binary ([#310](https://github.com/laravel/sail/pull/310)) 
+
+### Changed
+- Add separator between volume names ([#312](https://github.com/laravel/sail/pull/312))
 
 
 ## [v1.12.12 (2021-12-16)](https://github.com/laravel/sail/compare/v1.12.11...v1.12.12)
