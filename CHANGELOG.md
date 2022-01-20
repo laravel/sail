@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.1...1.x)
+
+
+## [v1.13.1 (2022-01-20)](https://github.com/laravel/sail/compare/v1.13.0...v1.13.1)
+
+### Changed
+- Update for Meilisearch ARM support ([#315](https://github.com/laravel/sail/pull/315))
+
+### Fixed
+- Fix php8.0-dev depending on php8.1-cli ([#316](https://github.com/laravel/sail/pull/316))
 
 
 ## [v1.13.0 (2022-01-18)](https://github.com/laravel/sail/compare/v1.12.12...v1.13.0)
