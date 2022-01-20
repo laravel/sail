@@ -43,6 +43,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN update-alternatives --set php /usr/bin/php8.0
+
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 RUN groupadd --force -g $WWWGROUP sail
