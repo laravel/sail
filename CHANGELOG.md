@@ -1,6 +1,24 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.12.12...master)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.1...master)
+
+
+## [v1.13.1 (2022-01-20)](https://github.com/laravel/sail/compare/v1.13.0...v1.13.1)
+
+### Changed
+- Update for Meilisearch ARM support ([#315](https://github.com/laravel/sail/pull/315))
+
+### Fixed
+- Fix php8.0-dev depending on php8.1-cli ([#316](https://github.com/laravel/sail/pull/316))
+
+
+## [v1.13.0 (2022-01-18)](https://github.com/laravel/sail/compare/v1.12.12...v1.13.0)
+
+### Added
+- Add phpunit alias to sail binary ([#310](https://github.com/laravel/sail/pull/310)) 
+
+### Changed
+- Add separator between volume names ([#312](https://github.com/laravel/sail/pull/312))
 
 
 ## [v1.12.12 (2021-12-16)](https://github.com/laravel/sail/compare/v1.12.11...v1.12.12)
