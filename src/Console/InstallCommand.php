@@ -3,6 +3,7 @@
 namespace Laravel\Sail\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
@@ -115,14 +116,31 @@ class InstallCommand extends Command
     }
 
     /**
-     * Replace the Host environment variables in the app's .env file.
+     * Replace the Host environment variables in the app's .env and .env.example files.
      *
      * @param  array  $services
      * @return void
      */
     protected function replaceEnvVariables(array $services)
     {
-        $environment = file_get_contents($this->laravel->basePath('.env'));
+        $this->replaceByPath($services, $this->laravel->basePath('.env'));
+
+        if (File::exists($this->laravel->basePath('.env.example'))) {
+            $this->replaceByPath($services, $this->laravel->basePath('.env.example'));
+        }
+    }
+
+    /**
+     * Replace the Host environment in given path.
+     *
+     * @param  array  $services
+     * @param  string  $path
+     *
+     * @return void
+     */
+    protected function replaceByPath(array $services, string $path)
+    {
+        $environment = file_get_contents($path);
 
         if (in_array('pgsql', $services)) {
             $environment = str_replace('DB_CONNECTION=mysql', "DB_CONNECTION=pgsql", $environment);
@@ -145,7 +163,7 @@ class InstallCommand extends Command
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
         }
 
-        file_put_contents($this->laravel->basePath('.env'), $environment);
+        file_put_contents($path, $environment);
     }
 
     /**
