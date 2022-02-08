@@ -160,7 +160,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail
+                -u sail \
                 "$APP_SERVICE" \
                 php vendor/bin/phpunit "$@"
         else
