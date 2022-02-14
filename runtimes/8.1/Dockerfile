@@ -4,6 +4,7 @@ LABEL maintainer="Taylor Otwell"
 
 ARG WWWGROUP
 ARG NODE_VERSION=16
+ARG PACKAGES_MIRROR
 
 WORKDIR /var/www/html
 
@@ -11,6 +12,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN if [ $PACKAGES_MIRROR ] ; then sed -i -e s@http://archive.ubuntu.com/ubuntu@$PACKAGES_MIRROR@g /etc/apt/sources.list ; fi
 
 RUN apt-get update \
     && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
