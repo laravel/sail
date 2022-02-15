@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.3...1.x)
+
+## [v1.13.3](https://github.com/laravel/sail/compare/v1.13.2...v1.13.3) - 2022-02-15
+
+### Changed
+
+- Support Newer Docker Compose Exit Statuses by @amayer5125 in https://github.com/laravel/sail/pull/331
+
+### Fixed
+
+- Typo in replace when checking for ARM for Seleium by @aprat84 in https://github.com/laravel/sail/pull/330
 
 ## [v1.13.2](https://github.com/laravel/sail/compare/v1.13.1...v1.13.2) - 2022-02-08
 
