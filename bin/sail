@@ -74,11 +74,6 @@ else
     EXEC="yes"
 fi
 
-NO_TTY=
-if [ ! -t 0 ]; then
-    NO_TTY="true"
-fi
-
 if [ $# -gt 0 ]; then
     # Proxy PHP commands to the "php" binary on the application container...
     if [ "$1" == "php" ]; then
