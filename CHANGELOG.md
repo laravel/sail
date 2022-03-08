@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.5...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.6...1.x)
+
+## [v1.13.6](https://github.com/laravel/sail/compare/v1.13.5...v1.13.6) - 2022-03-08
+
+### Changed
+
+- Allow overriding docker-compose.yml path using ENV by @prageeth in https://github.com/laravel/sail/pull/352 & @taylorotwell in https://github.com/laravel/sail/commit/6205041336b09b965af1d6af29261584e787bf52
 
 ## [v1.13.5](https://github.com/laravel/sail/compare/v1.13.3...v1.13.5) - 2022-02-22
 
