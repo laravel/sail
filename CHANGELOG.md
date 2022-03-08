@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.5...1.x)
+
+## [v1.13.5](https://github.com/laravel/sail/compare/v1.13.3...v1.13.5) - 2022-02-22
+
+### Changed
+
+- Revert "Install regular PHP packages instead of dev versions" by @taylorotwell in https://github.com/laravel/sail/pull/342
+
+## [v1.13.4](https://github.com/laravel/sail/compare/v1.13.3...v1.13.4) - 2022-02-17
+
+### Changed
+
+- Install regular PHP packages instead of dev versions by @bramdevries in https://github.com/laravel/sail/pull/340
+- Update Ubuntu by @taylorotwell in https://github.com/laravel/sail/commit/57d2942d5edd89b2018d0a3447da321fa35baac7
 
 ## [v1.13.3](https://github.com/laravel/sail/compare/v1.13.2...v1.13.3) - 2022-02-15
 
