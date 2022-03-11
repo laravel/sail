@@ -35,7 +35,7 @@ export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
 
-export SAIL_FILE=${SAIL_FILE:-""}
+export SAIL_FILES=${SAIL_FILES:-""}
 export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
 export SAIL_SHARE_SERVER_HOST=${SAIL_SHARE_SERVER_HOST:-"laravel-sail.site"}
 export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
@@ -52,16 +52,20 @@ function sail_is_not_running {
 
 # Define Docker Compose command prefix...
 DOCKER_COMPOSE=(docker-compose)
-if [ -n "$SAIL_FILE" ]; then
-    if [ -f "$SAIL_FILE" ]; then
-        DOCKER_COMPOSE+=(-f "$SAIL_FILE")
-    else
-        echo -e "${WHITE}Can't find file '${SAIL_FILE}'${NC}" >&2
-        echo "" >&2
-        echo -e "${WHITE}Update the 'SAIL_FILE' env variable with a valid path or leave it blank to use the default.${NC}" >&2
+if [ -n "$SAIL_FILES" ]; then
+    # Convert to array...
+    SAIL_FILES=(${SAIL_FILES//:/ })
+    for FILE in "${SAIL_FILES[@]}"; do
+        if [ -f "$FILE" ]; then
+            DOCKER_COMPOSE+=(-f "$FILE")
+        else
+            echo -e "${WHITE}Can't find file '${FILE}'${NC}" >&2
+            echo "" >&2
+            echo -e "${WHITE}Update the 'SAIL_FILES' env variable with valid paths separated by ':' or leave it blank to use the default.${NC}" >&2
 
-        exit 1
-    fi
+            exit 1
+        fi
+    done
 fi
 
 EXEC="yes"
