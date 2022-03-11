@@ -35,7 +35,7 @@ export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
 
-export SAIL_FILE=${SAIL_FILE:-"docker-compose.yml"}
+export SAIL_FILES=${SAIL_FILES:-""}
 export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
 export SAIL_SHARE_SERVER_HOST=${SAIL_SHARE_SERVER_HOST:-"laravel-sail.site"}
 export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
@@ -50,6 +50,26 @@ function sail_is_not_running {
     exit 1
 }
 
+# Define Docker Compose command prefix...
+DOCKER_COMPOSE=(docker-compose)
+
+if [ -n "$SAIL_FILES" ]; then
+    # Convert SAIL_FILES to an array...
+    SAIL_FILES=(${SAIL_FILES//:/ })
+
+    for FILE in "${SAIL_FILES[@]}"; do
+        if [ -f "$FILE" ]; then
+            DOCKER_COMPOSE+=(-f "$FILE")
+        else
+            echo -e "${WHITE}Unable to find Docker Compose file: '${FILE}'${NC}" >&2
+
+            exit 1
+        fi
+    done
+fi
+
+EXEC="yes"
+
 if [ -z "$SAIL_SKIP_CHECKS" ]; then
     # Ensure that Docker is running...
     if ! docker info > /dev/null 2>&1; then
@@ -59,23 +79,18 @@ if [ -z "$SAIL_SKIP_CHECKS" ]; then
     fi
 
     # Determine if Sail is currently up...
-    PSRESULT="$(docker-compose -f "$SAIL_FILE" ps -q)"
-    if docker-compose -f "$SAIL_FILE" ps "$APP_SERVICE" | grep 'Exit\|exited'; then
+    if "${DOCKER_COMPOSE[@]}" ps "$APP_SERVICE" | grep 'Exit\|exited'; then
         echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
 
-        docker-compose -f "$SAIL_FILE" down > /dev/null 2>&1
+        "${DOCKER_COMPOSE[@]}" down > /dev/null 2>&1
 
         EXEC="no"
-    elif [ -n "$PSRESULT" ]; then
-        EXEC="yes"
-    else
+    elif [ -z "$(${DOCKER_COMPOSE[@]} ps -q)" ]; then
         EXEC="no"
     fi
-else
-    EXEC="yes"
 fi
 
-ARGS=(-f "$SAIL_FILE")
+ARGS=()
 
 if [ $# -gt 0 ]; then
     # Proxy PHP commands to the "php" binary on the application container...
@@ -351,4 +366,4 @@ else
 fi
 
 # Run Docker Compose with the defined arguments...
-docker-compose "${ARGS[@]}"
+"${DOCKER_COMPOSE[@]}" "${ARGS[@]}"
