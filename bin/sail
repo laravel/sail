@@ -52,16 +52,16 @@ function sail_is_not_running {
 
 # Define Docker Compose command prefix...
 DOCKER_COMPOSE=(docker-compose)
+
 if [ -n "$SAIL_FILES" ]; then
-    # Convert to array...
+    # Convert SAIL_FILES to an array...
     SAIL_FILES=(${SAIL_FILES//:/ })
+
     for FILE in "${SAIL_FILES[@]}"; do
         if [ -f "$FILE" ]; then
             DOCKER_COMPOSE+=(-f "$FILE")
         else
-            echo -e "${WHITE}Can't find file '${FILE}'${NC}" >&2
-            echo "" >&2
-            echo -e "${WHITE}Update the 'SAIL_FILES' env variable with valid paths separated by ':' or leave it blank to use the default.${NC}" >&2
+            echo -e "${WHITE}Unable to find Docker Compose file: '${FILE}'${NC}" >&2
 
             exit 1
         fi
@@ -69,6 +69,7 @@ if [ -n "$SAIL_FILES" ]; then
 fi
 
 EXEC="yes"
+
 if [ -z "$SAIL_SKIP_CHECKS" ]; then
     # Ensure that Docker is running...
     if ! docker info > /dev/null 2>&1; then
