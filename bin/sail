@@ -91,6 +91,7 @@ if [ -z "$SAIL_SKIP_CHECKS" ]; then
 fi
 
 ARGS=()
+
 if [ $# -gt 0 ]; then
     # Proxy PHP commands to the "php" binary on the application container...
     if [ "$1" == "php" ]; then
