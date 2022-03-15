@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.6...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.7...1.x)
+
+## [v1.13.7](https://github.com/laravel/sail/compare/v1.13.6...v1.13.7) - 2022-03-15
+
+### Fixed
+
+- The input device is not a TTY by @ribeirobreno in https://github.com/laravel/sail/pull/353
+- `SAIL_FILE` environment variable prevents using docker-compose.override.yml by @ribeirobreno in https://github.com/laravel/sail/pull/355
 
 ## [v1.13.6](https://github.com/laravel/sail/compare/v1.13.5...v1.13.6) - 2022-03-08
 
