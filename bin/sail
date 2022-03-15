@@ -50,6 +50,84 @@ function sail_is_not_running {
     exit 1
 }
 
+# Function that prints the available commands...
+function display_help {
+    YELLOW='\e[33m'
+    GREEN='\e[32m'
+    END='\e[0m'
+
+    echo -e "Laravel Sail"
+    echo
+    echo -e "${YELLOW}Usage:${END}" >&2
+    echo -e "  sail COMMAND [options] [arguments]"
+    echo
+    echo -e "Docker files for running a basic Laravel application."
+    echo -e "Unknown commands are passed to the docker-compose binary."
+    echo
+    echo -e "${YELLOW}Docker-compose Commands:${END}"
+    echo -e "  ${GREEN}sail up${END}        Starts the application"
+    echo -e "  ${GREEN}sail up -d${END}     Starts the application in the background"
+    echo -e "  ${GREEN}sail stop${END}      Stops the application"
+    echo -e "  ${GREEN}sail restart${END}   Restarts the application"
+    echo -e "  ${GREEN}sail ps${END}        Displays the status of the containers"
+    echo
+    echo -e "${YELLOW}Artisan Commands:${END}"
+    echo -e "  ${GREEN}sail artisan ...${END}          Runs an artisan command"
+    echo -e "  ${GREEN}sail artisan queue:work${END}"
+    echo
+    echo -e "${YELLOW}PHP Commands:${END}"
+    echo -e "  ${GREEN}sail php ...${END}   Runs a PHP command"
+    echo -e "  ${GREEN}sail php -v${END}"
+    echo
+    echo -e "${YELLOW}Composer Commands:${END}"
+    echo -e "  ${GREEN}sail composer ...${END}                       Runs a composer command"
+    echo -e "  ${GREEN}sail composer require laravel/sanctum${END}"
+    echo
+    echo -e "${YELLOW}Node Commands:${END}"
+    echo -e "  ${GREEN}sail node ...${END}         Runs a node command"
+    echo -e "  ${GREEN}sail node --version${END}"
+    echo
+    echo -e "${YELLOW}NPM Commands:${END}"
+    echo -e "  ${GREEN}sail npm ...${END}        Runs a npm command"
+    echo -e "  ${GREEN}sail npx${END}            Runs a npx command"
+    echo -e "  ${GREEN}sail npm run prod${END}"
+    echo
+    echo -e "${YELLOW}Yarn Commands:${END}"
+    echo -e "  ${GREEN}sail yarn ...${END}        Runs a yarn command"
+    echo -e "  ${GREEN}sail yarn run prod${END}"
+    echo
+    echo -e "${YELLOW}Database Commands:${END}"
+    echo -e "  ${GREEN}sail mysql${END}     Instantiate a MySQL CLI session within the 'mysql' container"
+    echo -e "  ${GREEN}sail mariadb${END}   Instantiate a MySQL CLI session within the 'mariadb' container"
+    echo -e "  ${GREEN}sail psql${END}      Instantiate a PostgreSQL CLI session within the 'pgsql' container"
+    echo -e "  ${GREEN}sail redis${END}     Instantiate a Redis CLI session within the 'redis' container"
+    echo
+    echo -e "${YELLOW}Debugging:${END}"
+    echo -e "  ${GREEN}sail debug ...${END}          Runs an artisan command in debug mode"
+    echo -e "  ${GREEN}sail debug queue:work${END}"
+    echo
+    echo -e "${YELLOW}Running Tests:${END}"
+    echo -e "  ${GREEN}sail test${END}          Runs the PHPUnit tests"
+    echo -e "  ${GREEN}sail phpunit ...${END}   Runs the vendor/bin/phpunit binary"
+    echo -e "  ${GREEN}sail dusk${END}          Runs the Dusk tests (Requires the laravel/dusk package)"
+    echo
+    echo -e "${YELLOW}Container CLI:${END}"
+    echo -e "  ${GREEN}sail shell${END}        Connect to the container's shell"
+    echo -e "  ${GREEN}sail bash${END}         Alias for 'sail shell'"
+    echo -e "  ${GREEN}sail root-shell${END}   Connect to the container's root shell"
+    echo -e "  ${GREEN}sail root-bash${END}    Alias for 'sail root-shell'"
+    echo -e "  ${GREEN}sail tinker${END}       Starts a new Laravel Tinker session"
+    echo
+    echo -e "${YELLOW}Share Site:${END}"
+    echo -e "  ${GREEN}sail share${END}   Makes the application available on the internet"
+    echo
+    echo -e "${YELLOW}Customization:${END}"
+    echo -e "  ${GREEN}sail artisan sail:publish${END}   Publishes the Sail configuration files"
+    echo -e "  ${GREEN}sail build --no-cache${END}       Rebuilds the containers"
+
+    exit 1
+}
+
 # Define Docker Compose command prefix...
 DOCKER_COMPOSE=(docker-compose)
 
@@ -93,8 +171,15 @@ fi
 ARGS=()
 
 if [ $# -gt 0 ]; then
+
+    # Proxy the "help" command to show a list of available commands...
+    if [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
+        shift 1
+
+        display_help
+
     # Proxy PHP commands to the "php" binary on the application container...
-    if [ "$1" == "php" ]; then
+    elif [ "$1" == "php" ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
@@ -317,7 +402,7 @@ if [ $# -gt 0 ]; then
         fi
 
     # Initiate a root user Bash shell within the application container...
-    elif [ "$1" == "root-shell" ] ; then
+    elif [ "$1" == "root-shell" ] || [ "$1" == "root-bash" ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
@@ -362,7 +447,7 @@ if [ $# -gt 0 ]; then
         ARGS+=("$@")
     fi
 else
-    ARGS+=(ps)
+    display_help
 fi
 
 # Run Docker Compose with the defined arguments...
