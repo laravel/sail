@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ -f .env ]; then
+    SAIL_XDEBUG_MODE=$(grep 'SAIL_XDEBUG_MODE=' .env | sed 's/SAIL_XDEBUG_MODE=//g' | grep . || echo "off")
+    export SAIL_XDEBUG_MODE
+fi
+
 if [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail
 fi
