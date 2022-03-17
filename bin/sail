@@ -7,8 +7,20 @@ fi
 
 UNAMEOUT="$(uname -s)"
 
-WHITE='\033[1;37m'
-NC='\033[0m'
+# Check if stdout is a terminal...
+if test -t 1; then
+
+    # See if it supports colors...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test "$ncolors" -ge 8; then
+        BOLD="$(tput bold)"
+        YELLOW="$(tput setaf 3)"
+        GREEN="$(tput setaf 2)"
+        NC="$(tput sgr0)"
+    fi
+
+fi
 
 # Verify operating system is supported...
 case "${UNAMEOUT}" in
@@ -43,87 +55,83 @@ export SAIL_SHARE_SUBDOMAIN=${SAIL_SHARE_SUBDOMAIN:-""}
 
 # Function that outputs Sail is not running...
 function sail_is_not_running {
-    echo -e "${WHITE}Sail is not running.${NC}" >&2
+    echo "${BOLD}Sail is not running.${NC}" >&2
     echo "" >&2
-    echo -e "${WHITE}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
+    echo "${BOLD}You may Sail using the following commands:${NC} './vendor/bin/sail up' or './vendor/bin/sail up -d'" >&2
 
     exit 1
 }
 
 # Function that prints the available commands...
 function display_help {
-    YELLOW='\e[33m'
-    GREEN='\e[32m'
-    END='\e[0m'
-
-    echo -e "Laravel Sail"
+    echo "Laravel Sail"
     echo
-    echo -e "${YELLOW}Usage:${END}" >&2
-    echo -e "  sail COMMAND [options] [arguments]"
+    echo "${YELLOW}Usage:${NC}" >&2
+    echo "  sail COMMAND [options] [arguments]"
     echo
-    echo -e "Docker files for running a basic Laravel application."
-    echo -e "Unknown commands are passed to the docker-compose binary."
+    echo "Docker files for running a basic Laravel application."
+    echo "Unknown commands are passed to the docker-compose binary."
     echo
-    echo -e "${YELLOW}Docker-compose Commands:${END}"
-    echo -e "  ${GREEN}sail up${END}        Starts the application"
-    echo -e "  ${GREEN}sail up -d${END}     Starts the application in the background"
-    echo -e "  ${GREEN}sail stop${END}      Stops the application"
-    echo -e "  ${GREEN}sail restart${END}   Restarts the application"
-    echo -e "  ${GREEN}sail ps${END}        Displays the status of the containers"
+    echo "${YELLOW}Docker-compose Commands:${NC}"
+    echo "  ${GREEN}sail up${NC}        Starts the application"
+    echo "  ${GREEN}sail up -d${NC}     Starts the application in the background"
+    echo "  ${GREEN}sail stop${NC}      Stops the application"
+    echo "  ${GREEN}sail restart${NC}   Restarts the application"
+    echo "  ${GREEN}sail ps${NC}        Displays the status of the containers"
     echo
-    echo -e "${YELLOW}Artisan Commands:${END}"
-    echo -e "  ${GREEN}sail artisan ...${END}          Runs an artisan command"
-    echo -e "  ${GREEN}sail artisan queue:work${END}"
+    echo "${YELLOW}Artisan Commands:${NC}"
+    echo "  ${GREEN}sail artisan ...${NC}          Runs an artisan command"
+    echo "  ${GREEN}sail artisan queue:work${NC}"
     echo
-    echo -e "${YELLOW}PHP Commands:${END}"
-    echo -e "  ${GREEN}sail php ...${END}   Runs a PHP command"
-    echo -e "  ${GREEN}sail php -v${END}"
+    echo "${YELLOW}PHP Commands:${NC}"
+    echo "  ${GREEN}sail php ...${NC}   Runs a PHP command"
+    echo "  ${GREEN}sail php -v${NC}"
     echo
-    echo -e "${YELLOW}Composer Commands:${END}"
-    echo -e "  ${GREEN}sail composer ...${END}                       Runs a composer command"
-    echo -e "  ${GREEN}sail composer require laravel/sanctum${END}"
+    echo "${YELLOW}Composer Commands:${NC}"
+    echo "  ${GREEN}sail composer ...${NC}                       Runs a composer command"
+    echo "  ${GREEN}sail composer require laravel/sanctum${NC}"
     echo
-    echo -e "${YELLOW}Node Commands:${END}"
-    echo -e "  ${GREEN}sail node ...${END}         Runs a node command"
-    echo -e "  ${GREEN}sail node --version${END}"
+    echo "${YELLOW}Node Commands:${NC}"
+    echo "  ${GREEN}sail node ...${NC}         Runs a node command"
+    echo "  ${GREEN}sail node --version${NC}"
     echo
-    echo -e "${YELLOW}NPM Commands:${END}"
-    echo -e "  ${GREEN}sail npm ...${END}        Runs a npm command"
-    echo -e "  ${GREEN}sail npx${END}            Runs a npx command"
-    echo -e "  ${GREEN}sail npm run prod${END}"
+    echo "${YELLOW}NPM Commands:${NC}"
+    echo "  ${GREEN}sail npm ...${NC}        Runs a npm command"
+    echo "  ${GREEN}sail npx${NC}            Runs a npx command"
+    echo "  ${GREEN}sail npm run prod${NC}"
     echo
-    echo -e "${YELLOW}Yarn Commands:${END}"
-    echo -e "  ${GREEN}sail yarn ...${END}        Runs a yarn command"
-    echo -e "  ${GREEN}sail yarn run prod${END}"
+    echo "${YELLOW}Yarn Commands:${NC}"
+    echo "  ${GREEN}sail yarn ...${NC}        Runs a yarn command"
+    echo "  ${GREEN}sail yarn run prod${NC}"
     echo
-    echo -e "${YELLOW}Database Commands:${END}"
-    echo -e "  ${GREEN}sail mysql${END}     Instantiate a MySQL CLI session within the 'mysql' container"
-    echo -e "  ${GREEN}sail mariadb${END}   Instantiate a MySQL CLI session within the 'mariadb' container"
-    echo -e "  ${GREEN}sail psql${END}      Instantiate a PostgreSQL CLI session within the 'pgsql' container"
-    echo -e "  ${GREEN}sail redis${END}     Instantiate a Redis CLI session within the 'redis' container"
+    echo "${YELLOW}Database Commands:${NC}"
+    echo "  ${GREEN}sail mysql${NC}     Instantiate a MySQL CLI session within the 'mysql' container"
+    echo "  ${GREEN}sail mariadb${NC}   Instantiate a MySQL CLI session within the 'mariadb' container"
+    echo "  ${GREEN}sail psql${NC}      Instantiate a PostgreSQL CLI session within the 'pgsql' container"
+    echo "  ${GREEN}sail redis${NC}     Instantiate a Redis CLI session within the 'redis' container"
     echo
-    echo -e "${YELLOW}Debugging:${END}"
-    echo -e "  ${GREEN}sail debug ...${END}          Runs an artisan command in debug mode"
-    echo -e "  ${GREEN}sail debug queue:work${END}"
+    echo "${YELLOW}Debugging:${NC}"
+    echo "  ${GREEN}sail debug ...${NC}          Runs an artisan command in debug mode"
+    echo "  ${GREEN}sail debug queue:work${NC}"
     echo
-    echo -e "${YELLOW}Running Tests:${END}"
-    echo -e "  ${GREEN}sail test${END}          Runs the PHPUnit tests"
-    echo -e "  ${GREEN}sail phpunit ...${END}   Runs the vendor/bin/phpunit binary"
-    echo -e "  ${GREEN}sail dusk${END}          Runs the Dusk tests (Requires the laravel/dusk package)"
+    echo "${YELLOW}Running Tests:${NC}"
+    echo "  ${GREEN}sail test${NC}          Runs the PHPUnit tests"
+    echo "  ${GREEN}sail phpunit ...${NC}   Runs the vNCor/bin/phpunit binary"
+    echo "  ${GREEN}sail dusk${NC}          Runs the Dusk tests (Requires the laravel/dusk package)"
     echo
-    echo -e "${YELLOW}Container CLI:${END}"
-    echo -e "  ${GREEN}sail shell${END}        Connect to the container's shell"
-    echo -e "  ${GREEN}sail bash${END}         Alias for 'sail shell'"
-    echo -e "  ${GREEN}sail root-shell${END}   Connect to the container's root shell"
-    echo -e "  ${GREEN}sail root-bash${END}    Alias for 'sail root-shell'"
-    echo -e "  ${GREEN}sail tinker${END}       Starts a new Laravel Tinker session"
+    echo "${YELLOW}Container CLI:${NC}"
+    echo "  ${GREEN}sail shell${NC}        Connect to the container's shell"
+    echo "  ${GREEN}sail bash${NC}         Alias for 'sail shell'"
+    echo "  ${GREEN}sail root-shell${NC}   Connect to the container's root shell"
+    echo "  ${GREEN}sail root-bash${NC}    Alias for 'sail root-shell'"
+    echo "  ${GREEN}sail tinker${NC}       Starts a new Laravel Tinker session"
     echo
-    echo -e "${YELLOW}Share Site:${END}"
-    echo -e "  ${GREEN}sail share${END}   Makes the application available on the internet"
+    echo "${YELLOW}Share Site:${NC}"
+    echo "  ${GREEN}sail share${NC}   Makes the application available on the internet"
     echo
-    echo -e "${YELLOW}Customization:${END}"
-    echo -e "  ${GREEN}sail artisan sail:publish${END}   Publishes the Sail configuration files"
-    echo -e "  ${GREEN}sail build --no-cache${END}       Rebuilds the containers"
+    echo "${YELLOW}Customization:${NC}"
+    echo "  ${GREEN}sail artisan sail:publish${NC}   Publishes the Sail configuration files"
+    echo "  ${GREEN}sail build --no-cache${NC}       Rebuilds the containers"
 
     exit 1
 }
@@ -139,7 +147,7 @@ if [ -n "$SAIL_FILES" ]; then
         if [ -f "$FILE" ]; then
             DOCKER_COMPOSE+=(-f "$FILE")
         else
-            echo -e "${WHITE}Unable to find Docker Compose file: '${FILE}'${NC}" >&2
+            echo "${BOLD}Unable to find Docker Compose file: '${FILE}'${NC}" >&2
 
             exit 1
         fi
@@ -151,14 +159,14 @@ EXEC="yes"
 if [ -z "$SAIL_SKIP_CHECKS" ]; then
     # Ensure that Docker is running...
     if ! docker info > /dev/null 2>&1; then
-        echo -e "${WHITE}Docker is not running.${NC}" >&2
+        echo "${BOLD}Docker is not running.${NC}" >&2
 
         exit 1
     fi
 
     # Determine if Sail is currently up...
     if "${DOCKER_COMPOSE[@]}" ps "$APP_SERVICE" | grep 'Exit\|exited'; then
-        echo -e "${WHITE}Shutting down old Sail processes...${NC}" >&2
+        echo "${BOLD}Shutting down old Sail processes...${NC}" >&2
 
         "${DOCKER_COMPOSE[@]}" down > /dev/null 2>&1
 
