@@ -20,10 +20,9 @@ if [ "$MACHINE" == "UNKNOWN" ]; then
     exit 1
 fi
 
-# Check if stdout is a terminal...
+# Determine if stdout is a terminal...
 if test -t 1; then
-
-    # See if it supports colors...
+    # Determine if colors are supported...
     ncolors=$(tput colors)
 
     if test -n "$ncolors" && test "$ncolors" -ge 8; then
@@ -32,7 +31,6 @@ if test -t 1; then
         GREEN="$(tput setaf 2)"
         NC="$(tput sgr0)"
     fi
-
 fi
 
 # Function that prints the available commands...
@@ -42,74 +40,73 @@ function display_help {
     echo "${YELLOW}Usage:${NC}" >&2
     echo "  sail COMMAND [options] [arguments]"
     echo
-    echo "Docker files for running a basic Laravel application."
     echo "Unknown commands are passed to the docker-compose binary."
     echo
-    echo "${YELLOW}Docker-compose Commands:${NC}"
-    echo "  ${GREEN}sail up${NC}        Starts the application"
-    echo "  ${GREEN}sail up -d${NC}     Starts the application in the background"
-    echo "  ${GREEN}sail stop${NC}      Stops the application"
-    echo "  ${GREEN}sail restart${NC}   Restarts the application"
-    echo "  ${GREEN}sail ps${NC}        Displays the status of the containers"
+    echo "${YELLOW}docker-compose Commands:${NC}"
+    echo "  ${GREEN}sail up${NC}        Start the application"
+    echo "  ${GREEN}sail up -d${NC}     Start the application in the background"
+    echo "  ${GREEN}sail stop${NC}      Stop the application"
+    echo "  ${GREEN}sail restart${NC}   Restart the application"
+    echo "  ${GREEN}sail ps${NC}        Display the status of all containers"
     echo
     echo "${YELLOW}Artisan Commands:${NC}"
-    echo "  ${GREEN}sail artisan ...${NC}          Runs an artisan command"
+    echo "  ${GREEN}sail artisan ...${NC}          Run an Artisan command"
     echo "  ${GREEN}sail artisan queue:work${NC}"
     echo
     echo "${YELLOW}PHP Commands:${NC}"
-    echo "  ${GREEN}sail php ...${NC}   Runs a PHP command"
+    echo "  ${GREEN}sail php ...${NC}   Run a snippet of PHP code"
     echo "  ${GREEN}sail php -v${NC}"
     echo
     echo "${YELLOW}Composer Commands:${NC}"
-    echo "  ${GREEN}sail composer ...${NC}                       Runs a composer command"
+    echo "  ${GREEN}sail composer ...${NC}                       Run a Composer command"
     echo "  ${GREEN}sail composer require laravel/sanctum${NC}"
     echo
     echo "${YELLOW}Node Commands:${NC}"
-    echo "  ${GREEN}sail node ...${NC}         Runs a node command"
+    echo "  ${GREEN}sail node ...${NC}         Run a Node command"
     echo "  ${GREEN}sail node --version${NC}"
     echo
     echo "${YELLOW}NPM Commands:${NC}"
-    echo "  ${GREEN}sail npm ...${NC}        Runs a npm command"
-    echo "  ${GREEN}sail npx${NC}            Runs a npx command"
+    echo "  ${GREEN}sail npm ...${NC}        Run a npm command"
+    echo "  ${GREEN}sail npx${NC}            Run a npx command"
     echo "  ${GREEN}sail npm run prod${NC}"
     echo
     echo "${YELLOW}Yarn Commands:${NC}"
-    echo "  ${GREEN}sail yarn ...${NC}        Runs a yarn command"
+    echo "  ${GREEN}sail yarn ...${NC}        Run a Yarn command"
     echo "  ${GREEN}sail yarn run prod${NC}"
     echo
     echo "${YELLOW}Database Commands:${NC}"
-    echo "  ${GREEN}sail mysql${NC}     Instantiate a MySQL CLI session within the 'mysql' container"
-    echo "  ${GREEN}sail mariadb${NC}   Instantiate a MySQL CLI session within the 'mariadb' container"
-    echo "  ${GREEN}sail psql${NC}      Instantiate a PostgreSQL CLI session within the 'pgsql' container"
-    echo "  ${GREEN}sail redis${NC}     Instantiate a Redis CLI session within the 'redis' container"
+    echo "  ${GREEN}sail mysql${NC}     Start a MySQL CLI session within the 'mysql' container"
+    echo "  ${GREEN}sail mariadb${NC}   Start a MySQL CLI session within the 'mariadb' container"
+    echo "  ${GREEN}sail psql${NC}      Start a PostgreSQL CLI session within the 'pgsql' container"
+    echo "  ${GREEN}sail redis${NC}     Start a Redis CLI session within the 'redis' container"
     echo
     echo "${YELLOW}Debugging:${NC}"
-    echo "  ${GREEN}sail debug ...${NC}          Runs an artisan command in debug mode"
+    echo "  ${GREEN}sail debug ...${NC}          Run an Artisan command in debug mode"
     echo "  ${GREEN}sail debug queue:work${NC}"
     echo
     echo "${YELLOW}Running Tests:${NC}"
-    echo "  ${GREEN}sail test${NC}          Runs the PHPUnit tests"
-    echo "  ${GREEN}sail phpunit ...${NC}   Runs the vNCor/bin/phpunit binary"
-    echo "  ${GREEN}sail dusk${NC}          Runs the Dusk tests (Requires the laravel/dusk package)"
+    echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command"
+    echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit"
+    echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)"
     echo
     echo "${YELLOW}Container CLI:${NC}"
-    echo "  ${GREEN}sail shell${NC}        Connect to the container's shell"
+    echo "  ${GREEN}sail shell${NC}        Start a shell session within the application container"
     echo "  ${GREEN}sail bash${NC}         Alias for 'sail shell'"
-    echo "  ${GREEN}sail root-shell${NC}   Connect to the container's root shell"
+    echo "  ${GREEN}sail root-shell${NC}   Start a root shell session within the application container"
     echo "  ${GREEN}sail root-bash${NC}    Alias for 'sail root-shell'"
-    echo "  ${GREEN}sail tinker${NC}       Starts a new Laravel Tinker session"
+    echo "  ${GREEN}sail tinker${NC}       Start a new Laravel Tinker session"
     echo
-    echo "${YELLOW}Share Site:${NC}"
-    echo "  ${GREEN}sail share${NC}   Makes the application available on the internet"
+    echo "${YELLOW}Sharing:${NC}"
+    echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
     echo
     echo "${YELLOW}Customization:${NC}"
-    echo "  ${GREEN}sail artisan sail:publish${NC}   Publishes the Sail configuration files"
-    echo "  ${GREEN}sail build --no-cache${NC}       Rebuilds the containers"
+    echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
+    echo "  ${GREEN}sail build --no-cache${NC}       Rebuild all of the Sail containers"
 
     exit 1
 }
 
-# Proxy the "help" command to show a list of available commands...
+# Proxy the "help" command...
 if [ $# -gt 0 ]; then
     if [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
         display_help
