@@ -174,7 +174,7 @@ if [ -z "$SAIL_SKIP_CHECKS" ]; then
     fi
 
     # Determine if Sail is currently up...
-    if "${DOCKER_COMPOSE[@]}" ps "$APP_SERVICE" | grep 'Exit\|exited'; then
+    if "${DOCKER_COMPOSE[@]}" ps "$APP_SERVICE" 2>&1 | grep 'Exit\|exited'; then
         echo "${BOLD}Shutting down old Sail processes...${NC}" >&2
 
         "${DOCKER_COMPOSE[@]}" down > /dev/null 2>&1
