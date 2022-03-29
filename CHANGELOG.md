@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.7...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.8...1.x)
+
+## [v1.13.8](https://github.com/laravel/sail/compare/v1.13.7...v1.13.8) - 2022-03-23
+
+### Changed
+
+- Update ondrej/php Repository Details by @amayer5125 in https://github.com/laravel/sail/pull/360
+- Shell - display available commands / help section by @WalterWoshid in https://github.com/laravel/sail/pull/359
+
+### Fixes
+
+- Fixes docker-compose not found in non-bash shells by @ribeirobreno in https://github.com/laravel/sail/pull/364
 
 ## [v1.13.7](https://github.com/laravel/sail/compare/v1.13.6...v1.13.7) - 2022-03-15
 
