@@ -111,8 +111,11 @@ else
 fi
 
 # Source the ".env" file so Laravel's environment variables are available...
-if [ -f ./.env ]; then
-    source ./.env
+ENVIRONMENT_FILE=${ENVIRONMENT_FILE:-"./.env"}
+ENVIRONMENT_PRESENT="no"
+if [ -f $ENVIRONMENT_FILE ]; then
+    ENVIRONMENT_PRESENT="yes"
+    source $ENVIRONMENT_FILE
 fi
 
 # Define environment variables...
@@ -142,6 +145,11 @@ if [ -x "$(command -v docker-compose)" ]; then
     DOCKER_COMPOSE=(docker-compose)
 else
     DOCKER_COMPOSE=(docker compose)
+fi
+
+# Define Docker Environment
+if [ "$ENVIRONMENT_PRESENT" == "yes" ]; then
+    DOCKER_COMPOSE+=(--env-file "$ENVIRONMENT_FILE")
 fi
 
 if [ -n "$SAIL_FILES" ]; then
