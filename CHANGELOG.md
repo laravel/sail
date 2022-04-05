@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.8...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.9...1.x)
+
+## [v1.13.9](https://github.com/laravel/sail/compare/v1.13.8...v1.13.9) - 2022-04-04
+
+### Changed
+
+- Update default PostgreSQL version to v14 by @ariaieboy in https://github.com/laravel/sail/pull/373
 
 ## [v1.13.8](https://github.com/laravel/sail/compare/v1.13.7...v1.13.8) - 2022-03-23
 
