@@ -15,3 +15,18 @@
             test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
             retries: 3
             timeout: 5s
+    minio-buckets:
+      image: minio/mc
+      depends_on:
+        - minio
+      networks:
+        - sail
+      entrypoint: >
+        /bin/sh -c "
+        /usr/bin/mc config host add minio http://minio:9000 sail password --api S3V4;
+        /usr/bin/mc mb minio/private;
+        /usr/bin/mc mb minio/public;
+        /usr/bin/mc policy set public minio/public;
+        exit 0;
+        "
+
