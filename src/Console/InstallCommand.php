@@ -122,7 +122,11 @@ class InstallCommand extends Command
      */
     protected function replaceEnvVariables(array $services)
     {
-        $environment = file_get_contents($this->laravel->basePath('.env'));
+        $environment = file_get_contents(
+            rtrim($this->laravel->environmentPath(),DIRECTORY_SEPARATOR)
+            .DIRECTORY_SEPARATOR.
+            $this->laravel->environmentFile()
+        );
 
         if (in_array('pgsql', $services)) {
             $environment = str_replace('DB_CONNECTION=mysql', "DB_CONNECTION=pgsql", $environment);
