@@ -1,6 +1,59 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.13.9...1.x)
+
+## [v1.13.9](https://github.com/laravel/sail/compare/v1.13.8...v1.13.9) - 2022-04-04
+
+### Changed
+
+- Update default PostgreSQL version to v14 by @ariaieboy in https://github.com/laravel/sail/pull/373
+
+## [v1.13.8](https://github.com/laravel/sail/compare/v1.13.7...v1.13.8) - 2022-03-23
+
+### Changed
+
+- Update ondrej/php Repository Details by @amayer5125 in https://github.com/laravel/sail/pull/360
+- Shell - display available commands / help section by @WalterWoshid in https://github.com/laravel/sail/pull/359
+
+### Fixes
+
+- Fixes docker-compose not found in non-bash shells by @ribeirobreno in https://github.com/laravel/sail/pull/364
+
+## [v1.13.7](https://github.com/laravel/sail/compare/v1.13.6...v1.13.7) - 2022-03-15
+
+### Fixed
+
+- The input device is not a TTY by @ribeirobreno in https://github.com/laravel/sail/pull/353
+- `SAIL_FILE` environment variable prevents using docker-compose.override.yml by @ribeirobreno in https://github.com/laravel/sail/pull/355
+
+## [v1.13.6](https://github.com/laravel/sail/compare/v1.13.5...v1.13.6) - 2022-03-08
+
+### Changed
+
+- Allow overriding docker-compose.yml path using ENV by @prageeth in https://github.com/laravel/sail/pull/352 & @taylorotwell in https://github.com/laravel/sail/commit/6205041336b09b965af1d6af29261584e787bf52
+
+## [v1.13.5](https://github.com/laravel/sail/compare/v1.13.3...v1.13.5) - 2022-02-22
+
+### Changed
+
+- Revert "Install regular PHP packages instead of dev versions" by @taylorotwell in https://github.com/laravel/sail/pull/342
+
+## [v1.13.4](https://github.com/laravel/sail/compare/v1.13.3...v1.13.4) - 2022-02-17
+
+### Changed
+
+- Install regular PHP packages instead of dev versions by @bramdevries in https://github.com/laravel/sail/pull/340
+- Update Ubuntu by @taylorotwell in https://github.com/laravel/sail/commit/57d2942d5edd89b2018d0a3447da321fa35baac7
+
+## [v1.13.3](https://github.com/laravel/sail/compare/v1.13.2...v1.13.3) - 2022-02-15
+
+### Changed
+
+- Support Newer Docker Compose Exit Statuses by @amayer5125 in https://github.com/laravel/sail/pull/331
+
+### Fixed
+
+- Typo in replace when checking for ARM for Seleium by @aprat84 in https://github.com/laravel/sail/pull/330
 
 ## [v1.13.2](https://github.com/laravel/sail/compare/v1.13.1...v1.13.2) - 2022-02-08
 
