@@ -39,6 +39,7 @@ class InstallCommand extends Command
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
+        $this->configurePhpUnit();
 
         if ($this->option('devcontainer')) {
             $this->installDevContainer();
@@ -146,6 +147,21 @@ class InstallCommand extends Command
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    /**
+     * Configure PHPUnit to use the dedicated testing database.
+     *
+     * @return void
+     */
+    protected function configurePhpUnit()
+    {
+        $phpunit = file_get_contents($this->laravel->basePath('phpunit.xml'));
+
+        $phpunit = preg_replace('/^.*DB_CONNECTION.*\n/m', '', $phpunit);
+        $phpunit = str_replace('<!-- <env name="DB_DATABASE" value=":memory:"/> -->', '<env name="DB_DATABASE" value="testing"/>', $phpunit);
+
+        file_put_contents($this->laravel->basePath('phpunit.xml'), $phpunit);
     }
 
     /**
