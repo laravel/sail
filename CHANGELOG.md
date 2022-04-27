@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.13.10...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.0...1.x)
+
+## [v1.14.0](https://github.com/laravel/sail/compare/v1.13.10...v1.14.0) - 2022-04-27
+
+### Added
+
+- Create a dedicated testing database by @jessarcher in https://github.com/laravel/sail/pull/388
+
+### Fixed
+
+- Fix apt-key for WSL by @Evertt in https://github.com/laravel/sail/pull/389
 
 ## [v1.13.10](https://github.com/laravel/sail/compare/v1.13.9...v1.13.10) - 2022-04-14
 
