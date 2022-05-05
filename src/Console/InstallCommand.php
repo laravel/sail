@@ -156,7 +156,13 @@ class InstallCommand extends Command
      */
     protected function configurePhpUnit()
     {
-        $phpunit = file_get_contents($this->laravel->basePath('phpunit.xml'));
+        $file = $this->laravel->basePath('phpunit.xml');
+
+        if (! file_exists($file)) {
+            $file = $this->laravel->basePath('phpunit.xml.dist');
+        }
+
+        $phpunit = file_get_contents($file);
 
         $phpunit = preg_replace('/^.*DB_CONNECTION.*\n/m', '', $phpunit);
         $phpunit = str_replace('<!-- <env name="DB_DATABASE" value=":memory:"/> -->', '<env name="DB_DATABASE" value="testing"/>', $phpunit);
