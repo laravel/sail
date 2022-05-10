@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.2...1.x)
+
+## [v1.14.2](https://github.com/laravel/sail/compare/v1.14.1...v1.14.2) - 2022-05-10
+
+### Fixed
+
+- Allow Sail to read from phpunit.xml and phpunit.xml.dist when running the install command by @kylemilloy in https://github.com/laravel/sail/pull/394
+- Fix missing usage of POSTGRES_VERSION by @driesvints in https://github.com/laravel/sail/pull/398
 
 ## [v1.14.1](https://github.com/laravel/sail/compare/v1.14.0...v1.14.1) - 2022-05-02
 
