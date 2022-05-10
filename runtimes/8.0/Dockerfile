@@ -2,6 +2,7 @@ FROM ubuntu:21.10
 
 LABEL maintainer="Taylor Otwell"
 
+ARG TZ=UTC
 ARG WWWGROUP
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=14
@@ -9,7 +10,7 @@ ARG POSTGRES_VERSION=14
 WORKDIR /var/www/html
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV TZ=UTC
+ENV TZ=$TZ
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
