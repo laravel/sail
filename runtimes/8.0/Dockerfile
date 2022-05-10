@@ -5,6 +5,7 @@ LABEL maintainer="Taylor Otwell"
 ARG WWWGROUP
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=14
+ARG PHP_VERSION=8.0
 
 WORKDIR /var/www/html
 
@@ -26,15 +27,15 @@ RUN    apt update && apt install -y curl \
     && echo "deb http://apt.postgresql.org/pub/repos/apt impish-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
     && apt-get install -y gnupg gosu ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
-       php8.0-cli php8.0-dev \
-       php8.0-pgsql php8.0-sqlite3 php8.0-gd \
-       php8.0-curl \
-       php8.0-imap php8.0-mysql php8.0-mbstring \
-       php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap \
-       php8.0-intl php8.0-readline \
-       php8.0-ldap \
-       php8.0-msgpack php8.0-igbinary php8.0-redis php8.0-swoole \
-       php8.0-memcached php8.0-pcov php8.0-xdebug \
+       php$PHP_VERSION-cli php$PHP_VERSION-dev \
+       php$PHP_VERSION-pgsql php$PHP_VERSION-sqlite3 php$PHP_VERSION-gd \
+       php$PHP_VERSION-curl \
+       php$PHP_VERSION-imap php$PHP_VERSION-mysql php$PHP_VERSION-mbstring \
+       php$PHP_VERSION-xml php$PHP_VERSION-zip php$PHP_VERSION-bcmath php$PHP_VERSION-soap \
+       php$PHP_VERSION-intl php$PHP_VERSION-readline \
+       php$PHP_VERSION-ldap \
+       php$PHP_VERSION-msgpack php$PHP_VERSION-igbinary php$PHP_VERSION-redis php$PHP_VERSION-swoole \
+       php$PHP_VERSION-memcached php$PHP_VERSION-pcov php$PHP_VERSION-xdebug \
        nodejs \
        yarn \
        mysql-client \
