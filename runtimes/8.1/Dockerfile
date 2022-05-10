@@ -13,7 +13,8 @@ ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+RUN       apt update && apt install -y curl \
+    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && mkdir -p ~/.gnupg \
     && chmod 600 ~/.gnupg \
@@ -23,7 +24,7 @@ RUN    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
     && echo "deb http://apt.postgresql.org/pub/repos/apt impish-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
+    && apt-get install -y gnupg gosu ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
        php8.1-cli php8.1-dev \
        php8.1-pgsql php8.1-sqlite3 php8.1-gd \
        php8.1-curl \
