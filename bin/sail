@@ -96,7 +96,7 @@ function display_help {
     echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
     echo
     echo "${YELLOW}Binaries:${NC}"
-    echo "  ${GREEN}sail bin ...${NC}               Run Composer binary scripts from the vendor/bin directory"
+    echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
     echo
     echo "${YELLOW}Customization:${NC}"
     echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
