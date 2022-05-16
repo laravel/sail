@@ -46,9 +46,7 @@ function display_help {
     echo
     echo "${YELLOW}Artisan Commands:${NC}"
     echo "  ${GREEN}sail artisan ...${NC}          Run an Artisan command"
-    echo "  ${GREEN}sail art ...${NC}              Run an Artisan command"
     echo "  ${GREEN}sail artisan queue:work${NC}"
-    echo "  ${GREEN}sail art     queue:work${NC}"
     echo
     echo "${YELLOW}PHP Commands:${NC}"
     echo "  ${GREEN}sail php ...${NC}   Run a snippet of PHP code"
@@ -85,7 +83,7 @@ function display_help {
     echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command"
     echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit"
     echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)"
-    echo "  ${GREEN}sail dusk:fails${NC}    Re-running the failing tests (Requires the laravel/dusk package)"
+    echo "  ${GREEN}sail dusk:fails${NC}    Re-run previously failed Dusk tests (Requires the laravel/dusk package)"
     echo
     echo "${YELLOW}Container CLI:${NC}"
     echo "  ${GREEN}sail shell${NC}        Start a shell session within the application container"
@@ -97,10 +95,8 @@ function display_help {
     echo "${YELLOW}Sharing:${NC}"
     echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
     echo
-    echo "${YELLOW}Run binary files:${NC}"
-    echo "  ${GREEN}sail bin ...${NC}               Run binary files from the vendor/bin directory"
-    echo "  ${GREEN}sail bin var-dump-server${NC}   Run var-dump-server from the vendor/bin directory"
-    echo "  ${GREEN}sail bin simple-cli${NC}        Run simple-cli from the vendor/bin directory"
+    echo "${YELLOW}Binaries:${NC}"
+    echo "  ${GREEN}sail bin ...${NC}               Run Composer binary scripts from the vendor/bin directory"
     echo
     echo "${YELLOW}Customization:${NC}"
     echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
