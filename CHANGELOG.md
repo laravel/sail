@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.5...1.x)
+
+## [v1.14.5](https://github.com/laravel/sail/compare/v1.14.4...v1.14.5) - 2022-05-16
+
+### Changed
+
+- Updated sail helps section by @mehdirajabi59 in https://github.com/laravel/sail/pull/407
+- Cleans up deprecated apt-key usage by @tbollinger in https://github.com/laravel/sail/pull/408
+- use docker compose (GO) by @erfantkerfan in https://github.com/laravel/sail/pull/405
 
 ## [v1.14.4](https://github.com/laravel/sail/compare/v1.14.3...v1.14.4) - 2022-05-12
 
