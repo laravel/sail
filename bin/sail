@@ -142,7 +142,8 @@ function sail_is_not_running {
 }
 
 # Define Docker Compose command prefix...
-if [ -x "$(command -v docker compose)" ]; then
+docker compose &> /dev/null
+if [ $? == 0 ]; then
     DOCKER_COMPOSE=(docker compose)
 else
     DOCKER_COMPOSE=(docker-compose)
