@@ -3,7 +3,7 @@
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
         volumes:
-            - 'sail-meilisearch:/data.ms'
+            - 'sail-meilisearch:/meili_data'
         networks:
             - sail
         healthcheck:
