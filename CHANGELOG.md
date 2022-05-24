@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.5...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.6...1.x)
+
+## [v1.14.6](https://github.com/laravel/sail/compare/v1.14.5...v1.14.6) - 2022-05-18
+
+### Fixed
+
+- Checks if docker compose or docker-compose is installed by @affektde in https://github.com/laravel/sail/pull/409
 
 ## [v1.14.5](https://github.com/laravel/sail/compare/v1.14.4...v1.14.5) - 2022-05-16
 
