@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.6...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.7...1.x)
+
+## [v1.14.7](https://github.com/laravel/sail/compare/v1.14.6...v1.14.7) - 2022-05-21
+
+### Changed
+
+- Update meilisearch stub to reflect new data path by @tdondich in https://github.com/laravel/sail/pull/414
 
 ## [v1.14.6](https://github.com/laravel/sail/compare/v1.14.5...v1.14.6) - 2022-05-18
 
