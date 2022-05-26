@@ -13,5 +13,6 @@ chmod -R ugo+rw /.composer
 if [ $# -gt 0 ]; then
     exec gosu $WWWUSER "$@"
 else
+    sed -i "s/\${APP_PORT}/${APP_PORT:-80}/g"  /etc/supervisor/conf.d/supervisord.conf
     /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 fi
