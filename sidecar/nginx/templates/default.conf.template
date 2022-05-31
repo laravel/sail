@@ -1,0 +1,20 @@
+server {
+    listen  80  default_server;
+    server_name localhost;
+
+    return  301 https://$host:${SSL_PORT}$request_uri;
+}
+
+server {
+    listen  443 ssl default_server;
+    server_name localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/server.pem;
+    ssl_certificate_key /etc/nginx/certs/server.key;
+
+    location / {
+        proxy_pass	http://laravel.test;
+    }
+}

@@ -1,0 +1,15 @@
+    nginx:
+        image: 'nginx:latest'
+        ports:
+            - '${HTTP_PORT:-8000}:80'
+            - '${SSL_PORT:-443}:443'
+        environment:
+            - SSL_PORT=${SSL_PORT:-443}
+        volumes:
+            - 'sail-nginx:/etc/nginx/certs'
+            - './vendor/laravel/sail/sidecar/nginx/templates:/etc/nginx/templates'
+            - './vendor/laravel/sail/sidecar/nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh'
+        depends_on:
+            - laravel.test
+        networks:
+            - sail
