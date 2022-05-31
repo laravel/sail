@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.7...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.8...1.x)
+
+## [v1.14.8](https://github.com/laravel/sail/compare/v1.14.7...v1.14.8) - 2022-05-31
+
+### Changed
+
+- Run supervisord with pid 1 by @ryoluo in https://github.com/laravel/sail/pull/419
 
 ## [v1.14.7](https://github.com/laravel/sail/compare/v1.14.6...v1.14.7) - 2022-05-21
 
