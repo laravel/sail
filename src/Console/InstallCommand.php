@@ -65,6 +65,7 @@ class InstallCommand extends Command
              'minio',
              'mailhog',
              'selenium',
+             'soketi',
          ], 0, null, true);
     }
 
@@ -78,7 +79,10 @@ class InstallCommand extends Command
     {
         $depends = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium']);
+                return in_array(
+                    $service,
+                    ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium', 'soketi']
+                );
             })->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
@@ -144,6 +148,31 @@ class InstallCommand extends Command
         if (in_array('meilisearch', $services)) {
             $environment .= "\nSCOUT_DRIVER=meilisearch";
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
+        }
+
+        if (in_array('soketi', $services)) {
+            $environment = preg_replace("/BROADCAST_DRIVER=(.*)/", "BROADCAST_DRIVER=pusher", $environment);
+            $environment = preg_replace("/PUSHER_APP_KEY=(.*)/", "PUSHER_APP_KEY=local-app-key", $environment);
+            $environment = preg_replace("/PUSHER_APP_SECRET=(.*)/", "PUSHER_APP_SECRET=local-app-secret", $environment);
+            $environment = preg_replace("/PUSHER_APP_ID=(.*)/", "PUSHER_APP_ID=local-app-id", $environment);
+            $environment = preg_replace(
+                "/PUSHER_APP_CLUSTER=(.*)/",
+                implode("\n", [
+                    "PUSHER_HOST=soketi",
+                    "PUSHER_PORT=6001",
+                    "PUSHER_SCHEME=http",
+                ]),
+                $environment
+            );
+            $environment = preg_replace(
+                "/MIX_PUSHER_APP_CLUSTER=(.*)/",
+                implode("\n", [
+                    "MIX_PUSHER_HOST=\"\${PUSHER_HOST}\"",
+                    "MIX_PUSHER_PORT=\"\${PUSHER_PORT}\"",
+                    "MIX_PUSHER_SCHEME=\"\${PUSHER_SCHEME}\"",
+                ]),
+                $environment
+            );
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);

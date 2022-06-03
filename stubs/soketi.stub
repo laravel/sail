@@ -1,0 +1,20 @@
+    soketi:
+        image: 'quay.io/soketi/soketi:latest-16-alpine'
+        environment:
+            SOKETI_DEBUG: '${SOKETI_DEBUG:-1}'
+            SOKETI_METRICS_ENABLED: '${SOKETI_METRICS_ENABLED:-1}'
+            SOKETI_METRICS_SERVER_PORT: '9601'
+            SOKETI_DEFAULT_APP_ENABLED: '${SOKETI_DEFAULT_APP_ENABLED:-1}'
+            SOKETI_DEFAULT_APP_ENABLE_CLIENT_MESSAGES: ${SOKETI_DEFAULT_APP_ENABLE_CLIENT_MESSAGES:-false}
+            SOKETI_DEFAULT_APP_ID: '${PUSHER_APP_ID:-app-id}'
+            SOKETI_DEFAULT_APP_KEY: '${PUSHER_APP_KEY:-app-key}'
+            SOKETI_DEFAULT_APP_SECRET: '${PUSHER_APP_SECRET:-app-secret}'
+        ports:
+            - '${SOKETI_PORT:-6001}:6001'
+            - '${SOKETI_METRICS_SERVER_PORT:-9601}:9601'
+        networks:
+            - sail
+        healthcheck:
+            test: ['CMD', 'wget', '--no-verbose', '--spider',  'http://localhost:9601']
+            retries: 3
+            timeout: 5s
