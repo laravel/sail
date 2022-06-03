@@ -5,3 +5,7 @@
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
+        healthcheck:
+            test: ['CMD', 'wget', '--no-verbose', '--spider',  'http://localhost:8025']
+            retries: 3
+            timeout: 5s
