@@ -15,6 +15,6 @@
         networks:
             - sail
         healthcheck:
-            test: ['CMD', 'wget', '--no-verbose', '--spider',  'http://localhost:9601']
+            test: ['CMD', 'wget', '--no-verbose', '--spider',  'http://localhost:6001']
             retries: 3
             timeout: 5s

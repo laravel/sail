@@ -152,9 +152,9 @@ class InstallCommand extends Command
 
         if (in_array('soketi', $services)) {
             $environment = preg_replace("/BROADCAST_DRIVER=(.*)/", "BROADCAST_DRIVER=pusher", $environment);
-            $environment = preg_replace("/PUSHER_APP_KEY=(.*)/", "PUSHER_APP_KEY=local-app-key", $environment);
-            $environment = preg_replace("/PUSHER_APP_SECRET=(.*)/", "PUSHER_APP_SECRET=local-app-secret", $environment);
-            $environment = preg_replace("/PUSHER_APP_ID=(.*)/", "PUSHER_APP_ID=local-app-id", $environment);
+            $environment = preg_replace("/PUSHER_APP_KEY=(.*)/", "PUSHER_APP_KEY=app-key", $environment);
+            $environment = preg_replace("/PUSHER_APP_SECRET=(.*)/", "PUSHER_APP_SECRET=app-secret", $environment);
+            $environment = preg_replace("/PUSHER_APP_ID=(.*)/", "PUSHER_APP_ID=app-id", $environment);
             $environment = preg_replace(
                 "/PUSHER_APP_CLUSTER=(.*)/",
                 implode("\n", [
