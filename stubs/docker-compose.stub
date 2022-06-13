@@ -20,6 +20,7 @@ services:
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
             - '.:/var/www/html'
+            - 'sail-tinker:/home/sail/.config/psysh'
         networks:
             - sail
 {{depends}}

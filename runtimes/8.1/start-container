@@ -10,6 +10,10 @@ fi
 
 chmod -R ugo+rw /.composer
 
+if [ -d /home/sail/.config/psysh ]; then
+    chown sail: /home/sail/.config/psysh
+fi
+
 if [ $# -gt 0 ]; then
     exec gosu $WWWUSER "$@"
 else

@@ -94,9 +94,9 @@ class InstallCommand extends Command
                 return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
             })->map(function ($service) {
                 return "    sail-{$service}:\n        driver: local";
-            })->whenNotEmpty(function ($collection) {
-                return $collection->prepend('volumes:');
-            })->implode("\n");
+            })->push("    sail-tinker:\n        driver: local")
+            ->prepend('volumes:')
+            ->implode("\n");
 
         $dockerCompose = file_get_contents(__DIR__ . '/../../stubs/docker-compose.stub');
 
