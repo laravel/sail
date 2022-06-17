@@ -123,8 +123,8 @@ fi
 export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
 export DB_PORT=${DB_PORT:-3306}
-export WWWUSER=${WWWUSER:-$UID}
-export WWWGROUP=${WWWGROUP:-$(id -g)}
+export WWWUSER=${WWWUSER:-$(id -u $(logname))}
+export WWWGROUP=${WWWGROUP:-$(id -g $(logname))}
 
 export SAIL_FILES=${SAIL_FILES:-""}
 export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
