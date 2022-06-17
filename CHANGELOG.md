@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.8...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.10...1.x)
+
+## [v1.14.10](https://github.com/laravel/sail/compare/v1.14.9...v1.14.10) - 2022-06-09
+
+### Fixed
+
+- Fix testing DB creation by @jessarcher in https://github.com/laravel/sail/pull/429
+
+## [v1.14.9](https://github.com/laravel/sail/compare/v1.14.8...v1.14.9) - 2022-06-06
+
+### Changed
+
+- Allow for creation of databases needed for parallel testing by @bram-pkg in https://github.com/laravel/sail/pull/424
 
 ## [v1.14.8](https://github.com/laravel/sail/compare/v1.14.7...v1.14.8) - 2022-05-31
 
