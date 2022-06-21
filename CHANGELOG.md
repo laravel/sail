@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.10...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.14.11...1.x)
+
+## [v1.14.11](https://github.com/laravel/sail/compare/v1.14.10...v1.14.11) - 2022-06-14
+
+### Fixed
+
+- Revert "Expose 8080 port for hot module replacement" by @jessarcher in https://github.com/laravel/sail/pull/432
 
 ## [v1.14.10](https://github.com/laravel/sail/compare/v1.14.9...v1.14.10) - 2022-06-09
 
