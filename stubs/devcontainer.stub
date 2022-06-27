@@ -15,8 +15,8 @@
 		// "onecentlin.laravel-blade"
 	],
 	"remoteUser": "sail",
+	"postCreateCommand": "chown -R 1000:1000 /var/www/html"
 	// "forwardPorts": [],
 	// "runServices": [],
-	// "postCreateCommand": "apt-get update && apt-get install -y curl",
 	// "shutdownAction": "none",
 }
