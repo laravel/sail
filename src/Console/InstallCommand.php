@@ -151,26 +151,35 @@ class InstallCommand extends Command
         }
 
         if (in_array('soketi', $services)) {
-            $environment = preg_replace("/BROADCAST_DRIVER=(.*)/", "BROADCAST_DRIVER=pusher", $environment);
-            $environment = preg_replace("/PUSHER_APP_KEY=(.*)/", "PUSHER_APP_KEY=app-key", $environment);
-            $environment = preg_replace("/PUSHER_APP_SECRET=(.*)/", "PUSHER_APP_SECRET=app-secret", $environment);
-            $environment = preg_replace("/PUSHER_APP_ID=(.*)/", "PUSHER_APP_ID=app-id", $environment);
+            // Failback for old version before https://github.com/laravel/laravel/pull/5900
+            $frontendPrefix = file_exists($this->laravel->basePath('webpack.mix.js')) ? 'MIX' : 'VITE';
+            foreach (['PUSHER_HOST', 'PUSHER_PORT', 'PUSHER_SCHEME'] as $env) {
+                if (strpos($environment, $env . '=') === false) {
+                    $environment .= "\n{$env}=";
+                    $environment .= "\n{$frontendPrefix}_{$env}=\"\${{$env}}\"";
+                }
+            }
+
+            // Change environment variables for Soketi
             $environment = preg_replace(
-                "/PUSHER_APP_CLUSTER=(.*)/",
-                implode("\n", [
-                    "PUSHER_HOST=soketi",
-                    "PUSHER_PORT=6001",
-                    "PUSHER_SCHEME=http",
-                ]),
-                $environment
-            );
-            $environment = preg_replace(
-                "/MIX_PUSHER_APP_CLUSTER=(.*)/",
-                implode("\n", [
-                    "MIX_PUSHER_HOST=\"\${PUSHER_HOST}\"",
-                    "MIX_PUSHER_PORT=\"\${PUSHER_PORT}\"",
-                    "MIX_PUSHER_SCHEME=\"\${PUSHER_SCHEME}\"",
-                ]),
+                [
+                    "/\nBROADCAST_DRIVER=(.*)/",
+                    "/\nPUSHER_APP_ID=(.*)/",
+                    "/\nPUSHER_APP_KEY=(.*)/",
+                    "/\nPUSHER_APP_SECRET=(.*)/",
+                    "/\nPUSHER_HOST=(.*)/",
+                    "/\nPUSHER_PORT=(.*)/",
+                    "/\nPUSHER_SCHEME=(.*)/",
+                ],
+                [
+                    "\nBROADCAST_DRIVER=pusher",
+                    "\nPUSHER_APP_ID=app-id",
+                    "\nPUSHER_APP_KEY=app-key",
+                    "\nPUSHER_APP_SECRET=app-secret",
+                    "\nPUSHER_HOST=soketi",
+                    "\nPUSHER_PORT=6001",
+                    "\nPUSHER_SCHEME=http",
+                ],
                 $environment
             );
         }
