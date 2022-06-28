@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.11...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.15.0...1.x)
+
+## [v1.15.0](https://github.com/laravel/sail/compare/v1.14.11...v1.15.0) - 2022-06-24
+
+### Added
+
+- Adds `sail pint` by @nunomaduro in https://github.com/laravel/sail/pull/439
+
+### Changed
+
+- Publish the Vite port by @jessarcher in https://github.com/laravel/sail/pull/433
+
+### Fixed
+
+- Fixed devcontainer permissions by @GoodM4ven in https://github.com/laravel/sail/pull/438
+- Update default PostgreSQL versions for PHP 8.0 and 7.4 runtimes by @driesvints in https://github.com/laravel/sail/pull/441
 
 ## [v1.14.11](https://github.com/laravel/sail/compare/v1.14.10...v1.14.11) - 2022-06-14
 
