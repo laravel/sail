@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.15.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.15.1...1.x)
+
+## [v1.15.1](https://github.com/laravel/sail/compare/v1.15.0...v1.15.1) - 2022-07-21
+
+### Fixed
+
+- Fix ubuntu versions for PHP 7.4 & 8.0 runtimes by @taylorotwell in https://github.com/laravel/sail/commit/2fe64c0b45a3af56cac0af638c8020a8adc860d7
 
 ## [v1.15.0](https://github.com/laravel/sail/compare/v1.14.11...v1.15.0) - 2022-06-24
 
