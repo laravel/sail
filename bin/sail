@@ -152,7 +152,7 @@ fi
 
 if [ -n "$SAIL_FILES" ]; then
     # Convert SAIL_FILES to an array...
-    SAIL_FILES=("${SAIL_FILES//:/ }")
+    IFS=':' read -ra SAIL_FILES <<< "$SAIL_FILES"
 
     for FILE in "${SAIL_FILES[@]}"; do
         if [ -f "$FILE" ]; then
