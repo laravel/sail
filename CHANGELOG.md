@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.15.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.15.2...1.x)
+
+## [v1.15.2](https://github.com/laravel/sail/compare/v1.15.1...v1.15.2) - 2022-08-08
+
+### Fixed
+
+- Fix splitting SAIL_FILES into array by @mortenscheel in https://github.com/laravel/sail/pull/458
 
 ## [v1.15.1](https://github.com/laravel/sail/compare/v1.15.0...v1.15.1) - 2022-07-21
 
