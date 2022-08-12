@@ -431,7 +431,7 @@ elif [ "$1" == "shell" ] || [ "$1" == "bash" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" bash "$@")
+        ARGS+=("$APP_SERVICE" "${APP_BASH:=bash}" "$@")
     else
         sail_is_not_running
     fi
@@ -443,7 +443,7 @@ elif [ "$1" == "root-shell" ] || [ "$1" == "root-bash" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" bash "$@")
+        ARGS+=("$APP_SERVICE" "${APP_BASH:=bash}" "$@")
     else
         sail_is_not_running
     fi
