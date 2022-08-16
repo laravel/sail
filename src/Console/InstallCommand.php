@@ -249,7 +249,7 @@ class InstallCommand extends Command
             }
         }
 
-        $process->run(function ($type, $line) {
+        return $process->run(function ($type, $line) {
             $this->output->write('    '.$line);
         });
     }
