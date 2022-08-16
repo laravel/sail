@@ -94,9 +94,7 @@ class InstallCommand extends Command
     protected function buildDockerCompose(array $services)
     {
         $depends = collect($services)
-            ->filter(function ($service) {
-                return in_array($service, $this->services);
-            })->map(function ($service) {
+            ->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
                 return $collection->prepend('depends_on:');
