@@ -3,6 +3,8 @@
 namespace Laravel\Sail\Console;
 
 use Illuminate\Console\Command;
+use RuntimeException;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -13,7 +15,8 @@ class InstallCommand extends Command
      */
     protected $signature = 'sail:install
                 {--with= : The services that should be included in the installation}
-                {--devcontainer : Create a .devcontainer configuration directory}';
+                {--devcontainer : Create a .devcontainer configuration directory}
+                {--prepare : Prepare the installation by building and pulling necessary images}';
 
     /**
      * The console command description.
@@ -25,7 +28,7 @@ class InstallCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return int|null
      */
     public function handle()
     {
@@ -46,6 +49,10 @@ class InstallCommand extends Command
         }
 
         $this->info('Sail scaffolding installed successfully.');
+
+        if ($this->option('prepare')) {
+            return $this->prepareInstallation($services);
+        }
     }
 
     /**
@@ -190,5 +197,50 @@ class InstallCommand extends Command
         $environment .= "\nWWWUSER=1000\n";
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    /**
+     * Prepare the installation by building and pulling necessary images.
+     *
+     * @param  array  $services
+     * return int|null
+     */
+    protected function prepareInstallation($services)
+    {
+        $status = $this->runCommands([
+            './vendor/bin/sail pull '.implode(' ', $services),
+            './vendor/bin/sail build',
+        ]);
+
+        if ($status !== 0) {
+            $this->warn('Unable to build and pull images. Is Docker installed and running?');
+
+            return 1;
+        }
+
+        $this->info('Sail images installed successfully.');
+    }
+
+    /**
+     * Run the given commands.
+     *
+     * @param  array  $commands
+     * @return int
+     */
+    protected function runCommands($commands)
+    {
+        $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
+
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            try {
+                $process->setTty(true);
+            } catch (RuntimeException $e) {
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
+            }
+        }
+
+        $process->run(function ($type, $line) {
+            $this->output->write('    '.$line);
+        });
     }
 }
