@@ -26,6 +26,23 @@ class InstallCommand extends Command
     protected $description = 'Install Laravel Sail\'s default Docker Compose file';
 
     /**
+     * The available services that may be installed
+     *
+     * @var array<string>
+     */
+    protected $services = [
+        'mysql',
+        'pgsql',
+        'mariadb',
+        'redis',
+        'memcached',
+        'meilisearch',
+        'minio',
+        'mailhog',
+        'selenium',
+    ];
+
+    /**
      * Execute the console command.
      *
      * @return int|null
@@ -38,6 +55,12 @@ class InstallCommand extends Command
             $services = ['mysql', 'redis', 'selenium', 'mailhog'];
         } else {
             $services = $this->gatherServicesWithSymfonyMenu();
+        }
+
+        if ($invalidServices = array_diff($services, $this->services)) {
+            $this->error('Invalid services ['.implode(',', $invalidServices).'].');
+
+            return 1;
         }
 
         $this->buildDockerCompose($services);
@@ -62,17 +85,7 @@ class InstallCommand extends Command
      */
     protected function gatherServicesWithSymfonyMenu()
     {
-        return $this->choice('Which services would you like to install?', [
-             'mysql',
-             'pgsql',
-             'mariadb',
-             'redis',
-             'memcached',
-             'meilisearch',
-             'minio',
-             'mailhog',
-             'selenium',
-         ], 0, null, true);
+        return $this->choice('Which services would you like to install?', $this->services, 0, null, true);
     }
 
     /**
@@ -85,7 +98,7 @@ class InstallCommand extends Command
     {
         $depends = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'selenium']);
+                return in_array($service, $this->services);
             })->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
