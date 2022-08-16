@@ -25,7 +25,7 @@ class InstallCommand extends Command
     protected $description = 'Install Laravel Sail\'s default Docker Compose file';
 
     /**
-     * The available services that may be installed
+     * The available services that may be installed.
      *
      * @var array<string>
      */
@@ -210,10 +210,10 @@ class InstallCommand extends Command
     }
 
     /**
-     * Prepare the installation by building and pulling necessary images.
+     * Prepare the installation by pulling and building any necessary images.
      *
      * @param  array  $services
-     * return int|null
+     * @return int|null
      */
     protected function prepareInstallation($services)
     {
@@ -223,7 +223,7 @@ class InstallCommand extends Command
         ]);
 
         if ($status !== 0) {
-            $this->warn('Unable to build and pull images. Is Docker installed and running?');
+            $this->warn('Unable to download and build your Sail images. Is Docker installed and running?');
 
             return 1;
         }
