@@ -15,8 +15,7 @@ class InstallCommand extends Command
      */
     protected $signature = 'sail:install
                 {--with= : The services that should be included in the installation}
-                {--devcontainer : Create a .devcontainer configuration directory}
-                {--prepare : Prepare the installation by building and pulling necessary images}';
+                {--devcontainer : Create a .devcontainer configuration directory}';
 
     /**
      * The console command description.
@@ -73,9 +72,7 @@ class InstallCommand extends Command
 
         $this->info('Sail scaffolding installed successfully.');
 
-        if ($this->option('prepare')) {
-            return $this->prepareInstallation($services);
-        }
+        return $this->prepareInstallation($services);
     }
 
     /**
