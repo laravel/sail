@@ -72,7 +72,7 @@ class InstallCommand extends Command
 
         $this->info('Sail scaffolding installed successfully.');
 
-        return $this->prepareInstallation($services);
+        $this->prepareInstallation($services);
     }
 
     /**
@@ -211,22 +211,23 @@ class InstallCommand extends Command
      * Prepare the installation by pulling and building any necessary images.
      *
      * @param  array  $services
-     * @return int|null
+     * @return void
      */
     protected function prepareInstallation($services)
     {
+        // Ensure docker is installed...
+        if ($this->runCommands(['docker info > /dev/null 2>&1']) !== 0) {
+            return;
+        }
+
         $status = $this->runCommands([
             './vendor/bin/sail pull '.implode(' ', $services),
             './vendor/bin/sail build',
         ]);
 
-        if ($status !== 0) {
-            $this->warn('Unable to download and build your Sail images. Is Docker installed and running?');
-
-            return 1;
+        if ($status === 0) {
+            $this->info('Sail images installed successfully.');
         }
-
-        $this->info('Sail images installed successfully.');
     }
 
     /**
