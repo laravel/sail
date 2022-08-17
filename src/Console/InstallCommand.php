@@ -215,7 +215,7 @@ class InstallCommand extends Command
      */
     protected function prepareInstallation($services)
     {
-        // Ensure docker is installed
+        // Ensure docker is installed...
         if ($this->runCommands(['docker info > /dev/null 2>&1']) !== 0) {
             return;
         }
