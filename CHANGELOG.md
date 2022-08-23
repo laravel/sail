@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.15.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.15.4...1.x)
+
+## [v1.15.4](https://github.com/laravel/sail/compare/v1.15.3...v1.15.4) - 2022-08-17
+
+### Fixed
+
+- Don't error when docker is not available by @jessarcher in https://github.com/laravel/sail/pull/468
 
 ## [v1.15.3](https://github.com/laravel/sail/compare/v1.15.2...v1.15.3) - 2022-08-17
 
