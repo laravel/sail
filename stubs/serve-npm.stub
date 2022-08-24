@@ -1,0 +1,95 @@
+#!/bin/bash
+
+# Fail the whole script if any command fails
+set -euo pipefail
+trap "echo \"[INFO] To stop the docker container you need to run: vendor/bin/sail down\"" EXIT
+
+FRESH=false
+
+# Determine if the environment should be refreshed
+if [ $# -eq 1 ] && [ $1 == '--fresh' ]
+then
+    rm -rf node_modules
+    rm -rf vendor
+    rm -f storage/sail/composer.lock
+    rm -f storage/sail/package-lock.json
+    rm -f storage/sail/docker-compose.yml
+    rm -f .env
+fi
+
+# Create environment file if it doesn't exist yet
+if [ ! -f .env ]
+then
+    cp .env.example .env
+    FRESH=true
+fi
+
+# Install needed composer dependencies for Laravel Sail
+if [ ! -f vendor/bin/sail ]
+then
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v $(pwd):/var/www/html \
+        -w /var/www/html \
+        laravelsail/php81-composer:latest \
+        composer install --ignore-platform-reqs
+fi
+
+# Install needed composer dependencies for Laravel Sail
+if [ ! -f vendor/bin/sail ]
+then
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v $(pwd):/var/www/html \
+        -w /var/www/html \
+        laravelsail/php81-composer:latest \
+        composer install --ignore-platform-reqs
+fi
+
+if [ ! -f storage/sail/docker-compose.yml ] || ! cmp --silent -- "docker-compose.yml" "storage/sail/docker-compose.yml"
+then
+    vendor/bin/sail stop
+    vendor/bin/sail build --no-cache --pull
+
+    cp docker-compose.yml storage/sail/docker-compose.yml
+fi
+
+# Get Laravel Sail up and running in the background
+vendor/bin/sail up -d --wait
+
+# Install NPM dependencies if not installed yet
+if [ ! -d node_modules ]
+then
+    vendor/bin/sail npm install
+
+    # Save currently installed dependencies
+    cp package-lock.json storage/sail/package-lock.json
+fi
+
+# Install latest composer dependencies, if out of sync
+if ! cmp --silent -- "composer.lock" "storage/sail/composer.lock"
+then
+    vendor/bin/sail composer install
+
+    cp composer.lock storage/sail/composer.lock
+fi
+
+# Install latest npm dependencies, if out of sync
+if ! cmp --silent -- "package-lock.json" "storage/sail/package-lock.json"
+then
+    vendor/bin/sail npm install
+
+    # Save currently installed dependencies
+    cp package-lock.json storage/sail/package-lock.json
+fi
+
+# Migrate Database to the newest version
+if $FRESH
+then
+    vendor/bin/sail artisan migrate:fresh --seed
+else
+    vendor/bin/sail artisan migrate
+fi
+
+# Start the Development Server
+vendor/bin/sail npm run dev
