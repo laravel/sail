@@ -14,7 +14,7 @@ ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
+    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 cron \
     && mkdir -p ~/.gnupg \
     && chmod 600 ~/.gnupg \
     && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
@@ -54,10 +54,14 @@ RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 
+COPY cron/scheduler /etc/cron.d/scheduler
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
-RUN chmod +x /usr/local/bin/start-container
+
+RUN chmod 0644 /etc/cron.d/scheduler \
+    && crontab /etc/cron.d/scheduler \
+    && chmod +x /usr/local/bin/start-container
 
 EXPOSE 8000
 
