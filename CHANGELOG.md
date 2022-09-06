@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.15.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.0...1.x)
+
+## [v1.16.0](https://github.com/laravel/sail/compare/v1.15.4...v1.16.0) - 2022-08-31
+
+### Added
+
+- PHP 8.2 Support by @Jubeki in https://github.com/laravel/sail/pull/473
 
 ## [v1.15.4](https://github.com/laravel/sail/compare/v1.15.3...v1.15.4) - 2022-08-17
 
