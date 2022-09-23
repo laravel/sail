@@ -115,15 +115,11 @@ else
     display_help
 fi
 
-CURRENT_APP_ENV=$APP_ENV
-
 # Source the ".env" file so Laravel's environment variables are available...
-if [ -f ./.env ]; then
+if [ ! -z "$APP_ENV" ] && [ -f ./.env.$APP_ENV ]; then
+  source ./.env.$APP_ENV;
+elif [ -f ./.env ]; then
   source ./.env;
-fi
-
-if [ -f ./.env.$CURRENT_APP_ENV ]; then
-  source ./.env.$CURRENT_APP_ENV;
 fi
 
 # Define environment variables...
