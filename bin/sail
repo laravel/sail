@@ -116,8 +116,10 @@ else
 fi
 
 # Source the ".env" file so Laravel's environment variables are available...
-if [ -f ./.env ]; then
-    source ./.env
+if [ ! -z "$APP_ENV" ] && [ -f ./.env.$APP_ENV ]; then
+  source ./.env.$APP_ENV;
+elif [ -f ./.env ]; then
+  source ./.env;
 fi
 
 # Define environment variables...
