@@ -1,7 +1,5 @@
-# Doc: https://github.com/redhat-plumbers-in-action/differential-shellcheck#usage
----
-
 name: Differential ShellCheck
+
 on:
   pull_request:
 
@@ -10,7 +8,6 @@ permissions:
 
 jobs:
   shellcheck:
-    name: ShellCheck
     runs-on: ubuntu-latest
 
     steps:
