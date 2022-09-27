@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.1...1.x)
+
+## [v1.16.1](https://github.com/laravel/sail/compare/v1.16.0...v1.16.1) - 2022-09-26
+
+### Fixed
+
+- Script not loading all app env files by @LouisHaftmann in https://github.com/laravel/sail/pull/482
 
 ## [v1.16.0](https://github.com/laravel/sail/compare/v1.15.4...v1.16.0) - 2022-08-31
 
