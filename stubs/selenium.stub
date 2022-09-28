@@ -1,5 +1,7 @@
     selenium:
         image: 'selenium/standalone-chrome'
+        ports:
+            - '${FORWARD_SELENIUM_PORT:-7900}:7900'
         volumes:
             - '/dev/shm:/dev/shm'
         networks:
