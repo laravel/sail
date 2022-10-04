@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.2...1.x)
+
+## [v1.16.2](https://github.com/laravel/sail/compare/v1.16.1...v1.16.2) - 2022-09-28
+
+### Fixed
+
+- Add extra hosts to Selenium by @nomnoms12 in https://github.com/laravel/sail/pull/485
 
 ## [v1.16.1](https://github.com/laravel/sail/compare/v1.16.0...v1.16.1) - 2022-09-26
 
