@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.3...1.x)
+
+## [v1.16.3](https://github.com/laravel/sail/compare/v1.16.2...v1.16.3) - 2022-11-21
+
+### Fixed
+
+- Fix usage of none for services list by @jf-prevost in https://github.com/laravel/sail/pull/495
 
 ## [v1.16.2](https://github.com/laravel/sail/compare/v1.16.1...v1.16.2) - 2022-09-28
 
