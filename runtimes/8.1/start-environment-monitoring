@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+lastKnownModification=$(date -r /var/www/html/.env "+%s")
+while true; do
+    sleep 1
+
+    lastModified=$(date -r /var/www/html/.env "+%s")
+
+    if [ $lastModified -gt $lastKnownModification ]; then
+        lastKnownModification=$lastModified
+        pid=$(ps -ef | grep -v grep | grep 'server.php' | awk '{print $2}')
+        kill $pid
+    fi
+done
