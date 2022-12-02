@@ -269,6 +269,9 @@ elif [ "$1" == "test" ]; then
 
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
+        [[ "$XDEBUG_MODE" == *"coverage"* ]] && {
+            ARGS+=(-e XDEBUG_MODE=$XDEBUG_MODE)
+        }
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" php artisan test "$@")
     else
