@@ -226,10 +226,12 @@ class InstallCommand extends Command
 
             $domain = parse_url(config('app.url'), PHP_URL_HOST);
 
-            file_put_contents(
-                $this->laravel->basePath('Caddyfile'),
-                str_replace('localhost', $domain, file_get_contents(__DIR__ . '/../../sslproxy/Caddyfile'))
-            );
+            $caddyfile = file_get_contents(__DIR__ . '/../../sslproxy/Caddyfile');
+
+            $caddyfile = str_replace('localhost', $domain, $caddyfile);
+            $caddyfile = str_replace('443', config('app.secure_port'), $caddyfile);
+
+            file_put_contents($this->laravel->basePath('Caddyfile'), $caddyfile);
         }
     }
 

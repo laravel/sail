@@ -11,4 +11,16 @@
 
     'service' => env('APP_SERVICE', 'laravel.test'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Secure Port
+    |--------------------------------------------------------------------------
+    |
+    | The APP_SECURE_PORT environment variable is used to specify an alternate
+    | port to use for secure connections. If unset, the default 443 is used.
+    |
+    */
+
+    'secure_port' => env('APP_SECURE_PORT)', '443'),
+
 ];
