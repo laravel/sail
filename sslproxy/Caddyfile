@@ -1,0 +1,22 @@
+{
+    on_demand_tls {
+        ask http://localhost/domain-verify
+    }
+    local_certs
+}
+
+:443 {
+    tls internal {
+        on_demand
+    }
+
+    reverse_proxy localhost {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Port {server_port}
+        header_up X-Forwarded-Proto {scheme}
+
+        health_timeout 5s
+    }
+}

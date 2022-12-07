@@ -39,6 +39,7 @@ class InstallCommand extends Command
         'minio',
         'mailhog',
         'selenium',
+        'caddy',
     ];
 
     /**
@@ -64,6 +65,7 @@ class InstallCommand extends Command
 
         $this->buildDockerCompose($services);
         $this->replaceEnvVariables($services);
+        $this->configureCaddy($services);
         $this->configurePhpUnit();
 
         if ($this->option('devcontainer')) {
@@ -72,6 +74,7 @@ class InstallCommand extends Command
 
         $this->info('Sail scaffolding installed successfully.');
 
+        $this->configureRoutes($services);
         $this->prepareInstallation($services);
     }
 
@@ -94,7 +97,9 @@ class InstallCommand extends Command
     protected function buildDockerCompose(array $services)
     {
         $depends = collect($services)
-            ->map(function ($service) {
+            ->filter(function ($service) {
+                return !in_array($service, ['caddy']);  // laravel.test container does not depend on Caddy when enabled
+            })->map(function ($service) {
                 return "            - {$service}";
             })->whenNotEmpty(function ($collection) {
                 return $collection->prepend('depends_on:');
@@ -106,7 +111,7 @@ class InstallCommand extends Command
 
         $volumes = collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio', 'caddy']);
             })->map(function ($service) {
                 return "    sail-{$service}:\n        driver: local";
             })->whenNotEmpty(function ($collection) {
@@ -114,6 +119,9 @@ class InstallCommand extends Command
             })->implode("\n");
 
         $dockerCompose = file_get_contents(__DIR__ . '/../../stubs/docker-compose.stub');
+
+        // Caddy requires a few changes to the default docker-compose.yml file...
+        $dockerCompose = $this->modifyDockerComposeForCaddy($dockerCompose, $services);
 
         $dockerCompose = str_replace('{{depends}}', empty($depends) ? '' : '        '.$depends, $dockerCompose);
         $dockerCompose = str_replace('{{services}}', $stubs, $dockerCompose);
@@ -161,7 +169,68 @@ class InstallCommand extends Command
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
         }
 
+        $domain = parse_url(config('app.url'), PHP_URL_HOST);
+
+        if (in_array('caddy', $services)) {
+            $environment = str_replace('APP_URL=http://', 'APP_URL=https://', $environment);
+
+            $environment = (false === strpos($environment, 'APP_SERVICE='))
+                ? preg_replace('/APP_URL=(.*)/', '\0'."\nAPP_SERVICE=".$domain, $environment)
+                : preg_replace('/APP_SERVICE=(.*)/', 'APP_SERVICE='.$domain, $environment);
+        }
+
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    /**
+     * Modifies the default docker-compose.yml configuration when Caddy is used.
+     *
+     * @param  string  $dockerCompose
+     * @param  array  $services
+     * @return string
+     */
+    protected function modifyDockerComposeForCaddy(string $dockerCompose, array $services): string
+    {
+        if (!in_array('caddy', $services)) return $dockerCompose;
+
+        // Port 80 will be exposed on the Caddy service instead of the default Laravel service.
+        $dockerCompose = str_replace('- \'${APP_PORT:-80}:80\'', '# - \'${APP_PORT:-80}:80\'', $dockerCompose);
+
+        // The default docker service name must match the Caddy host
+        $domain = parse_url(config('app.url'), PHP_URL_HOST);
+        $dockerCompose = str_replace('laravel.test', $domain, $dockerCompose);
+
+        return $dockerCompose;
+    }
+
+    /**
+     * Configure Caddy using the default Caddyfile.
+     *
+     * @param  array  $services
+     * @return void
+     */
+    protected function configureCaddy(array $services)
+    {
+        if (in_array('caddy', $services)) {
+            $path = $this->laravel->basePath('config/app.php');
+            $appConfig = file_get_contents($path);
+
+            $appConfig = str_replace('];', file_get_contents(__DIR__ . '/../../sslproxy/appconfig.stub'), $appConfig);
+
+            file_put_contents($path, $appConfig);
+
+            file_put_contents(
+                $this->laravel->basePath('app/Http/Controllers/CaddyProxyController.php'),
+                file_get_contents(__DIR__ . '/../../sslproxy/CaddyProxyController.php')
+            );
+
+            $domain = parse_url(config('app.url'), PHP_URL_HOST);
+
+            file_put_contents(
+                $this->laravel->basePath('Caddyfile'),
+                str_replace('localhost', $domain, file_get_contents(__DIR__ . '/../../sslproxy/Caddyfile'))
+            );
+        }
     }
 
     /**
@@ -240,12 +309,29 @@ class InstallCommand extends Command
     }
 
     /**
+     * Adds Caddy routes to web.php
+     *
+     * @param  array  $services
+     * @return void
+     */
+    protected function configureRoutes($services)
+    {
+        if (in_array('caddy', $services)) {
+            $routes = file_get_contents($this->laravel->basePath('routes/web.php'));
+
+            $routes .= "\nRoute::get('/domain-verify', [App\Http\Controllers\CaddyProxyController::class, 'verifyDomain']);\n";
+
+            file_put_contents($this->laravel->basePath('routes/web.php'), $routes);
+        }
+    }
+
+    /**
      * Run the given commands.
      *
      * @param  array  $commands
      * @return int
      */
-    protected function runCommands($commands)
+    protected function runCommands($commands): int
     {
         $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
 

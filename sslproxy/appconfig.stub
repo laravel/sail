@@ -1,0 +1,14 @@
+    /*
+    |--------------------------------------------------------------------------
+    | Application Service
+    |--------------------------------------------------------------------------
+    |
+    | The APP_SERVICE environment variable is used when the default docker
+    | service name is changed from its default 'laravel.test' value.
+    | Laravel Sail will fail to start if there is a mismatch.
+    |
+    */
+
+    'service' => env('APP_SERVICE', 'laravel.test'),
+
+];
