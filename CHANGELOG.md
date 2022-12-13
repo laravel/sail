@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.4...1.x)
+
+## [v1.16.4](https://github.com/laravel/sail/compare/v1.16.3...v1.16.4) - 2022-12-12
+
+### Fixed
+
+- Changing ubuntu keyserver to use curl by @jseitel in https://github.com/laravel/sail/pull/508
 
 ## [v1.16.3](https://github.com/laravel/sail/compare/v1.16.2...v1.16.3) - 2022-11-21
 
