@@ -8,7 +8,7 @@ while true; do
 
     if [ $lastModified -gt $lastKnownModification ]; then
         lastKnownModification=$lastModified
-        pid=$(ps -ef | grep -v grep | grep 'server.php' | awk '{print $2}')
-        kill $pid
+        /usr/bin/php -d variables_order=EGPCS /var/www/html/artisan optimize:clear
+        pgrep -fa server.php | cut -d ' ' -f 1 | xargs kill
     fi
 done
