@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+lastKnownModification=$(date -r /var/www/html/.env "+%s")
+while true; do
+    sleep 1
+
+    lastModified=$(date -r /var/www/html/.env "+%s")
+
+    if [ $lastModified -gt $lastKnownModification ]; then
+        lastKnownModification=$lastModified
+        /usr/bin/php -d variables_order=EGPCS /var/www/html/artisan optimize:clear
+        pgrep -fa server.php | cut -d ' ' -f 1 | xargs kill
+    fi
+done
