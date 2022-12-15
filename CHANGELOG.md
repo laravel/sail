@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.5...1.x)
+
+## [v1.16.5](https://github.com/laravel/sail/compare/v1.16.4...v1.16.5) - 2022-12-14
+
+### Changed
+
+- Add Forward Memcached Port by @dammy001 in https://github.com/laravel/sail/pull/512
 
 ## [v1.16.4](https://github.com/laravel/sail/compare/v1.16.3...v1.16.4) - 2022-12-12
 
