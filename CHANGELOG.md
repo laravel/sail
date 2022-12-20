@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.5...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.16.6...1.x)
+
+## [v1.16.6](https://github.com/laravel/sail/compare/v1.16.5...v1.16.6) - 2022-12-19
+
+### Changed
+
+- Add PHP 8.2 pcov extension again by @Jubeki in https://github.com/laravel/sail/pull/515
 
 ## [v1.16.5](https://github.com/laravel/sail/compare/v1.16.4...v1.16.5) - 2022-12-14
 
