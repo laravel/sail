@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.16.6...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.17.0...1.x)
+
+## [v1.17.0](https://github.com/laravel/sail/compare/v1.16.6...v1.17.0) - 2022-12-22
+
+### Changed
+
+- Upgrade to Postgres 15 by @Jubeki in https://github.com/laravel/sail/pull/519
+- Install `dnsutils` package to use `dig` command by @buismaarten in https://github.com/laravel/sail/pull/520
 
 ## [v1.16.6](https://github.com/laravel/sail/compare/v1.16.5...v1.16.6) - 2022-12-19
 
