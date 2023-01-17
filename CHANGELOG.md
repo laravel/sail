@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.18.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.18.1...1.x)
+
+## [v1.18.1](https://github.com/laravel/sail/compare/v1.18.0...v1.18.1) - 2023-01-12
+
+### Changed
+
+- Update devcontainer stub (vscode customizations) by @mojgit in https://github.com/laravel/sail/pull/528
 
 ## [v1.18.0](https://github.com/laravel/sail/compare/v1.17.0...v1.18.0) - 2023-01-10
 
