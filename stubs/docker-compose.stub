@@ -22,9 +22,6 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
-{{depends}}
-{{services}}
 networks:
     sail:
         driver: bridge
-{{volumes}}
