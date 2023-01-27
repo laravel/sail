@@ -39,7 +39,7 @@ trait InteractsWithDockerComposeServices
      */
     protected function gatherServicesWithSymfonyMenu()
     {
-        return $this->choice('Which services would you like to install?', $this->services, null, null, true);
+        return $this->choice('Which services would you like to install?', $this->services, 0, null, true);
     }
 
     /**
