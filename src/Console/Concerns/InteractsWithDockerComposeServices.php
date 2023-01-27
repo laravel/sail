@@ -55,8 +55,12 @@ trait InteractsWithDockerComposeServices
             ? Yaml::parseFile($composePath)
             : Yaml::parse(file_get_contents(__DIR__ . '/../../../stubs/docker-compose.stub'));
 
-        // Merge the depends on service list...
-        $compose['services']['laravel.test']['depends_on'] = array_values(array_unique(array_merge($compose['services']['laravel.test']['depends_on'] ?? [], $services)));
+        // Adds the new services as dependencies of the laravel.test service...
+        if (! array_key_exists('laravel.test', $compose['services'])) {
+            $this->warn('Couldn\'t find the laravel.test main service. Make sure you add [' . implode(',', $services) . '] to the depends_on config.');
+        } else {
+            $compose['services']['laravel.test']['depends_on'] = array_values(array_unique(array_merge($compose['services']['laravel.test']['depends_on'] ?? [], $services)));
+        }
 
         // Add the services to the docker-compose.yml...
         collect($services)
@@ -73,11 +77,10 @@ trait InteractsWithDockerComposeServices
             })->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['volumes'] ?? []);
             })->each(function ($service) use (&$compose) {
-                $compose['volumes']["sail-{$service}"] = [
-                    'driver' => 'local',
-                ];
+                $compose['volumes']["sail-{$service}"] = ['driver' => 'local'];
             });
 
+        // If the volumes is empty, we can remove it...
         if (empty($compose['volumes'])) {
             unset($compose['volumes']);
         }
