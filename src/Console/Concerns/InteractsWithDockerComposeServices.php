@@ -60,7 +60,11 @@ trait InteractsWithDockerComposeServices
         if (! array_key_exists('laravel.test', $compose['services'])) {
             $this->warn('Couldn\'t find the laravel.test main service. Make sure you add [' . implode(',', $services) . '] to the depends_on config.');
         } else {
-            $compose['services']['laravel.test']['depends_on'] = array_values(array_unique(array_merge($compose['services']['laravel.test']['depends_on'] ?? [], $services)));
+            $compose['services']['laravel.test']['depends_on'] = collect($compose['services']['laravel.test']['depends_on'] ?? [])
+                ->merge($services)
+                ->unique()
+                ->values()
+                ->all();
         }
 
         // Add the services to the docker-compose.yml...
