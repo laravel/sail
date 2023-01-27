@@ -25,6 +25,11 @@ class AddCommand extends Command
      */
     protected $description = 'Add Laravel Sail\'s services to an existing sail install';
 
+    /**
+     * Execute the console command.
+     *
+     * @return int|null
+     */
     public function handle()
     {
         if ($this->argument('services')) {
