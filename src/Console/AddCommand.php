@@ -23,7 +23,7 @@ class AddCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Add Laravel Sail\'s services to an existing sail install';
+    protected $description = 'Add Laravel Sail\'s services to an existing Sail install';
 
     /**
      * Execute the console command.
