@@ -91,7 +91,7 @@ trait InteractsWithDockerComposeServices
         }
 
         // Replace Selenium with ARM base container on Apple Silicon...
-        if (in_array('selenium', $services) && php_uname('m') === 'arm64') {
+        if (in_array('selenium', $services) && in_array(php_uname('m'), ['arm64', 'aarch64'])) {
             $compose['services']['selenium']['image'] = 'seleniarm/standalone-chromium';
         }
 
