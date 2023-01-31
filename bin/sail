@@ -82,7 +82,7 @@ function display_help {
     echo "${YELLOW}Running Tests:${NC}"
     echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command"
     echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit"
-    echo "  ${GREEN}sail pest ...${NC}      Run pest"
+    echo "  ${GREEN}sail pest ...${NC}      Run Pest"
     echo "  ${GREEN}sail pint ...${NC}      Run Pint"
     echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)"
     echo "  ${GREEN}sail dusk:fails${NC}    Re-run previously failed Dusk tests (Requires the laravel/dusk package)"
