@@ -82,8 +82,9 @@ function display_help {
     echo "${YELLOW}Running Tests:${NC}"
     echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command"
     echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit"
-    echo "  ${GREEN}sail pest ...${NC}      Run pest"
+    echo "  ${GREEN}sail pint ...${NC}      Run Pint"
     echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)"
+    echo "  ${GREEN}sail dusk:fails${NC}    Re-run previously failed Dusk tests (Requires the laravel/dusk package)"
     echo
     echo "${YELLOW}Container CLI:${NC}"
     echo "  ${GREEN}sail shell${NC}        Start a shell session within the application container"
@@ -94,6 +95,9 @@ function display_help {
     echo
     echo "${YELLOW}Sharing:${NC}"
     echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
+    echo
+    echo "${YELLOW}Binaries:${NC}"
+    echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
     echo
     echo "${YELLOW}Customization:${NC}"
     echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
@@ -112,8 +116,10 @@ else
 fi
 
 # Source the ".env" file so Laravel's environment variables are available...
-if [ -f ./.env ]; then
-    source ./.env
+if [ ! -z "$APP_ENV" ] && [ -f ./.env.$APP_ENV ]; then
+  source ./.env.$APP_ENV;
+elif [ -f ./.env ]; then
+  source ./.env;
 fi
 
 # Define environment variables...
@@ -128,6 +134,7 @@ export SAIL_SHARE_DASHBOARD=${SAIL_SHARE_DASHBOARD:-4040}
 export SAIL_SHARE_SERVER_HOST=${SAIL_SHARE_SERVER_HOST:-"laravel-sail.site"}
 export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
 export SAIL_SHARE_SUBDOMAIN=${SAIL_SHARE_SUBDOMAIN:-""}
+export SAIL_SHARE_DOMAIN=${SAIL_SHARE_DOMAIN:-""}
 
 # Function that outputs Sail is not running...
 function sail_is_not_running {
@@ -139,15 +146,16 @@ function sail_is_not_running {
 }
 
 # Define Docker Compose command prefix...
-if [ -x "$(command -v docker-compose)" ]; then
-    DOCKER_COMPOSE=(docker-compose)
-else
+docker compose &> /dev/null
+if [ $? == 0 ]; then
     DOCKER_COMPOSE=(docker compose)
+else
+    DOCKER_COMPOSE=(docker-compose)
 fi
 
 if [ -n "$SAIL_FILES" ]; then
     # Convert SAIL_FILES to an array...
-    SAIL_FILES=("${SAIL_FILES//:/ }")
+    IFS=':' read -ra SAIL_FILES <<< "$SAIL_FILES"
 
     for FILE in "${SAIL_FILES[@]}"; do
         if [ -f "$FILE" ]; then
@@ -280,14 +288,14 @@ elif [ "$1" == "phpunit" ]; then
         sail_is_not_running
     fi
 
-# Proxy the "pest" command to "php vendor/bin/pest"...
-elif [ "$1" == "pest" ]; then
+# Proxy the "pint" command to "php vendor/bin/pint"...
+elif [ "$1" == "pint" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php vendor/bin/pest "$@")
+        ARGS+=("$APP_SERVICE" php vendor/bin/pint "$@")
     else
         sail_is_not_running
     fi
@@ -465,6 +473,7 @@ elif [ "$1" == "share" ]; then
             --server-port="$SAIL_SHARE_SERVER_PORT" \
             --auth="$SAIL_SHARE_TOKEN" \
             --subdomain="$SAIL_SHARE_SUBDOMAIN" \
+            --domain="$SAIL_SHARE_DOMAIN" \
             "$@"
 
         exit

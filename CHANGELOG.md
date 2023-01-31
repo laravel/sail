@@ -1,6 +1,175 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.14.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.18.1...1.x)
+
+## [v1.18.1](https://github.com/laravel/sail/compare/v1.18.0...v1.18.1) - 2023-01-12
+
+### Changed
+
+- Update devcontainer stub (vscode customizations) by @mojgit in https://github.com/laravel/sail/pull/528
+
+## [v1.18.0](https://github.com/laravel/sail/compare/v1.17.0...v1.18.0) - 2023-01-10
+
+### Added
+
+- Laravel v10 Support by @driesvints in https://github.com/laravel/sail/pull/527
+
+## [v1.17.0](https://github.com/laravel/sail/compare/v1.16.6...v1.17.0) - 2022-12-22
+
+### Changed
+
+- Upgrade to Postgres 15 by @Jubeki in https://github.com/laravel/sail/pull/519
+- Install `dnsutils` package to use `dig` command by @buismaarten in https://github.com/laravel/sail/pull/520
+
+## [v1.16.6](https://github.com/laravel/sail/compare/v1.16.5...v1.16.6) - 2022-12-19
+
+### Changed
+
+- Add PHP 8.2 pcov extension again by @Jubeki in https://github.com/laravel/sail/pull/515
+
+## [v1.16.5](https://github.com/laravel/sail/compare/v1.16.4...v1.16.5) - 2022-12-14
+
+### Changed
+
+- Add Forward Memcached Port by @dammy001 in https://github.com/laravel/sail/pull/512
+
+## [v1.16.4](https://github.com/laravel/sail/compare/v1.16.3...v1.16.4) - 2022-12-12
+
+### Fixed
+
+- Changing ubuntu keyserver to use curl by @jseitel in https://github.com/laravel/sail/pull/508
+
+## [v1.16.3](https://github.com/laravel/sail/compare/v1.16.2...v1.16.3) - 2022-11-21
+
+### Fixed
+
+- Fix usage of none for services list by @jf-prevost in https://github.com/laravel/sail/pull/495
+
+## [v1.16.2](https://github.com/laravel/sail/compare/v1.16.1...v1.16.2) - 2022-09-28
+
+### Fixed
+
+- Add extra hosts to Selenium by @nomnoms12 in https://github.com/laravel/sail/pull/485
+
+## [v1.16.1](https://github.com/laravel/sail/compare/v1.16.0...v1.16.1) - 2022-09-26
+
+### Fixed
+
+- Script not loading all app env files by @LouisHaftmann in https://github.com/laravel/sail/pull/482
+
+## [v1.16.0](https://github.com/laravel/sail/compare/v1.15.4...v1.16.0) - 2022-08-31
+
+### Added
+
+- PHP 8.2 Support by @Jubeki in https://github.com/laravel/sail/pull/473
+
+## [v1.15.4](https://github.com/laravel/sail/compare/v1.15.3...v1.15.4) - 2022-08-17
+
+### Fixed
+
+- Don't error when docker is not available by @jessarcher in https://github.com/laravel/sail/pull/468
+
+## [v1.15.3](https://github.com/laravel/sail/compare/v1.15.2...v1.15.3) - 2022-08-17
+
+### Changed
+
+- Build and pull images on install by @jessarcher in https://github.com/laravel/sail/pull/467
+
+## [v1.15.2](https://github.com/laravel/sail/compare/v1.15.1...v1.15.2) - 2022-08-08
+
+### Fixed
+
+- Fix splitting SAIL_FILES into array by @mortenscheel in https://github.com/laravel/sail/pull/458
+
+## [v1.15.1](https://github.com/laravel/sail/compare/v1.15.0...v1.15.1) - 2022-07-21
+
+### Fixed
+
+- Fix ubuntu versions for PHP 7.4 & 8.0 runtimes by @taylorotwell in https://github.com/laravel/sail/commit/2fe64c0b45a3af56cac0af638c8020a8adc860d7
+
+## [v1.15.0](https://github.com/laravel/sail/compare/v1.14.11...v1.15.0) - 2022-06-24
+
+### Added
+
+- Adds `sail pint` by @nunomaduro in https://github.com/laravel/sail/pull/439
+
+### Changed
+
+- Publish the Vite port by @jessarcher in https://github.com/laravel/sail/pull/433
+
+### Fixed
+
+- Fixed devcontainer permissions by @GoodM4ven in https://github.com/laravel/sail/pull/438
+- Update default PostgreSQL versions for PHP 8.0 and 7.4 runtimes by @driesvints in https://github.com/laravel/sail/pull/441
+
+## [v1.14.11](https://github.com/laravel/sail/compare/v1.14.10...v1.14.11) - 2022-06-14
+
+### Fixed
+
+- Revert "Expose 8080 port for hot module replacement" by @jessarcher in https://github.com/laravel/sail/pull/432
+
+## [v1.14.10](https://github.com/laravel/sail/compare/v1.14.9...v1.14.10) - 2022-06-09
+
+### Fixed
+
+- Fix testing DB creation by @jessarcher in https://github.com/laravel/sail/pull/429
+
+## [v1.14.9](https://github.com/laravel/sail/compare/v1.14.8...v1.14.9) - 2022-06-06
+
+### Changed
+
+- Allow for creation of databases needed for parallel testing by @bram-pkg in https://github.com/laravel/sail/pull/424
+
+## [v1.14.8](https://github.com/laravel/sail/compare/v1.14.7...v1.14.8) - 2022-05-31
+
+### Changed
+
+- Run supervisord with pid 1 by @ryoluo in https://github.com/laravel/sail/pull/419
+
+## [v1.14.7](https://github.com/laravel/sail/compare/v1.14.6...v1.14.7) - 2022-05-21
+
+### Changed
+
+- Update meilisearch stub to reflect new data path by @tdondich in https://github.com/laravel/sail/pull/414
+
+## [v1.14.6](https://github.com/laravel/sail/compare/v1.14.5...v1.14.6) - 2022-05-18
+
+### Fixed
+
+- Checks if docker compose or docker-compose is installed by @affektde in https://github.com/laravel/sail/pull/409
+
+## [v1.14.5](https://github.com/laravel/sail/compare/v1.14.4...v1.14.5) - 2022-05-16
+
+### Changed
+
+- Updated sail helps section by @mehdirajabi59 in https://github.com/laravel/sail/pull/407
+- Cleans up deprecated apt-key usage by @tbollinger in https://github.com/laravel/sail/pull/408
+- use docker compose (GO) by @erfantkerfan in https://github.com/laravel/sail/pull/405
+
+## [v1.14.4](https://github.com/laravel/sail/compare/v1.14.3...v1.14.4) - 2022-05-12
+
+### Fixed
+
+- Fixes incorrectly referenced distro https://github.com/laravel/sail/commit/0e0e51f19c758c79acbda11e3870641fbad5b7d9
+
+## [v1.14.3](https://github.com/laravel/sail/compare/v1.14.2...v1.14.3) - 2022-05-10
+
+### Changed
+
+- Changed Ubuntu 21.10 to Ubuntu 22.04 LTS by @mehdirajabi59 in https://github.com/laravel/sail/pull/395
+
+## [v1.14.2](https://github.com/laravel/sail/compare/v1.14.1...v1.14.2) - 2022-05-10
+
+### Fixed
+
+- Allow Sail to read from phpunit.xml and phpunit.xml.dist when running the install command by @kylemilloy in https://github.com/laravel/sail/pull/394
+- Fix missing usage of POSTGRES_VERSION by @driesvints in https://github.com/laravel/sail/pull/398
+
+## [v1.14.1](https://github.com/laravel/sail/compare/v1.14.0...v1.14.1) - 2022-05-02
+
+### Changed
+
+- Expose 8080 port for hot module replacement by @ryoluo in https://github.com/laravel/sail/pull/391
 
 ## [v1.14.0](https://github.com/laravel/sail/compare/v1.13.10...v1.14.0) - 2022-04-27
 
