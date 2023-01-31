@@ -161,6 +161,11 @@ class InstallCommand extends Command
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
         }
 
+        if (!preg_match("/WWWGROUP=1000/", $environment)) {
+            $environment .= "\nWWWGROUP=1000";
+            $environment .= "\nWWWUSER=1000\n";
+        }
+
         file_put_contents($this->laravel->basePath('.env'), $environment);
     }
 
