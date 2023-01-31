@@ -280,7 +280,7 @@ elif [ "$1" == "phpunit" ]; then
         sail_is_not_running
     fi
 
-# Proxy the "phpunit" command to "php vendor/bin/phpunit"...
+# Proxy the "pest" command to "php vendor/bin/pest"...
 elif [ "$1" == "pest" ]; then
     shift 1
 
