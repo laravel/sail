@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.18.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.19.0...1.x)
+
+## [v1.19.0](https://github.com/laravel/sail/compare/v1.18.1...v1.19.0) - 2023-01-31
+
+### Added
+
+- Add custom domain config to sail share by @mojowill in https://github.com/laravel/sail/pull/531
+- Add pest command to sail bin by @MortenDHansen in https://github.com/laravel/sail/pull/534
+
+### Changed
+
+- Replace mailhog with mailpit by @ankurk91 in https://github.com/laravel/sail/pull/533
 
 ## [v1.18.1](https://github.com/laravel/sail/compare/v1.18.0...v1.18.1) - 2023-01-12
 
