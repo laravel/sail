@@ -58,7 +58,7 @@ trait InteractsWithDockerComposeServices
 
         // Adds the new services as dependencies of the laravel.test service...
         if (! array_key_exists('laravel.test', $compose['services'])) {
-            $this->warn('Couldn\'t find the laravel.test main service. Make sure you add [' . implode(',', $services) . '] to the depends_on config.');
+            $this->warn('Couldn\'t find the laravel.test service. Make sure you add ['.implode(',', $services).'] to the depends_on config.');
         } else {
             $compose['services']['laravel.test']['depends_on'] = collect($compose['services']['laravel.test']['depends_on'] ?? [])
                 ->merge($services)
@@ -85,7 +85,7 @@ trait InteractsWithDockerComposeServices
                 $compose['volumes']["sail-{$service}"] = ['driver' => 'local'];
             });
 
-        // If the volumes is empty, we can remove it...
+        // If the list of volumes is empty, we can remove it...
         if (empty($compose['volumes'])) {
             unset($compose['volumes']);
         }
