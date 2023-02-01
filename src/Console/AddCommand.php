@@ -3,28 +3,27 @@
 namespace Laravel\Sail\Console;
 
 use Illuminate\Console\Command;
-use RuntimeException;
-use Symfony\Component\Process\Process;
+use Laravel\Sail\Console\Concerns\InteractsWithDockerComposeServices;
 
-class InstallCommand extends Command
+class AddCommand extends Command
 {
-    use Concerns\InteractsWithDockerComposeServices;
+    use InteractsWithDockerComposeServices;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'sail:install
-                {--with= : The services that should be included in the installation}
-                {--devcontainer : Create a .devcontainer configuration directory}';
+    protected $signature = 'sail:add
+        {services? : The services that should be added}
+    ';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Install Laravel Sail\'s default Docker Compose file';
+    protected $description = 'Add a service to an existing Sail installation';
 
     /**
      * Execute the console command.
@@ -33,8 +32,8 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        if ($this->option('with')) {
-            $services = $this->option('with') == 'none' ? [] : explode(',', $this->option('with'));
+        if ($this->argument('services')) {
+            $services = $this->argument('services') == 'none' ? [] : explode(',', $this->argument('services'));
         } elseif ($this->option('no-interaction')) {
             $services = $this->defaultServices;
         } else {
@@ -51,11 +50,7 @@ class InstallCommand extends Command
         $this->replaceEnvVariables($services);
         $this->configurePhpUnit();
 
-        if ($this->option('devcontainer')) {
-            $this->installDevContainer();
-        }
-
-        $this->info('Sail scaffolding installed successfully.');
+        $this->info('Additional Sail services installed successfully.');
 
         $this->prepareInstallation($services);
     }

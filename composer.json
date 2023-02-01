@@ -15,9 +15,10 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
-        "illuminate/contracts": "^8.0|^9.0|^10.0",
         "illuminate/console": "^8.0|^9.0|^10.0",
-        "illuminate/support": "^8.0|^9.0|^10.0"
+        "illuminate/contracts": "^8.0|^9.0|^10.0",
+        "illuminate/support": "^8.0|^9.0|^10.0",
+        "symfony/yaml": "^6.0"
     },
     "bin": [
         "bin/sail"
