@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.19.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.20.0...1.x)
+
+## [v1.20.0](https://github.com/laravel/sail/compare/v1.19.0...v1.20.0) - 2023-02-05
+
+### Added
+
+- Use symfony/yaml, new Soketi service, and new sail:add command by @tonysm in https://github.com/laravel/sail/pull/532
+
+### Fixed
+
+- Move settings into customizations.vscode by @Kyzegs in https://github.com/laravel/sail/pull/542
 
 ## [v1.19.0](https://github.com/laravel/sail/compare/v1.18.1...v1.19.0) - 2023-01-31
 
