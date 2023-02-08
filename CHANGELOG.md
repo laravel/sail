@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.20.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.20.1...1.x)
+
+## [v1.20.1](https://github.com/laravel/sail/compare/v1.20.0...v1.20.1) - 2023-02-07
+
+### Fixed
+
+- Fixed the path to devcontainer.stub by @gabrielgry in https://github.com/laravel/sail/pull/544
 
 ## [v1.20.0](https://github.com/laravel/sail/compare/v1.19.0...v1.20.0) - 2023-02-05
 
