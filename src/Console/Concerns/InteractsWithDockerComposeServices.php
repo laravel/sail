@@ -184,7 +184,7 @@ trait InteractsWithDockerComposeServices
 
         file_put_contents(
             $this->laravel->basePath('.devcontainer/devcontainer.json'),
-            file_get_contents(__DIR__.'/../../stubs/devcontainer.stub')
+            file_get_contents(__DIR__.'/../../../stubs/devcontainer.stub')
         );
 
         $environment = file_get_contents($this->laravel->basePath('.env'));
