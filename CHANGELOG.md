@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.20.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.20.2...1.x)
+
+## [v1.20.2](https://github.com/laravel/sail/compare/v1.20.1...v1.20.2) - 2023-02-08
+
+### Fixed
+
+- Fix `SAIL_SHARE_DOMAIN` default value by @gonzalom in https://github.com/laravel/sail/pull/546
 
 ## [v1.20.1](https://github.com/laravel/sail/compare/v1.20.0...v1.20.1) - 2023-02-07
 
