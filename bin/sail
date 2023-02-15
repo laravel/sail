@@ -96,6 +96,7 @@ function display_help {
     echo
     echo "${YELLOW}Sharing:${NC}"
     echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
+    echo "  ${GREEN}sail open${NC}    Open the site in your browser"
     echo
     echo "${YELLOW}Binaries:${NC}"
     echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
@@ -488,6 +489,18 @@ elif [ "$1" == "share" ]; then
             --subdomain="$SAIL_SHARE_SUBDOMAIN" \
             --domain="$SAIL_SHARE_DOMAIN" \
             "$@"
+
+        exit
+    else
+        sail_is_not_running
+    fi
+
+# Open the site...
+elif [ "$1" == "open" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        open $APP_URL
 
         exit
     else
