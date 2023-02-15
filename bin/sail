@@ -97,7 +97,7 @@ function display_help {
     echo
     echo "${YELLOW}Sharing:${NC}"
     echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
-    echo "  ${GREEN}sail open${NC}    Open the site for the current directory in your browser"
+    echo "  ${GREEN}sail open${NC}    Open the site in your browser"
     echo
     echo "${YELLOW}Binaries:${NC}"
     echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
