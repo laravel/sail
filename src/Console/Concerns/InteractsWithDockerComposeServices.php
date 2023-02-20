@@ -2,6 +2,7 @@
 
 namespace Laravel\Sail\Console\Concerns;
 
+use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
@@ -33,6 +34,18 @@ trait InteractsWithDockerComposeServices
     protected $defaultServices = ['mysql', 'redis', 'selenium', 'mailpit'];
 
     /**
+     * The available php versions that can be installed
+     * @var string[]
+     */
+    protected $phpVersions = ["7.4", "8.0", "8.1", "8.2"];
+
+    /**
+     * default php versions
+     * @var string
+     */
+    protected $defaultPhpVersion = "8.2";
+
+    /**
      * Gather the desired Sail services using a Symfony menu.
      *
      * @return array
@@ -43,12 +56,22 @@ trait InteractsWithDockerComposeServices
     }
 
     /**
+     * Gather the desired Sail php version using symfony menu.
+     *
+     * @return string
+     */
+    protected function gatherPhpVersionWithSymfonyMenu()
+    {
+        return $this->choice('Which php version would you like to install?', $this->phpVersions, $this->defaultPhpVersion);
+    }
+
+    /**
      * Build the Docker Compose file.
      *
      * @param  array  $services
      * @return void
      */
-    protected function buildDockerCompose(array $services)
+    protected function buildDockerCompose(array $services, string $phpVersion)
     {
         $composePath = base_path('docker-compose.yml');
 
@@ -65,6 +88,9 @@ trait InteractsWithDockerComposeServices
                 ->unique()
                 ->values()
                 ->all();
+
+            $compose['services']['laravel.test']['image'] = Str::replace("{PHP_VERSION}", $phpVersion, $compose['services']['laravel.test']['image']);
+            $compose['services']['laravel.test']['build']['context'] = Str::replace("{PHP_VERSION}", $phpVersion, $compose['services']['laravel.test']['build']['context']);
         }
 
         // Add the services to the docker-compose.yml...

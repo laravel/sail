@@ -33,6 +33,8 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+        $phpVersion = $this->gatherPhpVersionWithSymfonyMenu();
+
         if ($this->option('with')) {
             $services = $this->option('with') == 'none' ? [] : explode(',', $this->option('with'));
         } elseif ($this->option('no-interaction')) {
@@ -47,7 +49,7 @@ class InstallCommand extends Command
             return 1;
         }
 
-        $this->buildDockerCompose($services);
+        $this->buildDockerCompose($services, $phpVersion);
         $this->replaceEnvVariables($services);
         $this->configurePhpUnit();
 
