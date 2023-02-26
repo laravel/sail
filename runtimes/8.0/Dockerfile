@@ -19,7 +19,7 @@ RUN apt-get update \
     && echo "deb [signed-by=/usr/share/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
     && apt-get update \
     && apt-get install -y php8.0-cli php8.0-dev \
-       php8.0-pgsql php8.0-sqlite3 php8.0-gd \
+       php8.0-pgsql php8.0-sqlite3 php8.0-gd php8.0-imagick \
        php8.0-curl php8.0-memcached \
        php8.0-imap php8.0-mysql php8.0-mbstring \
        php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap \
