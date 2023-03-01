@@ -145,6 +145,11 @@ elif [ -f ./.env ]; then
   source ./.env;
 fi
 
+if [ "$1" != "artisan" ] && [ "$APP_NAME" != "" ] && [ "$APP_KEY" = "" ]; then
+    echo "${BOLD}${YELLOW}Your application does not have any application key."
+    echo "You may generate by using the following command: './vendor/bin/sail key:generate'${NC}"
+fi
+
 # Define environment variables...
 export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
