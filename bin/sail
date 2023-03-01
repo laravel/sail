@@ -108,6 +108,20 @@ function display_help {
     exit 1
 }
 
+function confirm_yes_no() {
+    echo -n "${BOLD}$1 [Y/n]: ${NC}"
+    read -r ANSWER
+
+    case $ANSWER in
+    "" | [Yy]*)
+        return 0
+    ;;
+    *)
+        return 1
+    ;;
+    esac
+}
+
 # Proxy the "help" command...
 if [ $# -gt 0 ]; then
     if [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
@@ -115,6 +129,13 @@ if [ $# -gt 0 ]; then
     fi
 else
     display_help
+fi
+
+if [ -f ./.env.example ] && [ ! -f ./env ]; then
+    if confirm_yes_no ".env does not exist and .env.example exists. Would you like to copy .env.example to .env?"; then
+        cp ./.env.example ./.env
+        echo "Successfully copied .env.example to .env."
+    fi
 fi
 
 # Source the ".env" file so Laravel's environment variables are available...
