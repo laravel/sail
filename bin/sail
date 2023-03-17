@@ -69,6 +69,11 @@ function display_help {
     echo "  ${GREEN}sail yarn ...${NC}        Run a Yarn command"
     echo "  ${GREEN}sail yarn run prod${NC}"
     echo
+    echo "${YELLOW}PNPM Commands:${NC}"
+    echo "  ${GREEN}sail pnpm ...${NC}        Run a pnpm command"
+    echo "  ${GREEN}sail pnpx${NC}            Run a pnpx command"
+    echo "  ${GREEN}sail pnpm run prod${NC}"
+    echo
     echo "${YELLOW}Database Commands:${NC}"
     echo "  ${GREEN}sail mysql${NC}     Start a MySQL CLI session within the 'mysql' container"
     echo "  ${GREEN}sail mariadb${NC}   Start a MySQL CLI session within the 'mariadb' container"
@@ -399,6 +404,30 @@ elif [ "$1" == "yarn" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" yarn "$@")
+    else
+        sail_is_not_running
+    fi
+
+# Proxy PNPM commands to the "pnpm" binary on the application container...
+elif [ "$1" == "pnpm" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec -u sail)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=("$APP_SERVICE" pnpm "$@")
+    else
+        sail_is_not_running
+    fi
+
+# Proxy PNPX commands to the "pnpx" binary on the application container...
+elif [ "$1" == "pnpx" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec -u sail)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=("$APP_SERVICE" pnpx "$@")
     else
         sail_is_not_running
     fi
