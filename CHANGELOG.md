@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.21.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.21.3...1.x)
+
+## [v1.21.3](https://github.com/laravel/sail/compare/v1.21.2...v1.21.3) - 2023-03-13
+
+- Enable Expose Global Server Infrastructure by @theutz in https://github.com/laravel/sail/pull/563
+- feat: upgrade postgresql-client to 15 by @fedorvladimirov in https://github.com/laravel/sail/pull/564
 
 ## [v1.21.2](https://github.com/laravel/sail/compare/v1.21.1...v1.21.2) - 2023-03-06
 
