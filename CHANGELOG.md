@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.21.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.21.4...1.x)
+
+## [v1.21.4](https://github.com/laravel/sail/compare/v1.21.3...v1.21.4) - 2023-03-30
+
+- Speeds up CLI and tests by enabling OpCache by @lukeraymonddowning in https://github.com/laravel/sail/pull/569
 
 ## [v1.21.3](https://github.com/laravel/sail/compare/v1.21.2...v1.21.3) - 2023-03-13
 
