@@ -28,7 +28,8 @@ body:
       required: true
   - type: dropdown
     attributes:
-      label: What operating system are you using? Any OS not listed here is currently not supported.
+      label: Operating System
+      description: What operating system are you using? Any OS not listed here is currently not supported.
       options:
         - macOS
         - Windows (WSL)
