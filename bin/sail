@@ -108,6 +108,42 @@ function display_help {
     exit 1
 }
 
+# Function to return the files changed listed from command "git status --short -- '**.php'"
+function get_files_changed {
+    # Run `git status --short` and save the output to a variable
+    GIT_STATUS=$(git status --short -- '**.php')
+
+    # Track the files that are changed
+    FILES_FROM_GIT_STATUS=()
+
+    # Loop over the files changed
+    while read -r line; do
+    STATUS="${line:0:2}"
+    FILE="${line:2}"
+
+    STATUS="${STATUS#"${STATUS%%[![:space:]]*}"}" # remove leading whitespace
+    STATUS="${STATUS%"${STATUS##*[![:space:]]}"}" # remove trailing whitespace
+    FILE="${FILE#"${FILE%%[![:space:]]*}"}" # remove leading whitespace
+    FILE="${FILE%"${FILE##*[![:space:]]}"}" # remove trailing whitespace
+
+    # If the STATUS is "??", set the STATUS to "N"
+    if [ "$STATUS" = "??" ]; then
+        STATUS="N"
+    fi
+
+    if [ "$STATUS" != "D" ]; then
+        if [ "$STATUS" = "R" ]; then
+        # If the STATUS is "R", extract the new FILE name
+        FILE=${FILE#* -> }
+        fi
+
+        FILES_FROM_GIT_STATUS+=($FILE)
+    fi
+    done <<< "$GIT_STATUS"
+
+    echo "${FILES_FROM_GIT_STATUS[@]}"
+}
+
 # Proxy the "help" command...
 if [ $# -gt 0 ]; then
     if [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ]; then
@@ -310,7 +346,26 @@ elif [ "$1" == "pint" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php vendor/bin/pint "$@")
+
+        HAS_DIRTY=false
+
+        for arg in "$@"
+        do
+            # Check if the argument is equal to the desired value
+            if [ "$arg" = "--dirty" ]; then
+                HAS_DIRTY=true
+                break
+            fi
+        done
+
+        if $HAS_DIRTY; then
+            FILES_FROM_GIT_STATUS=$(get_files_changed)
+
+            ARGS+=("$APP_SERVICE" php vendor/bin/pint $FILES_FROM_GIT_STATUS)
+        else
+            ARGS+=("$APP_SERVICE" php vendor/bin/pint "$@")
+        fi
+
     else
         sail_is_not_running
     fi
