@@ -137,7 +137,7 @@ function get_files_changed {
         FILE=${FILE#* -> }
         fi
 
-        FILES_FROM_GIT_STATUS+=($FILE)
+        FILES_FROM_GIT_STATUS+=("${FILE}")
     fi
     done <<< "$GIT_STATUS"
 
@@ -359,9 +359,9 @@ elif [ "$1" == "pint" ]; then
         done
 
         if $HAS_DIRTY; then
-            FILES_FROM_GIT_STATUS=$(get_files_changed)
+            read -r -a FILES_CHANGED <<< "$(get_files_changed)"
 
-            ARGS+=("$APP_SERVICE" php vendor/bin/pint $FILES_FROM_GIT_STATUS)
+            ARGS+=("$APP_SERVICE" php vendor/bin/pint "${FILES_CHANGED[@]}")
         else
             ARGS+=("$APP_SERVICE" php vendor/bin/pint "$@")
         fi
