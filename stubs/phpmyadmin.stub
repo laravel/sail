@@ -1,0 +1,10 @@
+phpmyadmin:
+    image: 'phpmyadmin:5.2.1'
+    ports:
+        - "8080:80"
+    environment:
+        PMA_HOST: mysql
+    networks:
+        - sail
+    depends_on:
+        - mysql
