@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.21.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.21.5...1.x)
+
+## [v1.21.5](https://github.com/laravel/sail/compare/v1.21.4...v1.21.5) - 2023-04-24
+
+- Fix opening files from Ignition error page by @NiclasvanEyk in https://github.com/laravel/sail/pull/576
+- Add librsvg2-bin package for SVG support by @Bottelet in https://github.com/laravel/sail/pull/575
 
 ## [v1.21.4](https://github.com/laravel/sail/compare/v1.21.3...v1.21.4) - 2023-03-30
 
