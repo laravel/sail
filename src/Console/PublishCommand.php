@@ -36,13 +36,11 @@ class PublishCommand extends Command
                     './vendor/laravel/sail/runtimes/8.2',
                     './vendor/laravel/sail/runtimes/8.1',
                     './vendor/laravel/sail/runtimes/8.0',
-                    './vendor/laravel/sail/runtimes/7.4',
                 ],
                 [
                     './docker/8.2',
                     './docker/8.1',
                     './docker/8.0',
-                    './docker/7.4',
                 ],
                 file_get_contents($this->laravel->basePath('docker-compose.yml'))
             )
