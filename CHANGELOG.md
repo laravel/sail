@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.21.5...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.22.0...1.x)
+
+## [v1.22.0](https://github.com/laravel/sail/compare/v1.21.5...v1.22.0) - 2023-05-04
+
+- Remove PHP 7.4 Support by @Jubeki in https://github.com/laravel/sail/pull/580
 
 ## [v1.21.5](https://github.com/laravel/sail/compare/v1.21.4...v1.21.5) - 2023-04-24
 
