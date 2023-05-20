@@ -171,6 +171,13 @@ if [ -n "$SAIL_FILES" ]; then
     done
 fi
 
+# An alternate environment file so Docker compose environment variables are available...
+if [ ! -z "$APP_ENV" ] && [ -f ./.env.$APP_ENV ]; then
+ DOCKER_COMPOSE+=(--env-file ".env.$APP_ENV")
+elif [ -f ./.env ]; then
+ DOCKER_COMPOSE+=(--env-file ".env")
+fi
+
 EXEC="yes"
 
 if [ -z "$SAIL_SKIP_CHECKS" ]; then
