@@ -244,7 +244,7 @@ elif [ "$1" == "composer" ]; then
     fi
 
 # Proxy Artisan commands to the "artisan" binary on the application container...
-elif [ "$1" == "artisan" ] || [ "$1" == "art" ]; then
+elif [ "$1" == "artisan" ] || [ "$1" == "art" ] || [ "$1" == "a" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
