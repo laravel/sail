@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.22.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.23.0...1.x)
+
+## [v1.23.0](https://github.com/laravel/sail/compare/v1.22.0...v1.23.0) - 2023-06-16
+
+- Add `a` as alias for artisan command by @5thmv in https://github.com/laravel/sail/pull/588
 
 ## [v1.22.0](https://github.com/laravel/sail/compare/v1.21.5...v1.22.0) - 2023-05-04
 
