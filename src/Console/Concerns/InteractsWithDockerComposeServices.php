@@ -2,6 +2,7 @@
 
 namespace Laravel\Sail\Console\Concerns;
 
+use Winter\LaravelConfigWriter\EnvFile;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
@@ -106,50 +107,50 @@ trait InteractsWithDockerComposeServices
      */
     protected function replaceEnvVariables(array $services)
     {
-        $environment = file_get_contents($this->laravel->basePath('.env'));
+        $environment = EnvFile::open($this->laravel->basePath('.env'));
 
         if (in_array('pgsql', $services)) {
-            $environment = str_replace('DB_CONNECTION=mysql', "DB_CONNECTION=pgsql", $environment);
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
-            $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
+            $environment->set('DB_CONNECTION', 'pgsql');
+            $environment->set('DB_HOST', 'pgsql');
+            $environment->set('DB_PORT', 5432);
         } elseif (in_array('mariadb', $services)) {
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
+            $environment->set('DB_HOST', 'mariadb');
         } else {
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
+            $environment->set('DB_HOST', 'mysql');
         }
 
-        $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
-        $environment = preg_replace("/DB_PASSWORD=(.*)/", "DB_PASSWORD=password", $environment);
+        $environment->set('DB_USERNAME', 'sail');
+        $environment->set('DB_PASSWORD', 'password');
 
         if (in_array('memcached', $services)) {
-            $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=memcached', $environment);
+            $environment->set('MEMCACHED_HOST', 'memcached');
         }
 
         if (in_array('redis', $services)) {
-            $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
+            $environment->set('REDIS_HOST', 'redis');
         }
 
         if (in_array('meilisearch', $services)) {
-            $environment .= "\nSCOUT_DRIVER=meilisearch";
-            $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
+            $environment->set('SCOUT_DRIVER', 'meilisearch');
+            $environment->set('MEILISEARCH_HOST', 'http://meilisearch:7700');
         }
 
         if (in_array('soketi', $services)) {
-            $environment = preg_replace("/^BROADCAST_DRIVER=(.*)/m", "BROADCAST_DRIVER=pusher", $environment);
-            $environment = preg_replace("/^PUSHER_APP_ID=(.*)/m", "PUSHER_APP_ID=app-id", $environment);
-            $environment = preg_replace("/^PUSHER_APP_KEY=(.*)/m", "PUSHER_APP_KEY=app-key", $environment);
-            $environment = preg_replace("/^PUSHER_APP_SECRET=(.*)/m", "PUSHER_APP_SECRET=app-secret", $environment);
-            $environment = preg_replace("/^PUSHER_HOST=(.*)/m", "PUSHER_HOST=soketi", $environment);
-            $environment = preg_replace("/^PUSHER_PORT=(.*)/m", "PUSHER_PORT=6001", $environment);
-            $environment = preg_replace("/^PUSHER_SCHEME=(.*)/m", "PUSHER_SCHEME=http", $environment);
-            $environment = preg_replace("/^VITE_PUSHER_HOST=(.*)/m", "VITE_PUSHER_HOST=localhost", $environment);
+            $environment->set('BROADCAST_DRIVER', 'pusher');
+            $environment->set('PUSHER_APP_ID', 'app-id');
+            $environment->set('PUSHER_APP_KEY', 'app-key');
+            $environment->set('PUSHER_APP_SECRET', 'app-secret');
+            $environment->set('PUSHER_HOST', 'soketi');
+            $environment->set('PUSHER_PORT', '6001');
+            $environment->set('PUSHER_SCHEME', 'http');
+            $environment->set('VITE_PUSHER_HOST', 'localhost');
         }
 
         if (in_array('mailpit', $services)) {
-            $environment = preg_replace("/^MAIL_HOST=(.*)/m", "MAIL_HOST=mailpit", $environment);
+            $environment->set('MAIL_HOST', 'mailpit');
         }
 
-        file_put_contents($this->laravel->basePath('.env'), $environment);
+        $environment->write();
     }
 
     /**
