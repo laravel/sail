@@ -6,7 +6,7 @@ ARG WWWGROUP
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=13
 ARG PHP_POST_MAX_SIZE=100M
-ARG PHP_UPLOAD_MAX_SIZE=100M
+ARG PHP_UPLOAD_MAX_FILESIZE=100M
 
 WORKDIR /var/www/html
 
@@ -55,7 +55,7 @@ COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN echo "[PHP]\n"\
 "post_max_size = $PHP_POST_MAX_SIZE\n"\
-"upload_max_filesize = $PHP_UPLOAD_MAX_SIZE\n"\
+"upload_max_filesize = $PHP_UPLOAD_MAX_FILESIZE\n"\
 "variables_order=EGPCS\n\n"\
 "[opcache]\n"\
 "opcache.enable_cli=1\n"\ >> /etc/php/8.0/cli/conf.d/99-sail.ini
