@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.23.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.23.1...1.x)
+
+## [v1.23.1](https://github.com/laravel/sail/compare/v1.23.0...v1.23.1) - 2023-06-28
+
+- Also publish database init scripts by [@spasstiger23](https://github.com/spasstiger23) in https://github.com/laravel/sail/pull/592
 
 ## [v1.23.0](https://github.com/laravel/sail/compare/v1.22.0...v1.23.0) - 2023-06-16
 
