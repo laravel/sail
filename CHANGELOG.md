@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.23.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.23.2...1.x)
+
+## [v1.23.2](https://github.com/laravel/sail/compare/v1.23.1...v1.23.2) - 2023-08-07
+
+- add fswatch for pest support by [@Thinkro](https://github.com/Thinkro) in https://github.com/laravel/sail/pull/600
 
 ## [v1.23.1](https://github.com/laravel/sail/compare/v1.23.0...v1.23.1) - 2023-06-28
 
