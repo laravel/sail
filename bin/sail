@@ -344,7 +344,7 @@ elif [ "$1" == "dusk:fails" ]; then
     fi
 
 # Initiate a Laravel Tinker session within the application container...
-elif [ "$1" == "tinker" ] ; then
+elif [ "$1" == "tinker" ] || [ "$1" == "ti" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
