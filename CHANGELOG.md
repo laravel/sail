@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.23.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.23.3...1.x)
+
+## [v1.23.3](https://github.com/laravel/sail/compare/v1.23.2...v1.23.3) - 2023-08-14
+
+- Upgrade the Compose file format version to Compose specification by [@goodjack](https://github.com/goodjack) in https://github.com/laravel/sail/pull/601
+- Add PNPM support to enhance dependency management efficiency by [@SamuelMTeixeira](https://github.com/SamuelMTeixeira) in https://github.com/laravel/sail/pull/605
 
 ## [v1.23.2](https://github.com/laravel/sail/compare/v1.23.1...v1.23.2) - 2023-08-07
 
