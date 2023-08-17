@@ -396,7 +396,7 @@ elif [ "$1" == "npx" ]; then
         sail_is_not_running
     fi
 
-# Proxy PNPM commands to the "npm" binary on the application container...
+# Proxy PNPM commands to the "pnpm" binary on the application container...
 elif [ "$1" == "pnpm" ]; then
     shift 1
 
@@ -408,7 +408,7 @@ elif [ "$1" == "pnpm" ]; then
         sail_is_not_running
     fi
 
-# Proxy PNPX commands to the "npm" binary on the application container...
+# Proxy PNPX commands to the "pnpx" binary on the application container...
 elif [ "$1" == "pnpx" ]; then
     shift 1
 
