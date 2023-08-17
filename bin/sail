@@ -65,6 +65,11 @@ function display_help {
     echo "  ${GREEN}sail npx${NC}            Run a npx command"
     echo "  ${GREEN}sail npm run prod${NC}"
     echo
+    echo "${YELLOW}PNPM Commands:${NC}"
+    echo "  ${GREEN}sail pnpm ...${NC}        Run a pnpm command"
+    echo "  ${GREEN}sail pnpx${NC}            Run a pnpx command"
+    echo "  ${GREEN}sail pnpm run prod${NC}"
+    echo
     echo "${YELLOW}Yarn Commands:${NC}"
     echo "  ${GREEN}sail yarn ...${NC}        Run a Yarn command"
     echo "  ${GREEN}sail yarn run prod${NC}"
@@ -387,6 +392,30 @@ elif [ "$1" == "npx" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" npx "$@")
+    else
+        sail_is_not_running
+    fi
+
+# Proxy PNPM commands to the "pnpm" binary on the application container...
+elif [ "$1" == "pnpm" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec -u sail)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=("$APP_SERVICE" pnpm "$@")
+    else
+        sail_is_not_running
+    fi
+
+# Proxy PNPX commands to the "pnpx" binary on the application container...
+elif [ "$1" == "pnpx" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec -u sail)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=("$APP_SERVICE" pnpx "$@")
     else
         sail_is_not_running
     fi
