@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.23.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.23.4...1.x)
+
+## [v1.23.4](https://github.com/laravel/sail/compare/v1.23.3...v1.23.4) - 2023-08-17
+
+- Adjust pnpm  to support Sail alias by [@SamuelMTeixeira](https://github.com/SamuelMTeixeira) in https://github.com/laravel/sail/pull/607
 
 ## [v1.23.3](https://github.com/laravel/sail/compare/v1.23.2...v1.23.3) - 2023-08-14
 
