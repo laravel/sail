@@ -43,6 +43,30 @@ trait InteractsWithDockerComposeServices
     }
 
     /**
+     * Get APP_SERVICE from .env or default to laravel.test.
+     *
+     * @return string
+     */
+    protected function getAppService()
+    {
+        $appService = env('APP_SERVICE');
+        if (!$appService) {
+            if (file_exists($this->laravel->basePath('.env'))) {
+                $env = file_get_contents($this->laravel->basePath('.env'));
+                $env = explode("\n", $env);
+                $env = array_filter($env);
+                $env = array_map(function ($item) {
+                    return explode('=', $item);
+                }, $env);
+                $env = array_column($env, 1, 0);
+                $appService = $env['APP_SERVICE'] ?? null;
+            }
+        }
+
+        return $appService ?? 'laravel.test';
+    }
+
+    /**
      * Build the Docker Compose file.
      *
      * @param  array  $services
@@ -56,11 +80,13 @@ trait InteractsWithDockerComposeServices
             ? Yaml::parseFile($composePath)
             : Yaml::parse(file_get_contents(__DIR__ . '/../../../stubs/docker-compose.stub'));
 
-        // Adds the new services as dependencies of the laravel.test service...
-        if (! array_key_exists('laravel.test', $compose['services'])) {
-            $this->warn('Couldn\'t find the laravel.test service. Make sure you add ['.implode(',', $services).'] to the depends_on config.');
+        $appService = $this->getAppService();
+    
+        // Adds the new services as dependencies of the app service...
+        if (! array_key_exists($appService, $compose['services'])) {
+            $this->warn('Couldn\'t find the '.$appService.' service. Make sure you add ['.implode(',', $services).'] to the depends_on config.');
         } else {
-            $compose['services']['laravel.test']['depends_on'] = collect($compose['services']['laravel.test']['depends_on'] ?? [])
+            $compose['services'][$appService]['depends_on'] = collect($compose['services'][$appService]['depends_on'] ?? [])
                 ->merge($services)
                 ->unique()
                 ->values()
