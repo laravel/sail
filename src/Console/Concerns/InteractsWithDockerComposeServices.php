@@ -59,7 +59,7 @@ trait InteractsWithDockerComposeServices
                     return explode('=', $item);
                 }, $env);
                 $env = array_column($env, 1, 0);
-                $appService = $env['APP_SERVICE'] ?? null;
+                $appService = $env['APP_SERVICE'] ? trim($env['APP_SERVICE']) : null;
             }
         }
 
