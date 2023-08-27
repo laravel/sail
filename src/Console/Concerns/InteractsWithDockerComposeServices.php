@@ -39,6 +39,14 @@ trait InteractsWithDockerComposeServices
      */
     protected function gatherServicesWithSymfonyMenu()
     {
+        if (function_exists('\Laravel\Prompts\multiselect')) {
+            return \Laravel\Prompts\multiselect(
+                label: 'Which services would you like to install?',
+                options: $this->services,
+                default: ['mysql'],
+            );
+        }
+
         return $this->choice('Which services would you like to install?', $this->services, 0, null, true);
     }
 
