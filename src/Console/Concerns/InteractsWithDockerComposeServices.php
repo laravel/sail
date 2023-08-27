@@ -33,11 +33,11 @@ trait InteractsWithDockerComposeServices
     protected $defaultServices = ['mysql', 'redis', 'selenium', 'mailpit'];
 
     /**
-     * Gather the desired Sail services using a Symfony menu.
+     * Gather the desired Sail services using an interactive prompt.
      *
      * @return array
      */
-    protected function gatherServicesWithSymfonyMenu()
+    protected function gatherServicesInteractively()
     {
         if (function_exists('\Laravel\Prompts\multiselect')) {
             return \Laravel\Prompts\multiselect(

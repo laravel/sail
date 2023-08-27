@@ -37,7 +37,7 @@ class AddCommand extends Command
         } elseif ($this->option('no-interaction')) {
             $services = $this->defaultServices;
         } else {
-            $services = $this->gatherServicesWithSymfonyMenu();
+            $services = $this->gatherServicesInteractively();
         }
 
         if ($invalidServices = array_diff($services, $this->services)) {
