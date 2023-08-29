@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.23.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.24.0...1.x)
+
+## [v1.24.0](https://github.com/laravel/sail/compare/v1.23.4...v1.24.0) - 2023-08-27
+
+- Make MEILISEARCH_NO_ANALYTICS environment variable available by [@mawnicat](https://github.com/mawnicat) in https://github.com/laravel/sail/pull/611
+- Use Laravel Prompts when available by [@jessarcher](https://github.com/jessarcher) in https://github.com/laravel/sail/pull/612
 
 ## [v1.23.4](https://github.com/laravel/sail/compare/v1.23.3...v1.23.4) - 2023-08-17
 
