@@ -34,6 +34,7 @@ class PublishCommand extends Command
             $this->laravel->basePath('docker-compose.yml'),
             str_replace(
                 [
+                    './vendor/laravel/sail/runtimes/8.3',
                     './vendor/laravel/sail/runtimes/8.2',
                     './vendor/laravel/sail/runtimes/8.1',
                     './vendor/laravel/sail/runtimes/8.0',
@@ -41,6 +42,7 @@ class PublishCommand extends Command
                     './vendor/laravel/sail/database/pgsql'
                 ],
                 [
+                    './docker/8.3',
                     './docker/8.2',
                     './docker/8.1',
                     './docker/8.0',
