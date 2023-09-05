@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.24.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.24.1...1.x)
+
+## [v1.24.1](https://github.com/laravel/sail/compare/v1.24.0...v1.24.1) - 2023-09-01
+
+- Change node source repository by [@alexpado](https://github.com/alexpado) in https://github.com/laravel/sail/pull/613
+- Add PHP 8.3 Runtime (missing extensions excluded) by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/614
 
 ## [v1.24.0](https://github.com/laravel/sail/compare/v1.23.4...v1.24.0) - 2023-08-27
 
