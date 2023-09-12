@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.24.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.25.0...1.x)
+
+## [v1.25.0](https://github.com/laravel/sail/compare/v1.24.1...v1.25.0) - 2023-09-11
+
+- Add Bun by [@punyflash](https://github.com/punyflash) in https://github.com/laravel/sail/pull/616
+- Install bun from npm by [@punyflash](https://github.com/punyflash) in https://github.com/laravel/sail/pull/617
 
 ## [v1.24.1](https://github.com/laravel/sail/compare/v1.24.0...v1.24.1) - 2023-09-01
 
