@@ -92,7 +92,7 @@ function display_help {
     echo "${YELLOW}Running Tests:${NC}"
     echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command"
     echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit"
-    echo "  ${GREEN}sail pest ...${NC}      Run Pest"
+    echo "  ${GREEN}sail pest ...${NC}      Run Pest (run with -xdebug to start a XDEBUG session"
     echo "  ${GREEN}sail pint ...${NC}      Run Pint"
     echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)"
     echo "  ${GREEN}sail dusk:fails${NC}    Re-run previously failed Dusk tests (Requires the laravel/dusk package)"
@@ -307,6 +307,10 @@ elif [ "$1" == "pest" ]; then
 
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
+        if [[ "$1" == "-xdebug" ]];then
+          ARGS+=(-e XDEBUG_SESSION=1)
+          shift 1
+        fi
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" php vendor/bin/pest "$@")
     else
