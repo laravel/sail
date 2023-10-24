@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.25.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.26.0...1.x)
+
+## [v1.26.0](https://github.com/laravel/sail/compare/v1.25.0...v1.26.0) - 2023-10-18
+
+- Fix: Allow postCreateCommand to fail silently in VS Code on Windows by [@seanburns326a](https://github.com/seanburns326a) in https://github.com/laravel/sail/pull/626
+- Support Laravel 11 and update dependencies by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/629
+- Use nodejs 20 by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/628
 
 ## [v1.25.0](https://github.com/laravel/sail/compare/v1.24.1...v1.25.0) - 2023-09-11
 
