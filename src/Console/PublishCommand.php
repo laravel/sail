@@ -35,6 +35,7 @@ class PublishCommand extends Command
             str_replace(
                 [
                     './vendor/laravel/sail/runtimes/8.3',
+                    './vendor/laravel/sail/runtimes/8.2-alpine',
                     './vendor/laravel/sail/runtimes/8.2',
                     './vendor/laravel/sail/runtimes/8.1',
                     './vendor/laravel/sail/runtimes/8.0',
@@ -43,6 +44,7 @@ class PublishCommand extends Command
                 ],
                 [
                     './docker/8.3',
+                    './docker/8.2-alpine',
                     './docker/8.2',
                     './docker/8.1',
                     './docker/8.0',
