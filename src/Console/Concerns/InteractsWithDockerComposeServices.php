@@ -16,6 +16,7 @@ trait InteractsWithDockerComposeServices
         'mysql',
         'pgsql',
         'mariadb',
+        'alpine',
         'redis',
         'memcached',
         'meilisearch',
@@ -70,6 +71,9 @@ trait InteractsWithDockerComposeServices
         } else {
             $compose['services']['laravel.test']['depends_on'] = collect($compose['services']['laravel.test']['depends_on'] ?? [])
                 ->merge($services)
+                ->reject(function ($service) {
+                    return $service == 'alpine';
+                })
                 ->unique()
                 ->values()
                 ->all();
@@ -80,7 +84,7 @@ trait InteractsWithDockerComposeServices
             ->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['services'] ?? []);
             })->each(function ($service) use (&$compose) {
-                $compose['services'][$service] = Yaml::parseFile(__DIR__ . "/../../../stubs/{$service}.stub")[$service];
+                if ($service != 'alpine') $compose['services'][$service] = Yaml::parseFile(__DIR__ . "/../../../stubs/{$service}.stub")[$service];
             });
 
         // Merge volumes...
@@ -101,6 +105,16 @@ trait InteractsWithDockerComposeServices
         // Replace Selenium with ARM base container on Apple Silicon...
         if (in_array('selenium', $services) && in_array(php_uname('m'), ['arm64', 'aarch64'])) {
             $compose['services']['selenium']['image'] = 'seleniarm/standalone-chromium';
+        }
+
+         // Replace Default image to alpine
+         if (in_array('alpine', $services)) {
+            $compose['services']['laravel.test']['build']['context'] = './vendor/laravel/sail/runtimes/8.2-alpine';
+            $compose['services']['laravel.test']['image'] = 'sail-8.2/app-alpine';
+
+            if (array_key_exists('pgsql', $compose['services'])) {
+                $compose['services']['pgsql']['image'] = 'postgres:15-alpine';
+            }
         }
 
         file_put_contents($this->laravel->basePath('docker-compose.yml'), Yaml::dump($compose, Yaml::DUMP_OBJECT_AS_MAP));
