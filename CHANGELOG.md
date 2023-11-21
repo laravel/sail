@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.26.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.26.1...1.x)
+
+## [v1.26.1](https://github.com/laravel/sail/compare/v1.26.0...v1.26.1) - 2023-11-20
+
+- Update default user by [@taylorotwell](https://github.com/taylorotwell) in https://github.com/laravel/sail/commit/7a82f5aa364dbee3fd9c52fc464cf0bdd11150ed
 
 ## [v1.26.0](https://github.com/laravel/sail/compare/v1.25.0...v1.26.0) - 2023-10-18
 
