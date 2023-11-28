@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.26.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.26.2...1.x)
+
+## [v1.26.2](https://github.com/laravel/sail/compare/v1.26.1...v1.26.2) - 2023-11-27
+
+* Add missing PHP 8.3 extensions by [@hebbet](https://github.com/hebbet) in https://github.com/laravel/sail/pull/640
 
 ## [v1.26.1](https://github.com/laravel/sail/compare/v1.26.0...v1.26.1) - 2023-11-20
 
