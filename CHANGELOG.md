@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.26.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.26.3...1.x)
+
+## [v1.26.3](https://github.com/laravel/sail/compare/v1.26.2...v1.26.3) - 2023-12-02
+
+* [1.x] Add PHP 8.3 xdebug by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/642
 
 ## [v1.26.2](https://github.com/laravel/sail/compare/v1.26.1...v1.26.2) - 2023-11-27
 
