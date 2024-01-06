@@ -60,15 +60,26 @@ trait InteractsWithDockerComposeServices
     {
         $composePath = base_path('docker-compose.yml');
 
+        $environment = file_get_contents($this->laravel->basePath('.env'));
+
+        // Split the environment content into lines
+        $lines = explode(PHP_EOL, $environment);
+
+        // Use array_reduce to search for APP_SERVICE in the environment lines
+        $appService = array_reduce($lines, function ($value, $line) {
+            // Output the value of APP_SERVICE found or default 'laravel.test' if not found
+            return (strpos($line, 'APP_SERVICE=') === 0) ? substr($line, strlen('APP_SERVICE=')) : $value;
+        }, 'laravel.test');
+
         $compose = file_exists($composePath)
             ? Yaml::parseFile($composePath)
             : Yaml::parse(file_get_contents(__DIR__ . '/../../../stubs/docker-compose.stub'));
 
-        // Adds the new services as dependencies of the laravel.test service...
-        if (! array_key_exists('laravel.test', $compose['services'])) {
-            $this->warn('Couldn\'t find the laravel.test service. Make sure you add ['.implode(',', $services).'] to the depends_on config.');
+        // Adds the new services as dependencies of the app service...
+        if (! array_key_exists($appService, $compose['services'])) {
+            $this->warn('Couldn\'t find the app service service. Make sure you add ['.implode(',', $services).'] to the depends_on config.');
         } else {
-            $compose['services']['laravel.test']['depends_on'] = collect($compose['services']['laravel.test']['depends_on'] ?? [])
+            $compose['services'][$appService]['depends_on'] = collect($compose['services'][$appService]['depends_on'] ?? [])
                 ->merge($services)
                 ->unique()
                 ->values()
