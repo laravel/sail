@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.26.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.27.0...1.x)
+
+## [v1.27.0](https://github.com/laravel/sail/compare/v1.26.3...v1.27.0) - 2024-01-03
+
+* [1.x] Allow easy customization of the command ran by supervisor's PHP process by [@bram-pkg](https://github.com/bram-pkg) in https://github.com/laravel/sail/pull/645
+* [1.x] Default to PHP 8.3 by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/647
 
 ## [v1.26.3](https://github.com/laravel/sail/compare/v1.26.2...v1.26.3) - 2023-12-02
 
