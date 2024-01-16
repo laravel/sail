@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.27.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.27.1...1.x)
+
+## [v1.27.1](https://github.com/laravel/sail/compare/v1.27.0...v1.27.1) - 2024-01-13
+
+* [1.x] [#651] Don't do anything if no phpunit files are present by [@zack6849](https://github.com/zack6849) in https://github.com/laravel/sail/pull/652
 
 ## [v1.27.0](https://github.com/laravel/sail/compare/v1.26.3...v1.27.0) - 2024-01-03
 
