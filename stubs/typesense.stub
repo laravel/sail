@@ -1,0 +1,16 @@
+typesense:
+    image: 'typesense/typesense:0.25.2'
+    ports:
+        - '${FORWARD_TYPESENSE_PORT:-8108}:8108'
+    environment:
+        TYPESENSE_DATA_DIR: '${TYPESENSE_DATA_DIR:-/typesense-data}'
+        TYPESENSE_API_KEY: '${TYPESENSE_API_KEY:-xyz}'
+        TYPESENSE_ENABLE_CORS: '${TYPESENSE_ENABLE_CORS:-true}'
+    volumes:
+        - 'sail-typesense:/typesense-data'
+    networks:
+        - sail
+    healthcheck:
+        test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:8108/health"]
+        retries: 5
+        timeout: 7s
