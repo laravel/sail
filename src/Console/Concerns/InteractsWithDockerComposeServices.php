@@ -19,6 +19,7 @@ trait InteractsWithDockerComposeServices
         'redis',
         'memcached',
         'meilisearch',
+        'typesense',
         'minio',
         'mailpit',
         'selenium',
@@ -86,7 +87,7 @@ trait InteractsWithDockerComposeServices
         // Merge volumes...
         collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'minio']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'typesense', 'minio']);
             })->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['volumes'] ?? []);
             })->each(function ($service) use (&$compose) {
@@ -141,6 +142,14 @@ trait InteractsWithDockerComposeServices
             $environment .= "\nSCOUT_DRIVER=meilisearch";
             $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
             $environment .= "\nMEILISEARCH_NO_ANALYTICS=false\n";
+        }
+
+        if (in_array('typesense', $services)) {
+            $environment .= "\nSCOUT_DRIVER=typesense";
+            $environment .= "\nTYPESENSE_HOST=typesense";
+            $environment .= "\nTYPESENSE_PORT=8108";
+            $environment .= "\nTYPESENSE_PROTOCOL=http";
+            $environment .= "\nTYPESENSE_API_KEY=xyz\n";
         }
 
         if (in_array('soketi', $services)) {
