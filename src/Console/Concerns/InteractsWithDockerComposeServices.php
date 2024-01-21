@@ -117,14 +117,31 @@ trait InteractsWithDockerComposeServices
     {
         $environment = file_get_contents($this->laravel->basePath('.env'));
 
-        if (in_array('pgsql', $services)) {
-            $environment = str_replace('DB_CONNECTION=mysql', "DB_CONNECTION=pgsql", $environment);
+        if (in_array('mysql', $services) ||
+            in_array('mariadb', $services) ||
+            in_array('pgsql', $services)) {
+            $defaults = [
+                '# DB_HOST=127.0.0.1',
+                '# DB_PORT=3306',
+                '# DB_DATABASE=laravel',
+                '# DB_USERNAME=root',
+                '# DB_PASSWORD=',
+            ];
+
+            foreach ($defaults as $default) {
+                $environment = str_replace($default, substr($default, 2), $environment);
+            }
+        }
+
+        if (in_array('mysql', $services)) {
+            $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mysql', $environment);
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
+        }elseif (in_array('pgsql', $services)) {
+            $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=pgsql', $environment);
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
         } elseif (in_array('mariadb', $services)) {
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
-        } else {
-            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
         }
 
         $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
