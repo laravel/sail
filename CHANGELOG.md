@@ -6,6 +6,7 @@
 
 * Add Support for Typesense by [@jasonbosco](https://github.com/jasonbosco) in https://github.com/laravel/sail/pull/655
 * Lint sail script by [@dimitriacosta](https://github.com/dimitriacosta) in https://github.com/laravel/sail/pull/656
+* Make DB_CONNECTION replacement more robust by @taylorotwell in https://github.com/laravel/sail/commit/2276a8d9d6cfdcaad98bf67a34331d100149d5b6
 
 ## [v1.27.1](https://github.com/laravel/sail/compare/v1.27.0...v1.27.1) - 2024-01-13
 
