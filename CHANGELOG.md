@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.27.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.27.2...1.x)
+
+## [v1.27.2](https://github.com/laravel/sail/compare/v1.27.1...v1.27.2) - 2024-01-21
+
+* Add Support for Typesense by [@jasonbosco](https://github.com/jasonbosco) in https://github.com/laravel/sail/pull/655
+* Lint sail script by [@dimitriacosta](https://github.com/dimitriacosta) in https://github.com/laravel/sail/pull/656
 
 ## [v1.27.1](https://github.com/laravel/sail/compare/v1.27.0...v1.27.1) - 2024-01-13
 
