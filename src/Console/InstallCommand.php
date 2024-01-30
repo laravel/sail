@@ -58,7 +58,7 @@ class InstallCommand extends Command
         $this->prepareInstallation($services);
 
         $this->output->writeln('');
-        $this->components->info('Sail scaffolding installed successfully. Initiate Docker containers using Sail\'s "up" command.');
+        $this->components->info('Sail scaffolding installed successfully. You may run your Docker containers using Sail\'s "up" command.');
 
         $this->output->writeln('<fg=gray>➜</> <options=bold>./vendor/bin/sail up</>');
 
