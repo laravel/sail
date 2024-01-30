@@ -42,7 +42,7 @@ class InstallCommand extends Command
         }
 
         if ($invalidServices = array_diff($services, $this->services)) {
-            $this->error('Invalid services ['.implode(',', $invalidServices).'].');
+            $this->components->error('Invalid services ['.implode(',', $invalidServices).'].');
 
             return 1;
         }
@@ -55,8 +55,21 @@ class InstallCommand extends Command
             $this->installDevContainer();
         }
 
-        $this->info('Sail scaffolding installed successfully.');
-
         $this->prepareInstallation($services);
+
+        $this->output->writeln('');
+        $this->components->info('Sail scaffolding installed successfully. You may run your Docker containers using Sail\'s "up" command.');
+
+        $this->output->writeln('<fg=gray>➜</> <options=bold>./vendor/bin/sail up</>');
+
+        if (in_array('mysql', $services) ||
+            in_array('mariadb', $services) ||
+            in_array('pgsql', $services)) {
+            $this->components->warn('A database service was installed. Run "artisan migrate" to prepare your database:');
+
+            $this->output->writeln('<fg=gray>➜</> <options=bold>./vendor/bin/sail artisan migrate</>');
+        }
+
+        $this->output->writeln('');
     }
 }

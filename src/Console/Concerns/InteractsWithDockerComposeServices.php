@@ -248,22 +248,14 @@ trait InteractsWithDockerComposeServices
         }
 
         if (count($services) > 0) {
-            $status = $this->runCommands([
+            $this->runCommands([
                 './vendor/bin/sail pull '.implode(' ', $services),
             ]);
-
-            if ($status === 0) {
-                $this->info('Sail images installed successfully.');
-            }
         }
 
-        $status = $this->runCommands([
+        $this->runCommands([
             './vendor/bin/sail build',
         ]);
-
-        if ($status === 0) {
-            $this->info('Sail build successful.');
-        }
     }
 
     /**

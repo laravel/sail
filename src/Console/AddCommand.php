@@ -41,7 +41,7 @@ class AddCommand extends Command
         }
 
         if ($invalidServices = array_diff($services, $this->services)) {
-            $this->error('Invalid services ['.implode(',', $invalidServices).'].');
+            $this->components->error('Invalid services ['.implode(',', $invalidServices).'].');
 
             return 1;
         }
@@ -50,8 +50,9 @@ class AddCommand extends Command
         $this->replaceEnvVariables($services);
         $this->configurePhpUnit();
 
-        $this->info('Additional Sail services installed successfully.');
-
         $this->prepareInstallation($services);
+
+        $this->output->writeln('');
+        $this->components->info('Additional Sail services installed successfully.');
     }
 }
