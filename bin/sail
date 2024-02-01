@@ -425,7 +425,7 @@ elif [ "$1" == "pnpx" ]; then
         sail_is_not_running
     fi
 
-# Proxy YARN commands to the "yarn" binary on the application container...
+# Proxy Yarn commands to the "yarn" binary on the application container...
 elif [ "$1" == "yarn" ]; then
     shift 1
 
