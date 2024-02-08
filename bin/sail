@@ -560,7 +560,14 @@ elif [ "$1" == "open" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
-        open "$APP_URL"
+
+        if [[ -n "$APP_PORT" && "$APP_PORT" != "80" ]]; then
+            FULL_URL="${APP_URL}:${APP_PORT}"
+        else
+            FULL_URL="$APP_URL"
+        fi
+
+        open "$FULL_URL"
 
         exit
     else
