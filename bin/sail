@@ -567,7 +567,6 @@ elif [ "$1" == "open" ]; then
             FULL_URL="$APP_URL"
         fi
 
-        # Open the URL
         open "$FULL_URL"
 
         exit
