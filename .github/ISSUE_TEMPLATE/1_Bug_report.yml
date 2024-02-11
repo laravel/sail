@@ -31,6 +31,7 @@ body:
       description: What operating system are you using? Any OS not listed here is currently not supported.
       options:
         - macOS
+        - Windows (PowerShell)
         - Windows (WSL)
         - Linux
     validations:
@@ -54,4 +55,4 @@ body:
       description: Provide detailed steps to reproduce your issue. If necessary, please provide a GitHub repository to demonstrate your issue using `laravel new bug-report --github="--public"`.
     validations:
       required: true
-      
+
