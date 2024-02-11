@@ -49,9 +49,22 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 __DIR__ . '/../runtimes' => $this->app->basePath('docker'),
             ], ['sail', 'sail-docker']);
 
-            $this->publishes([
-                __DIR__ . '/../bin/sail' => $this->app->basePath('sail'),
-            ], ['sail', 'sail-bin']);
+            if (str_starts_with(PHP_OS, 'WIN')) {
+                $composerConfig = json_decode(file_get_contents(base_path('composer.json')), true);
+                $binPath = $composerConfig['config']['bin-dir'] ?? 'vendor/bin';
+
+                $this->publishes([
+                    __DIR__ . '/../bin/sail.ps1' => $binPath . '/sail.ps1',
+                ], ['laravel-assets']);
+
+                $this->publishes([
+                    __DIR__ . '/../bin/sail.ps1' => $this->app->basePath('sail.ps1'),
+                ], ['sail', 'sail-bin']);
+            } else {
+                $this->publishes([
+                    __DIR__ . '/../bin/sail' => $this->app->basePath('sail'),
+                ], ['sail', 'sail-bin']);
+            }
 
             $this->publishes([
                 __DIR__ . '/../database' => $this->app->basePath('docker'),
