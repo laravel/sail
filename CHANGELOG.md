@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.27.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.27.4...1.x)
+
+## [v1.27.4](https://github.com/laravel/sail/compare/v1.27.3...v1.27.4) - 2024-02-08
+
+* Fix open in browser with APP_PORT by [@ijpatricio](https://github.com/ijpatricio) in https://github.com/laravel/sail/pull/663
 
 ## [v1.27.3](https://github.com/laravel/sail/compare/v1.27.2...v1.27.3) - 2024-01-30
 
