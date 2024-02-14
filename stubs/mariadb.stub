@@ -3,12 +3,12 @@ mariadb:
     ports:
         - '${FORWARD_DB_PORT:-3306}:3306'
     environment:
-        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-        MYSQL_ROOT_HOST: "%"
-        MYSQL_DATABASE: '${DB_DATABASE}'
-        MYSQL_USER: '${DB_USERNAME}'
-        MYSQL_PASSWORD: '${DB_PASSWORD}'
-        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        MARIADB_ROOT_PASSWORD: '${DB_PASSWORD}'
+        MARIADB_ROOT_HOST: "%"
+        MARIADB_DATABASE: '${DB_DATABASE}'
+        MARIADB_USER: '${DB_USERNAME}'
+        MARIADB_PASSWORD: '${DB_PASSWORD}'
+        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
     volumes:
         - 'sail-mariadb:/var/lib/mysql'
         - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
