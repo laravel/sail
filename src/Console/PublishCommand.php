@@ -11,14 +11,15 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'sail:publish';
+    protected $signature = 'sail:publish
+                {--force : The services that should be included in the installation}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Publish the Laravel Sail Docker files';
+    protected $description = 'Publish the Laravel Sail Docker files. If you want overwrite the existing files, you can add the `--force` option';
 
     /**
      * Execute the console command.
@@ -27,8 +28,13 @@ class PublishCommand extends Command
      */
     public function handle()
     {
-        $this->call('vendor:publish', ['--tag' => 'sail-docker']);
-        $this->call('vendor:publish', ['--tag' => 'sail-database']);
+        if ($this->option('force')) {
+            $this->call('vendor:publish', ['--tag' => 'sail-docker', '--force' => '1']);
+            $this->call('vendor:publish', ['--tag' => 'sail-database', '--force' => '1']);
+        } else {
+            $this->call('vendor:publish', ['--tag' => 'sail-docker']);
+            $this->call('vendor:publish', ['--tag' => 'sail-database']);
+        }
 
         file_put_contents(
             $this->laravel->basePath('docker-compose.yml'),

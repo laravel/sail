@@ -112,8 +112,9 @@ function display_help {
     echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
     echo
     echo "${YELLOW}Customization:${NC}"
-    echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
-    echo "  ${GREEN}sail build --no-cache${NC}       Rebuild all of the Sail containers"
+    echo "  ${GREEN}sail artisan sail:publish${NC}          Publish the Sail configuration files"
+    echo "  ${GREEN}sail artisan sail:publish --force${NC}  Force publishing the Sail configuration (override existing files)"
+    echo "  ${GREEN}sail build --no-cache${NC}              Rebuild all of the Sail containers"
 
     exit 1
 }
