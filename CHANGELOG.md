@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.27.4...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.28.0...1.x)
+
+## [v1.28.0](https://github.com/laravel/sail/compare/v1.27.4...v1.28.0) - 2024-02-20
+
+* Changing pcov Directory by [@joaopalopes24](https://github.com/joaopalopes24) in https://github.com/laravel/sail/pull/670
+* add ffmpeg to support videos, when using Spatie media-library for Videos by [@negoziator](https://github.com/negoziator) in https://github.com/laravel/sail/pull/671
 
 ## [v1.27.4](https://github.com/laravel/sail/compare/v1.27.3...v1.27.4) - 2024-02-08
 
