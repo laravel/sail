@@ -141,6 +141,10 @@ trait InteractsWithDockerComposeServices
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
         } elseif (in_array('mariadb', $services)) {
+            if ($this->laravel->config->has('database.connections.mariadb')) {
+                $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mariadb', $environment);
+            }
+
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
         }
 
