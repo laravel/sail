@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.28.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.28.1...1.x)
+
+## [v1.28.1](https://github.com/laravel/sail/compare/v1.28.0...v1.28.1) - 2024-02-23
+
+* [1.x] Use new MariaDB connection if possible by [@staudenmeir](https://github.com/staudenmeir) in https://github.com/laravel/sail/pull/672
 
 ## [v1.28.0](https://github.com/laravel/sail/compare/v1.27.4...v1.28.0) - 2024-02-20
 
