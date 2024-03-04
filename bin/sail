@@ -270,7 +270,7 @@ elif [ "$1" == "debug" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u sail -e XDEBUG_SESSION=1)
+        ARGS+=(exec -u sail -e XDEBUG_TRIGGER=1)
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" php artisan "$@")
     else
