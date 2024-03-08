@@ -185,7 +185,9 @@ trait InteractsWithDockerComposeServices
         }
 
         if (in_array('mailpit', $services)) {
+            $environment = preg_replace("/^MAIL_MAILER=(.*)/m", "MAIL_MAILER=smtp", $environment);
             $environment = preg_replace("/^MAIL_HOST=(.*)/m", "MAIL_HOST=mailpit", $environment);
+            $environment = preg_replace("/^MAIL_PORT=(.*)/m", "MAIL_PORT=1025", $environment);
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
