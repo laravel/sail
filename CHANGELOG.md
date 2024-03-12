@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.28.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.29.0...1.x)
+
+## [v1.29.0](https://github.com/laravel/sail/compare/v1.28.2...v1.29.0) - 2024-03-08
+
+* Allow building sail to run PHP as root by [@vmsh0](https://github.com/vmsh0) in https://github.com/laravel/sail/pull/677
+* Update MAILER config to use mailpit on L11 by [@SamuelMwangiW](https://github.com/SamuelMwangiW) in https://github.com/laravel/sail/pull/678
 
 ## [v1.28.2](https://github.com/laravel/sail/compare/v1.28.1...v1.28.2) - 2024-03-04
 
