@@ -3,7 +3,9 @@
 namespace Laravel\Sail\Console;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'sail:publish')]
 class PublishCommand extends Command
 {
     /**
