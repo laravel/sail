@@ -18,6 +18,7 @@
         "illuminate/console": "^9.52.16|^10.0|^11.0",
         "illuminate/contracts": "^9.52.16|^10.0|^11.0",
         "illuminate/support": "^9.52.16|^10.0|^11.0",
+        "symfony/console": "^6.0|^7.0",
         "symfony/yaml": "^6.0|^7.0"
     },
     "bin": [
