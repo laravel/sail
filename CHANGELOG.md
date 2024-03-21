@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.29.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.29.1...1.x)
+
+## [v1.29.1](https://github.com/laravel/sail/compare/v1.29.0...v1.29.1) - 2024-03-20
+
+* [1.x] Make commands lazy by [@timacdonald](https://github.com/timacdonald) in https://github.com/laravel/sail/pull/683
+* Preinstall nano, so default make tinker edit work out of the box by [@negoziator](https://github.com/negoziator) in https://github.com/laravel/sail/pull/685
+* Revert opcache for CLI by [@driesvints](https://github.com/driesvints) in https://github.com/laravel/sail/pull/684
 
 ## [v1.29.0](https://github.com/laravel/sail/compare/v1.28.2...v1.29.0) - 2024-03-08
 
