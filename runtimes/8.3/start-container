@@ -14,6 +14,7 @@ if [ ! -d /.composer ]; then
 fi
 
 chmod -R ugo+rw /.composer
+chmod -R ugo+rw ./storage
 
 if [ $# -gt 0 ]; then
     if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
