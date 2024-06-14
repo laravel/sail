@@ -1,5 +1,5 @@
 mariadb:
-    image: 'mariadb:10'
+    image: 'mariadb:${MARIADB_VERSION}'
     ports:
         - '${FORWARD_DB_PORT:-3306}:3306'
     environment:
@@ -10,8 +10,8 @@ mariadb:
         MYSQL_PASSWORD: '${DB_PASSWORD}'
         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-        - 'sail-mariadb:/var/lib/mysql'
-        - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        - 'sail-mariadb-${MARIADB_VERSION}:/var/lib/mysql'
+        - './vendor/laravel/sail/database/mariadb/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
     networks:
         - sail
     healthcheck:
