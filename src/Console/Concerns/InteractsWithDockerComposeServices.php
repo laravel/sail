@@ -69,9 +69,6 @@ trait InteractsWithDockerComposeServices
         // Prepare the installation of the "mariadb-client" package if the MariaDB service is used...
         if (in_array('mariadb10', $services) || in_array('mariadb11', $services)) {
             $compose['services']['laravel.test']['build']['args']['MYSQL_CLIENT'] = 'mariadb-client';
-
-            $compose['services']['laravel.test']['build']['args']['MARIADB_VERSION'] =
-                in_array('mariadb10', $services) ? 10 : 11;
         }
 
         // Adds the new services as dependencies of the laravel.test service...
