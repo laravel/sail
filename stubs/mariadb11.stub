@@ -1,5 +1,5 @@
 mariadb:
-    image: 'mariadb:10'
+    image: 'mariadb:11'
     ports:
         - '${FORWARD_DB_PORT:-3306}:3306'
     environment:
@@ -11,10 +11,10 @@ mariadb:
         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
         - 'sail-mariadb:/var/lib/mysql'
-        - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        - './vendor/laravel/sail/database/mariadb/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
     networks:
         - sail
     healthcheck:
-        test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+        test: ["CMD", "mariadb-admin", "ping", "-p${DB_PASSWORD}"]
         retries: 3
         timeout: 5s

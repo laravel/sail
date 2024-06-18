@@ -15,7 +15,8 @@ trait InteractsWithDockerComposeServices
     protected $services = [
         'mysql',
         'pgsql',
-        'mariadb',
+        'mariadb10',
+        'mariadb11',
         'redis',
         'memcached',
         'meilisearch',
@@ -66,7 +67,7 @@ trait InteractsWithDockerComposeServices
             : Yaml::parse(file_get_contents(__DIR__ . '/../../../stubs/docker-compose.stub'));
 
         // Prepare the installation of the "mariadb-client" package if the MariaDB service is used...
-        if (in_array('mariadb', $services)) {
+        if (in_array('mariadb10', $services) || in_array('mariadb11', $services)) {
             $compose['services']['laravel.test']['build']['args']['MYSQL_CLIENT'] = 'mariadb-client';
         }
 
@@ -92,7 +93,7 @@ trait InteractsWithDockerComposeServices
         // Merge volumes...
         collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'typesense', 'minio']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb10', 'mariadb11', 'redis', 'meilisearch', 'typesense', 'minio']);
             })->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['volumes'] ?? []);
             })->each(function ($service) use (&$compose) {
@@ -123,7 +124,8 @@ trait InteractsWithDockerComposeServices
         $environment = file_get_contents($this->laravel->basePath('.env'));
 
         if (in_array('mysql', $services) ||
-            in_array('mariadb', $services) ||
+            in_array('mariadb10', $services) ||
+            in_array('mariadb11', $services) ||
             in_array('pgsql', $services)) {
             $defaults = [
                 '# DB_HOST=127.0.0.1',
@@ -145,7 +147,7 @@ trait InteractsWithDockerComposeServices
             $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=pgsql', $environment);
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
-        } elseif (in_array('mariadb', $services)) {
+        } elseif (in_array('mariadb10', $services) || in_array('mariadb11', $services)) {
             if ($this->laravel->config->has('database.connections.mariadb')) {
                 $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mariadb', $environment);
             }
