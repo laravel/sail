@@ -10,7 +10,7 @@ mariadb:
         MYSQL_PASSWORD: '${DB_PASSWORD}'
         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-        - 'sail-mariadb11:/var/lib/mysql'
+        - 'sail-mariadb:/var/lib/mysql'
         - './vendor/laravel/sail/database/mariadb/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
     networks:
         - sail
