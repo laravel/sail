@@ -1,4 +1,4 @@
-mariadb11:
+mariadb:
     image: 'mariadb:11'
     ports:
         - '${FORWARD_DB_PORT:-3306}:3306'
