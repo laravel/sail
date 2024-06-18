@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.29.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.29.3...1.x)
+
+## [v1.29.3](https://github.com/laravel/sail/compare/v1.29.2...v1.29.3) - 2024-06-12
+
+* Fix meilisearch healthcheck gets to IPv6 instead IPv4 by [@Theprim0](https://github.com/Theprim0) in https://github.com/laravel/sail/pull/697
 
 ## [v1.29.2](https://github.com/laravel/sail/compare/v1.29.1...v1.29.2) - 2024-05-16
 
