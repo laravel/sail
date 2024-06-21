@@ -1,0 +1,11 @@
+pma:
+    image: phpmyadmin/phpmyadmin
+    ports:
+        - 8080:80
+    environment:
+        PMA_HOST: mysql
+        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    depends_on:
+        - mysql
+    networks:
+        - sail

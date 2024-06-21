@@ -25,6 +25,7 @@ trait InteractsWithDockerComposeServices
         'mailpit',
         'selenium',
         'soketi',
+        'phpmyadmin'
     ];
 
     /**
