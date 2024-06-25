@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.29.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.30.0...1.x)
+
+## [v1.30.0](https://github.com/laravel/sail/compare/v1.29.3...v1.30.0) - 2024-06-18
+
+* MariaDB 11 support by [@tomcoonen](https://github.com/tomcoonen) in https://github.com/laravel/sail/pull/698
 
 ## [v1.29.3](https://github.com/laravel/sail/compare/v1.29.2...v1.29.3) - 2024-06-12
 
