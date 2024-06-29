@@ -82,12 +82,25 @@ trait InteractsWithDockerComposeServices
                 ->all();
         }
 
+        // Update the dependencies if the MariaDB service is used...
+        if (in_array('mariadb10', $services) || in_array('mariadb11', $services)) {
+            $compose['services']['laravel.test']['depends_on'] = array_map(function ($dependedItem) {
+                if (in_array($dependedItem, ['mariadb10', 'mariadb11'])) {
+                    return 'mariadb';
+                }
+
+                return $dependedItem;
+            }, $compose['services']['laravel.test']['depends_on']);
+        }
+
         // Add the services to the docker-compose.yml...
         collect($services)
             ->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['services'] ?? []);
             })->each(function ($service) use (&$compose) {
-                $compose['services'][$service] = Yaml::parseFile(__DIR__ . "/../../../stubs/{$service}.stub")[$service];
+                in_array($service, ['mariadb10', 'mariadb11'])
+                    ? $compose['services']['mariadb'] = Yaml::parseFile(__DIR__ . "/../../../stubs/{$service}.stub")['mariadb']
+                    : $compose['services'][$service] = Yaml::parseFile(__DIR__ . "/../../../stubs/{$service}.stub")[$service];
             });
 
         // Merge volumes...
@@ -97,6 +110,10 @@ trait InteractsWithDockerComposeServices
             })->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['volumes'] ?? []);
             })->each(function ($service) use (&$compose) {
+                if (in_array($service, ['mariadb10', 'mariadb11'])) {
+                    $service = 'mariadb';
+                }
+
                 $compose['volumes']["sail-{$service}"] = ['driver' => 'local'];
             });
 
