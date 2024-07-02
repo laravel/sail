@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.30.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.30.1...1.x)
+
+## [v1.30.1](https://github.com/laravel/sail/compare/v1.30.0...v1.30.1) - 2024-07-01
+
+* Fixed undefined array key mariadb10|11 error on installation. by [@kursatcanciger](https://github.com/kursatcanciger) in https://github.com/laravel/sail/pull/703
 
 ## [v1.30.0](https://github.com/laravel/sail/compare/v1.29.3...v1.30.0) - 2024-06-18
 
