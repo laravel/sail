@@ -15,6 +15,6 @@ mariadb:
     networks:
         - sail
     healthcheck:
-        test: ["CMD", "mariadb-admin", "ping", "-p${DB_PASSWORD}"]
+        test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
         retries: 3
         timeout: 5s
