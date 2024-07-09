@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.30.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.30.2...1.x)
+
+## [v1.30.2](https://github.com/laravel/sail/compare/v1.30.1...v1.30.2) - 2024-07-05
+
+* [1.x] Use Official MariaDB Healthcheck Script by [@a1383n](https://github.com/a1383n) in https://github.com/laravel/sail/pull/704
 
 ## [v1.30.1](https://github.com/laravel/sail/compare/v1.30.0...v1.30.1) - 2024-07-01
 
