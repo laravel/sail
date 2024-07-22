@@ -65,8 +65,7 @@ class InstallCommand extends Command
         $this->output->writeln('<fg=gray>➜</> <options=bold>./vendor/bin/sail up</>');
 
         if (in_array('mysql', $services) ||
-            in_array('mariadb10', $services) ||
-            in_array('mariadb11', $services) ||
+            in_array('mariadb', $services) ||
             in_array('pgsql', $services)) {
             $this->components->warn('A database service was installed. Run "artisan migrate" to prepare your database:');
 
