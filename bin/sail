@@ -541,7 +541,7 @@ elif [ "$1" == "share" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
-        docker run --init --rm -p "$SAIL_SHARE_DASHBOARD":4040 -t beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
+        docker run --init --rm --add-host=host.docker.internal:host-gateway -p "$SAIL_SHARE_DASHBOARD":4040 -t beyondcodegmbh/expose-server:latest share http://host.docker.internal:"$APP_PORT" \
             --server-host="$SAIL_SHARE_SERVER_HOST" \
             --server-port="$SAIL_SHARE_SERVER_PORT" \
             --auth="$SAIL_SHARE_TOKEN" \
