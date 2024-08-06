@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.31.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.31.1...1.x)
+
+## [v1.31.1](https://github.com/laravel/sail/compare/v1.31.0...v1.31.1) - 2024-08-02
+
+* minio: health check using mc by [@francoism90](https://github.com/francoism90) in https://github.com/laravel/sail/pull/711
 
 ## [v1.31.0](https://github.com/laravel/sail/compare/v1.30.2...v1.31.0) - 2024-07-22
 
