@@ -1,0 +1,30 @@
+elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    ports:
+        - '${FORWARD_ELASTICSEARCH_PORT:-9200}:9200'
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    volumes:
+      - sail-elasticsearch:/usr/share/elasticsearch/data
+    networks:
+        - sail
+    ulimits:
+        memlock:
+            soft: -1
+            hard: -1
+    deploy:    
+        resources:
+            limits:
+                cpus: '2.0'
+            reservations:
+                cpus: '1.0'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
