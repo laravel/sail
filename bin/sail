@@ -83,6 +83,7 @@ function display_help {
     echo "  ${GREEN}sail mysql${NC}     Start a MySQL CLI session within the 'mysql' container"
     echo "  ${GREEN}sail mariadb${NC}   Start a MySQL CLI session within the 'mariadb' container"
     echo "  ${GREEN}sail psql${NC}      Start a PostgreSQL CLI session within the 'pgsql' container"
+    echo "  ${GREEN}sail sqlsrv${NC}    Start a Microsoft SQL Server CLI session within the 'sqlsrv' container"
     echo "  ${GREEN}sail redis${NC}     Start a Redis CLI session within the 'redis' container"
     echo
     echo "${YELLOW}Debugging:${NC}"
@@ -496,6 +497,19 @@ elif [ "$1" == "psql" ]; then
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=(pgsql bash -c)
         ARGS+=("PGPASSWORD=\${PGPASSWORD} psql -U \${POSTGRES_USER} \${POSTGRES_DB}")
+    else
+        sail_is_not_running
+    fi
+
+# Initiate a Microsoft SQL Server CLI terminal session within the "sqlsrv" container...
+elif [ "$1" == "sqlsrv" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=(sqlcmd bash -c)
+        ARGS+=("sqlcmd -No -d \${MSSQL_DB_NAME} -P \${MSSQL_PASSWORD} -U \${MSSQL_USER}")
     else
         sail_is_not_running
     fi

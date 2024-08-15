@@ -5,6 +5,8 @@ LABEL maintainer="Taylor Otwell"
 ARG WWWGROUP
 ARG NODE_VERSION=20
 ARG POSTGRES_VERSION=15
+ARG SQLSRV_VERSION=5.12.0
+ARG ACCEPT_EULA="N"
 
 WORKDIR /var/www/html
 
@@ -48,6 +50,22 @@ RUN apt-get update \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN if [ "$ACCEPT_EULA" = "Y" ]; then \
+         curl -sS https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+      && curl -sS https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
+      && apt-get update \
+      && apt-get install -y mssql-tools18 unixodbc-dev \
+      && echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc \
+      && pecl install sqlsrv pdo_sqlsrv-$SQLSRV_VERSION \
+      && printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.1/mods-available/sqlsrv.ini \
+      && printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.1/mods-available/pdo_sqlsrv.ini \
+      && phpenmod sqlsrv pdo_sqlsrv \
+      && bash -c "source ~/.bashrc" \
+      && apt-get -y autoremove \
+      && apt-get clean \
+      && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+    fi
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.1
 

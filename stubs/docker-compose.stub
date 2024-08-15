@@ -6,6 +6,7 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
+                ACCEPT_EULA: '${ACCEPT_EULA}'
         image: sail-8.3/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'

@@ -41,7 +41,8 @@ class PublishCommand extends Command
                     './vendor/laravel/sail/runtimes/8.1',
                     './vendor/laravel/sail/runtimes/8.0',
                     './vendor/laravel/sail/database/mysql',
-                    './vendor/laravel/sail/database/pgsql'
+                    './vendor/laravel/sail/database/pgsql',
+                    './vendor/laravel/sail/database/sqlsrv',
                 ],
                 [
                     './docker/8.3',
@@ -49,7 +50,8 @@ class PublishCommand extends Command
                     './docker/8.1',
                     './docker/8.0',
                     './docker/mysql',
-                    './docker/pgsql'
+                    './docker/pgsql',
+                    './docker/sqlsrv',
                 ],
                 file_get_contents($this->laravel->basePath('docker-compose.yml'))
             )

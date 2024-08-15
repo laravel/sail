@@ -2,8 +2,10 @@
 
 namespace Laravel\Sail\Console\Concerns;
 
+use RuntimeException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
+use function str_replace;
 
 trait InteractsWithDockerComposeServices
 {
@@ -16,6 +18,7 @@ trait InteractsWithDockerComposeServices
         'mysql',
         'pgsql',
         'mariadb',
+        'sqlsrv',
         'redis',
         'memcached',
         'meilisearch',
@@ -99,7 +102,7 @@ trait InteractsWithDockerComposeServices
         // Merge volumes...
         collect($services)
             ->filter(function ($service) {
-                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'redis', 'meilisearch', 'typesense', 'minio']);
+                return in_array($service, ['mysql', 'pgsql', 'mariadb', 'sqlsrv', 'redis', 'meilisearch', 'typesense', 'minio']);
             })->filter(function ($service) use ($compose) {
                 return ! array_key_exists($service, $compose['volumes'] ?? []);
             })->each(function ($service) use (&$compose) {
@@ -131,7 +134,8 @@ trait InteractsWithDockerComposeServices
 
         if (in_array('mysql', $services) ||
             in_array('mariadb', $services) ||
-            in_array('pgsql', $services)) {
+            in_array('pgsql', $services) ||
+            in_array('sqlsrv', $services)) {
             $defaults = [
                 '# DB_HOST=127.0.0.1',
                 '# DB_PORT=3306',
@@ -148,7 +152,7 @@ trait InteractsWithDockerComposeServices
         if (in_array('mysql', $services)) {
             $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mysql', $environment);
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
-        }elseif (in_array('pgsql', $services)) {
+        } elseif (in_array('pgsql', $services)) {
             $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=pgsql', $environment);
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
@@ -158,6 +162,27 @@ trait InteractsWithDockerComposeServices
             }
 
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
+        } elseif (in_array('sqlsrv', $services)) {
+            $confirm = $this->confirm(
+                "To install Microsoft SQL Server 2022 x64, EULA acceptance is required. Accept? \n" .
+                'The Microsoft SQL Server EULA is available at: https://mcr.microsoft.com/product/mssql/server/about'
+            );
+
+            if (!$confirm) {
+                throw new RuntimeException('Cannot install Microsoft SQL Server without accepting the EULA.');
+            }
+
+            $environment = preg_replace('/DB_CONNECTION=.*/', "DB_CONNECTION=sqlsrv", $environment);
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=sqlsrv", $environment);
+            $environment = str_replace('DB_PORT=3306', "DB_PORT=1433", $environment);
+
+            if (!preg_match('/ACCEPT_EULA=(.*)/', $environment)) {
+                $environment = str_replace('DB_CONNECTION=sqlsrv', "DB_CONNECTION=sqlsrv\nACCEPT_EULA=Y", $environment);
+            }
+
+            if (!preg_match('/DB_ROOT_PASSWORD=(.*)/', $environment)) {
+                $environment = str_replace('DB_CONNECTION=sqlsrv', "DB_CONNECTION=sqlsrv\nDB_ROOT_PASSWORD=p@ssw0rd", $environment);
+            }
         }
 
         $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
