@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.31.1...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.31.2...1.x)
+
+## [v1.31.2](https://github.com/laravel/sail/compare/v1.31.1...v1.31.2) - 2024-09-03
+
+* fix: fixed swoole extension that gets the SQLSTATE[08006] error by [@pedrovian4](https://github.com/pedrovian4) in https://github.com/laravel/sail/pull/715
 
 ## [v1.31.1](https://github.com/laravel/sail/compare/v1.31.0...v1.31.1) - 2024-08-02
 
