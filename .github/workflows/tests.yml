@@ -67,6 +67,10 @@ jobs:
         run: ../sail/bin/sail up -d
         working-directory: app
 
+      - name: Output .env
+        run: cat .env
+        working-directory: app
+
       - name: Run Migrations
         run: ../sail/bin/sail artisan migrate --no-interaction
         working-directory: app
