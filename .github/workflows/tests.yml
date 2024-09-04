@@ -56,7 +56,9 @@ jobs:
         working-directory: app
 
       - name: Install Sail into App
-        run: php artisan sail:install --php=${{ matrix.php }} --no-interaction
+        run: |
+          php artisan sail:install --php=${{ matrix.php }} --no-interaction
+          php artisan sail:publish --no-interaction
         working-directory: app
 
       - name: Remove Sail
@@ -69,6 +71,10 @@ jobs:
 
       - name: Output .env
         run: cat .env
+        working-directory: app
+
+      - name: Output docker-compose.yml
+        run: cat docker-compose.yml
         working-directory: app
 
       - name: Run Migrations
