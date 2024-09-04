@@ -116,7 +116,11 @@ trait InteractsWithDockerComposeServices
             $compose['services']['selenium']['image'] = 'seleniarm/standalone-chromium';
         }
 
-        file_put_contents($this->laravel->basePath('docker-compose.yml'), Yaml::dump($compose, Yaml::DUMP_OBJECT_AS_MAP));
+        $yaml = Yaml::dump($compose, Yaml::DUMP_OBJECT_AS_MAP);
+
+        $yaml = str_replace('{{PHP_VERSION}}', $this->option('php'), $yaml);
+
+        file_put_contents($this->laravel->basePath('docker-compose.yml'), $yaml);
     }
 
     /**

@@ -56,7 +56,7 @@ jobs:
         working-directory: app
 
       - name: Install Sail into App
-        run: php artisan sail:install --no-interaction
+        run: php artisan sail:install --php=${{ matrix.php }} --no-interaction
         working-directory: app
 
       - name: Build and Start Sail Container
