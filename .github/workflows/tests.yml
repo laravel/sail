@@ -1,0 +1,82 @@
+name: Docker Compose Test
+
+on:
+  push:
+    branches:
+      - master
+      - '*.x'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - php: '8.0'
+            laravel: 9
+          - php: '8.1'
+            laravel: 10
+          - php: '8.2'
+            laravel: 11
+          - php: '8.3'
+            laravel: 11
+
+    name: PHP ${{ matrix.php }} - L${{ matrix.laravel }}
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          path: 'sail'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: none
+
+      - name: Create a new laravel application
+        run: composer create-project laravel/laravel app "${{ matrix.laravel }}.x" --remove-vcs --no-interaction --prefer-dist
+
+      - name: Link Sail Repository
+        run: |
+          composer config minimum-stability dev
+          composer config repositories.sail path ../sail
+          composer require laravel/sail:* --dev -W
+        working-directory: app
+
+      - name: Install Sail into App
+        run: |
+          php artisan sail:install --php=${{ matrix.php }} --no-interaction
+          php artisan sail:publish --no-interaction
+        working-directory: app
+
+      - name: Remove Sail
+        run: composer remove laravel/sail --dev --no-interaction -W
+        working-directory: app
+
+      - name: Start Sail Container
+        run: ../sail/bin/sail up -d --wait
+        working-directory: app
+
+      - name: Run Migrations
+        run: ../sail/bin/sail artisan migrate --no-interaction
+        working-directory: app
+
+      - name: Run Tests in Sail Container
+        run: ../sail/bin/sail test
+        working-directory: app
+
+      - name: Stop Sail Container
+        run: ../sail/bin/sail down
+        working-directory: app
