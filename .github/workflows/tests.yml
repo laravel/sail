@@ -59,14 +59,22 @@ jobs:
         run: php artisan sail:install --php=${{ matrix.php }} --no-interaction
         working-directory: app
 
-      - name: Build and Start Sail Container
-        run: vendor/bin/sail up -d
+      - name: Remove Sail
+        run: composer remove laravel/sail --no-interaction
+        working-directory: app
+
+      - name: Start Sail Container
+        run: ../sail/bin/sail up -d
+        working-directory: app
+
+      - name: Run Migrations
+        run: ../sail/bin/sail artisan migrate --no-interaction
         working-directory: app
 
       - name: Run Tests in Sail Container
-        run: vendor/bin/sail test
+        run: ../sail/bin/sail test
         working-directory: app
 
       - name: Stop Sail Container
-        run: vendor/bin/sail down
+        run: ../sail/bin/sail down
         working-directory: app
