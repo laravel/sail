@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.31.2...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.31.3...1.x)
+
+## [v1.31.3](https://github.com/laravel/sail/compare/v1.31.2...v1.31.3) - 2024-09-03
+
+* fix: missing \ in dockerfile 8.3 by [@saullo](https://github.com/saullo) in https://github.com/laravel/sail/pull/718
 
 ## [v1.31.2](https://github.com/laravel/sail/compare/v1.31.1...v1.31.2) - 2024-09-03
 
