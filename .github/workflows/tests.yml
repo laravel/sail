@@ -46,7 +46,7 @@ jobs:
           coverage: none
 
       - name: Create a new laravel application
-        run: composer create-project laravel/laravel app "${{ matrix.laravel }}.x" --remove-vsc --no-interaction --prefer-dist
+        run: composer create-project laravel/laravel app "${{ matrix.laravel }}.x" --remove-vcs --no-interaction --prefer-dist
 
       - name: Link Sail Repository
         run: |
