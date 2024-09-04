@@ -60,7 +60,7 @@ jobs:
         working-directory: app
 
       - name: Remove Sail
-        run: composer remove laravel/sail --no-interaction
+        run: composer remove laravel/sail --dev --no-interaction -W
         working-directory: app
 
       - name: Start Sail Container
