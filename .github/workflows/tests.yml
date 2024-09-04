@@ -46,7 +46,7 @@ jobs:
           coverage: none
 
       - name: Create a new laravel application
-        uses: composer create-project laravel/laravel app "${{ matrix.laravel }}.x" --remove-vsc --no-interaction --prefer-dist
+        run: composer create-project laravel/laravel app "${{ matrix.laravel }}.x" --remove-vsc --no-interaction --prefer-dist
 
       - name: Link Sail Repository
         run: |
@@ -55,7 +55,11 @@ jobs:
           composer require laravel/sail:* --dev -W
         working-directory: app
 
-      - name: Start Sail Container (In Background)
+      - name: Install Sail into App
+        run: php artisan sail:install --no-interaction
+        working-directory: app
+
+      - name: Build and Start Sail Container
         run: vendor/bin/sail up -d
         working-directory: app
 
