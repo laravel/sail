@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.31.3...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.32.0...1.x)
+
+## [v1.32.0](https://github.com/laravel/sail/compare/v1.31.3...v1.32.0) - 2024-09-11
+
+* [1.x] Add Docker Compose Tests by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/721
+* Cleanup unneeded code by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/724
+* Use selenium/standalone-chromium on ARM by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/723
+* Use selenium/standalone-chromium on AMD and ARM by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/722
 
 ## [v1.31.3](https://github.com/laravel/sail/compare/v1.31.2...v1.31.3) - 2024-09-03
 
