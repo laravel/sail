@@ -1,5 +1,5 @@
 selenium:
-    image: 'selenium/standalone-chrome'
+    image: 'selenium/standalone-chromium'
     extra_hosts:
         - 'host.docker.internal:host-gateway'
     volumes:
