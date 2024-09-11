@@ -104,11 +104,6 @@ trait InteractsWithDockerComposeServices
             unset($compose['volumes']);
         }
 
-        // Replace Selenium with ARM base container on Apple Silicon...
-        if (in_array('selenium', $services) && in_array(php_uname('m'), ['arm64', 'aarch64'])) {
-            $compose['services']['selenium']['image'] = 'selenium/standalone-chromium';
-        }
-
         $yaml = Yaml::dump($compose, Yaml::DUMP_OBJECT_AS_MAP);
 
         $yaml = str_replace('{{PHP_VERSION}}', $this->option('php'), $yaml);
