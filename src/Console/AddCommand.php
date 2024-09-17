@@ -18,6 +18,7 @@ class AddCommand extends Command
      */
     protected $signature = 'sail:add
         {services? : The services that should be added}
+        {--php=8.3 : The PHP version that should be used}
     ';
 
     /**
