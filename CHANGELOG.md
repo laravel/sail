@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.32.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.33.0...1.x)
+
+## [v1.33.0](https://github.com/laravel/sail/compare/v1.32.0...v1.33.0) - 2024-09-22
+
+* Pass all command line arguments to wrapped executable by [@JoaquinTrinanes](https://github.com/JoaquinTrinanes) in https://github.com/laravel/sail/pull/728
+* Use apt php8.3-swoole again by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/731
 
 ## [v1.32.0](https://github.com/laravel/sail/compare/v1.31.3...v1.32.0) - 2024-09-11
 
