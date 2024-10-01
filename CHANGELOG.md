@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.33.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.34.0...1.x)
+
+## [v1.34.0](https://github.com/laravel/sail/compare/v1.33.0...v1.34.0) - 2024-09-27
+
+* M3 silicon support and fix 'Hash Sum Mismatch' by [@ConrDev](https://github.com/ConrDev) in https://github.com/laravel/sail/pull/734
+* Update logo to support dark/light theme by [@milewski](https://github.com/milewski) in https://github.com/laravel/sail/pull/733
 
 ## [v1.33.0](https://github.com/laravel/sail/compare/v1.32.0...v1.33.0) - 2024-09-22
 
