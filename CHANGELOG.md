@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.34.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.35.0...1.x)
+
+## [v1.35.0](https://github.com/laravel/sail/compare/v1.34.0...v1.35.0) - 2024-10-08
+
+* Upgrade to Postgres 17 by [@ziadoz](https://github.com/ziadoz) in https://github.com/laravel/sail/pull/735
+* Use /data path for minio by [@francoism90](https://github.com/francoism90) in https://github.com/laravel/sail/pull/736
 
 ## [v1.34.0](https://github.com/laravel/sail/compare/v1.33.0...v1.34.0) - 2024-09-27
 
