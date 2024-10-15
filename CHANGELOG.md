@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.35.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.36.0...1.x)
+
+## [v1.36.0](https://github.com/laravel/sail/compare/v1.35.0...v1.36.0) - 2024-10-10
+
+* [1.x] Update Postgres client to v17 by [@Jubeki](https://github.com/Jubeki) in https://github.com/laravel/sail/pull/737
 
 ## [v1.35.0](https://github.com/laravel/sail/compare/v1.34.0...v1.35.0) - 2024-10-08
 
