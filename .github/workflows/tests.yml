@@ -26,6 +26,8 @@ jobs:
             laravel: 11
           - php: '8.3'
             laravel: 11
+          - php: '8.4'
+            laravel: 11
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
