@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.36.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.37.0...1.x)
+
+## [v1.37.0](https://github.com/laravel/sail/compare/v1.36.0...v1.37.0) - 2024-10-21
+
+* Add php 8.4 to the list of runtimes by [@jobvink](https://github.com/jobvink) in https://github.com/laravel/sail/pull/740
 
 ## [v1.36.0](https://github.com/laravel/sail/compare/v1.35.0...v1.36.0) - 2024-10-10
 
