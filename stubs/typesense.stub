@@ -1,5 +1,5 @@
 typesense:
-    image: 'typesense/typesense:0.27.1'
+    image: 'typesense/typesense:27.1'
     ports:
         - '${FORWARD_TYPESENSE_PORT:-8108}:8108'
     environment:
