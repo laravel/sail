@@ -30,90 +30,90 @@ fi
 
 # Function that prints the available commands...
 function display_help {
-    echo "Laravel Sail"
-    echo
+    echo "Laravel Sail" >&2
+    echo >&2
     echo "${YELLOW}Usage:${NC}" >&2
-    echo "  sail COMMAND [options] [arguments]"
-    echo
-    echo "Unknown commands are passed to the docker-compose binary."
-    echo
-    echo "${YELLOW}docker-compose Commands:${NC}"
-    echo "  ${GREEN}sail up${NC}        Start the application"
-    echo "  ${GREEN}sail up -d${NC}     Start the application in the background"
-    echo "  ${GREEN}sail stop${NC}      Stop the application"
-    echo "  ${GREEN}sail restart${NC}   Restart the application"
-    echo "  ${GREEN}sail ps${NC}        Display the status of all containers"
-    echo
-    echo "${YELLOW}Artisan Commands:${NC}"
-    echo "  ${GREEN}sail artisan ...${NC}          Run an Artisan command"
-    echo "  ${GREEN}sail artisan queue:work${NC}"
-    echo
-    echo "${YELLOW}PHP Commands:${NC}"
-    echo "  ${GREEN}sail php ...${NC}   Run a snippet of PHP code"
-    echo "  ${GREEN}sail php -v${NC}"
-    echo
-    echo "${YELLOW}Composer Commands:${NC}"
-    echo "  ${GREEN}sail composer ...${NC}                       Run a Composer command"
-    echo "  ${GREEN}sail composer require laravel/sanctum${NC}"
-    echo
-    echo "${YELLOW}Node Commands:${NC}"
-    echo "  ${GREEN}sail node ...${NC}         Run a Node command"
-    echo "  ${GREEN}sail node --version${NC}"
-    echo
-    echo "${YELLOW}NPM Commands:${NC}"
-    echo "  ${GREEN}sail npm ...${NC}        Run a npm command"
-    echo "  ${GREEN}sail npx${NC}            Run a npx command"
-    echo "  ${GREEN}sail npm run prod${NC}"
-    echo
-    echo "${YELLOW}PNPM Commands:${NC}"
-    echo "  ${GREEN}sail pnpm ...${NC}        Run a pnpm command"
-    echo "  ${GREEN}sail pnpx${NC}            Run a pnpx command"
-    echo "  ${GREEN}sail pnpm run prod${NC}"
-    echo
-    echo "${YELLOW}Yarn Commands:${NC}"
-    echo "  ${GREEN}sail yarn ...${NC}        Run a Yarn command"
-    echo "  ${GREEN}sail yarn run prod${NC}"
-    echo
-    echo "${YELLOW}Bun Commands:${NC}"
-    echo "  ${GREEN}sail bun ...${NC}        Run a bun command"
-    echo "  ${GREEN}sail bunx${NC}           Run a bunx command"
-    echo "  ${GREEN}sail bun run prod${NC}"
-    echo
-    echo "${YELLOW}Database Commands:${NC}"
-    echo "  ${GREEN}sail mysql${NC}     Start a MySQL CLI session within the 'mysql' container"
-    echo "  ${GREEN}sail mariadb${NC}   Start a MySQL CLI session within the 'mariadb' container"
-    echo "  ${GREEN}sail psql${NC}      Start a PostgreSQL CLI session within the 'pgsql' container"
-    echo "  ${GREEN}sail redis${NC}     Start a Redis CLI session within the 'redis' container"
-    echo
-    echo "${YELLOW}Debugging:${NC}"
-    echo "  ${GREEN}sail debug ...${NC}          Run an Artisan command in debug mode"
-    echo "  ${GREEN}sail debug queue:work${NC}"
-    echo
-    echo "${YELLOW}Running Tests:${NC}"
-    echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command"
-    echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit"
-    echo "  ${GREEN}sail pest ...${NC}      Run Pest"
-    echo "  ${GREEN}sail pint ...${NC}      Run Pint"
-    echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)"
-    echo "  ${GREEN}sail dusk:fails${NC}    Re-run previously failed Dusk tests (Requires the laravel/dusk package)"
-    echo
-    echo "${YELLOW}Container CLI:${NC}"
-    echo "  ${GREEN}sail shell${NC}        Start a shell session within the application container"
-    echo "  ${GREEN}sail bash${NC}         Alias for 'sail shell'"
-    echo "  ${GREEN}sail root-shell${NC}   Start a root shell session within the application container"
-    echo "  ${GREEN}sail root-bash${NC}    Alias for 'sail root-shell'"
-    echo "  ${GREEN}sail tinker${NC}       Start a new Laravel Tinker session"
-    echo
-    echo "${YELLOW}Sharing:${NC}"
-    echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL"
-    echo "  ${GREEN}sail open${NC}    Open the site in your browser"
-    echo
-    echo "${YELLOW}Binaries:${NC}"
-    echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
-    echo
-    echo "${YELLOW}Customization:${NC}"
-    echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
-    echo "  ${GREEN}sail build --no-cache${NC}       Rebuild all of the Sail containers"
+    echo "  sail COMMAND [options] [arguments]" >&2
+    echo >&2
+    echo "Unknown commands are passed to the docker-compose binary." >&2
+    echo >&2
+    echo "${YELLOW}docker-compose Commands:${NC}" >&2
+    echo "  ${GREEN}sail up${NC}        Start the application" >&2
+    echo "  ${GREEN}sail up -d${NC}     Start the application in the background" >&2
+    echo "  ${GREEN}sail stop${NC}      Stop the application" >&2
+    echo "  ${GREEN}sail restart${NC}   Restart the application" >&2
+    echo "  ${GREEN}sail ps${NC}        Display the status of all containers" >&2
+    echo >&2
+    echo "${YELLOW}Artisan Commands:${NC}" >&2
+    echo "  ${GREEN}sail artisan ...${NC}          Run an Artisan command" >&2
+    echo "  ${GREEN}sail artisan queue:work${NC}" >&2
+    echo >&2
+    echo "${YELLOW}PHP Commands:${NC}" >&2
+    echo "  ${GREEN}sail php ...${NC}   Run a snippet of PHP code" >&2
+    echo "  ${GREEN}sail php -v${NC}" >&2
+    echo >&2
+    echo "${YELLOW}Composer Commands:${NC}" >&2
+    echo "  ${GREEN}sail composer ...${NC}                       Run a Composer command" >&2
+    echo "  ${GREEN}sail composer require laravel/sanctum${NC}" >&2
+    echo >&2
+    echo "${YELLOW}Node Commands:${NC}" >&2
+    echo "  ${GREEN}sail node ...${NC}         Run a Node command" >&2
+    echo "  ${GREEN}sail node --version${NC}" >&2
+    echo >&2
+    echo "${YELLOW}NPM Commands:${NC}" >&2
+    echo "  ${GREEN}sail npm ...${NC}        Run a npm command" >&2
+    echo "  ${GREEN}sail npx${NC}            Run a npx command" >&2
+    echo "  ${GREEN}sail npm run prod${NC}" >&2
+    echo >&2
+    echo "${YELLOW}PNPM Commands:${NC}" >&2
+    echo "  ${GREEN}sail pnpm ...${NC}        Run a pnpm command" >&2
+    echo "  ${GREEN}sail pnpx${NC}            Run a pnpx command" >&2
+    echo "  ${GREEN}sail pnpm run prod${NC}" >&2
+    echo >&2
+    echo "${YELLOW}Yarn Commands:${NC}" >&2
+    echo "  ${GREEN}sail yarn ...${NC}        Run a Yarn command" >&2
+    echo "  ${GREEN}sail yarn run prod${NC}" >&2
+    echo >&2
+    echo "${YELLOW}Bun Commands:${NC}" >&2
+    echo "  ${GREEN}sail bun ...${NC}        Run a bun command" >&2
+    echo "  ${GREEN}sail bunx${NC}           Run a bunx command" >&2
+    echo "  ${GREEN}sail bun run prod${NC}" >&2
+    echo >&2
+    echo "${YELLOW}Database Commands:${NC}" >&2
+    echo "  ${GREEN}sail mysql${NC}     Start a MySQL CLI session within the 'mysql' container" >&2
+    echo "  ${GREEN}sail mariadb${NC}   Start a MySQL CLI session within the 'mariadb' container" >&2
+    echo "  ${GREEN}sail psql${NC}      Start a PostgreSQL CLI session within the 'pgsql' container" >&2
+    echo "  ${GREEN}sail redis${NC}     Start a Redis CLI session within the 'redis' container" >&2
+    echo >&2
+    echo "${YELLOW}Debugging:${NC}" >&2
+    echo "  ${GREEN}sail debug ...${NC}          Run an Artisan command in debug mode" >&2
+    echo "  ${GREEN}sail debug queue:work${NC}" >&2
+    echo >&2
+    echo "${YELLOW}Running Tests:${NC}" >&2
+    echo "  ${GREEN}sail test${NC}          Run the PHPUnit tests via the Artisan test command" >&2
+    echo "  ${GREEN}sail phpunit ...${NC}   Run PHPUnit" >&2
+    echo "  ${GREEN}sail pest ...${NC}      Run Pest" >&2
+    echo "  ${GREEN}sail pint ...${NC}      Run Pint" >&2
+    echo "  ${GREEN}sail dusk${NC}          Run the Dusk tests (Requires the laravel/dusk package)" >&2
+    echo "  ${GREEN}sail dusk:fails${NC}    Re-run previously failed Dusk tests (Requires the laravel/dusk package)" >&2
+    echo >&2
+    echo "${YELLOW}Container CLI:${NC}" >&2
+    echo "  ${GREEN}sail shell${NC}        Start a shell session within the application container" >&2
+    echo "  ${GREEN}sail bash${NC}         Alias for 'sail shell'" >&2
+    echo "  ${GREEN}sail root-shell${NC}   Start a root shell session within the application container" >&2
+    echo "  ${GREEN}sail root-bash${NC}    Alias for 'sail root-shell'" >&2
+    echo "  ${GREEN}sail tinker${NC}       Start a new Laravel Tinker session" >&2
+    echo >&2
+    echo "${YELLOW}Sharing:${NC}" >&2
+    echo "  ${GREEN}sail share${NC}   Share the application publicly via a temporary URL" >&2
+    echo "  ${GREEN}sail open${NC}    Open the site in your browser" >&2
+    echo >&2
+    echo "${YELLOW}Binaries:${NC}" >&2
+    echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory" >&2
+    echo >&2
+    echo "${YELLOW}Customization:${NC}" >&2
+    echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files" >&2
+    echo "  ${GREEN}sail build --no-cache${NC}       Rebuild all of the Sail containers" >&2
 
     exit 1
 }
@@ -566,7 +566,7 @@ elif [ "$1" == "open" ]; then
     elif command -v xdg-open &>/dev/null; then
         OPEN="xdg-open"
     else
-        echo "Neither open nor xdg-open is available. Exiting."
+        echo "Neither open nor xdg-open is available. Exiting." >&2
         exit 1
     fi
 
