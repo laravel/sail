@@ -1,5 +1,7 @@
 # Release Notes
 
+## [Unreleased](https://github.com/laravel/sail/compare/v1.37.1...1.x)
+
 ## [v1.37.1](https://github.com/laravel/sail/compare/v1.37.0...v1.37.1) - 2024-10-29
 
 * Update typesense.stub to 27.1 by [@Braunson](https://github.com/Braunson) in https://github.com/laravel/sail/pull/741
