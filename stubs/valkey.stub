@@ -1,4 +1,4 @@
-redis:
+valkey:
     image: 'valkey/valkey:alpine'
     ports:
         - '${FORWARD_VALKEY_PORT:-6379}:6379'
