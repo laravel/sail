@@ -85,6 +85,7 @@ function display_help {
     echo "  ${GREEN}sail psql${NC}      Start a PostgreSQL CLI session within the 'pgsql' container"
     echo "  ${GREEN}sail mongodb${NC}   Start a Mongo Shell session within the 'mongodb' container"
     echo "  ${GREEN}sail redis${NC}     Start a Redis CLI session within the 'redis' container"
+    echo "  ${GREEN}sail valkey${NC}     Start a Valkey CLI session within the 'valkey' container"
     echo
     echo "${YELLOW}Debugging:${NC}"
     echo "  ${GREEN}sail debug ...${NC}          Run an Artisan command in debug mode"
@@ -547,6 +548,18 @@ elif [ "$1" == "redis" ]; then
         ARGS+=(exec)
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=(redis redis-cli)
+    else
+        sail_is_not_running
+    fi
+
+# Initiate a Valkey CLI terminal session within the "valkey" container...
+elif [ "$1" == "valkey" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=(valkey valkey-cli)
     else
         sail_is_not_running
     fi
