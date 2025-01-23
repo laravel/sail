@@ -112,6 +112,7 @@ function display_help {
     echo
     echo "${YELLOW}Binaries:${NC}"
     echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
+    echo "  ${GREEN}sail run ...${NC}   Run any command within the application container"
     echo
     echo "${YELLOW}Customization:${NC}"
     echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
@@ -229,6 +230,20 @@ elif [ "$1" == "bin" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" ./vendor/bin/"$CMD")
+    else
+        sail_is_not_running
+    fi
+
+# Proxy commands on the application container...
+elif [ "$1" == "run" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        CMD=$1
+        shift 1
+        ARGS+=(exec -u sail)
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=("$APP_SERVICE" "$CMD")
     else
         sail_is_not_running
     fi
