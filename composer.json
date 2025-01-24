@@ -15,11 +15,15 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/console": "^9.52.16|^10.0|^11.0",
-        "illuminate/contracts": "^9.52.16|^10.0|^11.0",
-        "illuminate/support": "^9.52.16|^10.0|^11.0",
+        "illuminate/console": "^9.52.16|^10.0|^11.0|^12.0",
+        "illuminate/contracts": "^9.52.16|^10.0|^11.0|^12.0",
+        "illuminate/support": "^9.52.16|^10.0|^11.0|^12.0",
         "symfony/console": "^6.0|^7.0",
         "symfony/yaml": "^6.0|^7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
+        "phpstan/phpstan": "^1.10"
     },
     "bin": [
         "bin/sail"
@@ -40,9 +44,5 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require-dev": {
-        "orchestra/testbench": "^7.0|^8.0|^9.0",
-        "phpstan/phpstan": "^1.10"
-    }
+    "prefer-stable": true
 }
