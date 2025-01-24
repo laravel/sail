@@ -112,7 +112,7 @@ function display_help {
     echo
     echo "${YELLOW}Binaries:${NC}"
     echo "  ${GREEN}sail bin ...${NC}   Run Composer binary scripts from the vendor/bin directory"
-    echo "  ${GREEN}sail run ...${NC}   Run any command within the application container"
+    echo "  ${GREEN}sail run ...${NC}   Run a command within the application container"
     echo
     echo "${YELLOW}Customization:${NC}"
     echo "  ${GREEN}sail artisan sail:publish${NC}   Publish the Sail configuration files"
