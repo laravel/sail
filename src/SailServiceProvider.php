@@ -11,6 +11,14 @@ use Laravel\Sail\Console\PublishCommand;
 class SailServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
+     * Register any application services.
+     */
+    public function register()
+    {
+        $this->app->singleton(Services::class, fn () => new Services());
+    }
+
+    /**
      * Bootstrap any application services.
      *
      * @return void
