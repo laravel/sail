@@ -10,7 +10,7 @@ class Services
     /**
      * The services registered with their stubs, persistence, and hooks.
      *
-     * @var array<string, array{stub: ?string, persistent: bool, default: ?bool, after: ?Closure}>
+     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, after: ?Closure}>
      */
     protected array $services = [
         'mysql' => [
@@ -33,9 +33,7 @@ class Services
         'valkey' => [
             'persistent' => true,
         ],
-        'memcached' => [
-            'persistent' => false,
-        ],
+        'memcached',
         'meilisearch' => [
             'persistent' => true,
         ],
@@ -46,16 +44,12 @@ class Services
             'persistent' => true,
         ],
         'mailpit' => [
-            'persistent' => false,
             'default' => true,
         ],
         'selenium' => [
-            'persistent' => false,
             'default' => true,
         ],
-        'soketi' => [
-            'persistent' => false,
-        ],
+        'soketi',
     ];
 
     /**
@@ -64,14 +58,20 @@ class Services
      * @param string $service
      * @param string $stubPath
      * @param bool $persistent
+     * @param bool|null $default
      * @param Closure|null $after
      * @return self
      */
-    public function addService(string $service, string $stubPath, bool $persistent = false, ?Closure $after = null): self
-    {
+    public function addService(string $service,
+                               string $stubPath,
+                               bool $persistent = false,
+                               ?bool $default = false,
+                               ?Closure $after = null
+    ): self {
         $this->services[$service] = [
             'stub' => $stubPath,
             'persistent' => $persistent,
+            'default' => $default,
             'after' => $after,
         ];
 
@@ -86,10 +86,19 @@ class Services
      */
     public function availableServices(bool $default = false): array
     {
-        $services = array_keys($this->services);
+        $services = [];
+        foreach ($this->services as $key => $value) {
+            $services[] = is_string($value) ? $value : $key;
+        }
 
         if ($default) {
-            return array_filter($services, fn ($service) => ($this->services[$service]['default'] ?? false));
+            $defaults = [];
+            foreach ($this->services as $key => $value) {
+                if (is_array($value) && ($value['default'] ?? false)) {
+                    $defaults[] = $key;
+                }
+            }
+            return $defaults;
         }
 
         return $services;
@@ -127,7 +136,7 @@ class Services
     public function runHooks(Command $command, array $services): void
     {
         foreach ($services as $service) {
-            if (isset($this->services[$service]) && $this->services[$service]['after'] !== null) {
+            if (isset($this->services[$service]) && is_array($this->services[$service]) && ($this->services[$service]['after'] ?? null) !== null) {
                 $this->services[$service]['after']($command, [$service]);
             }
         }
