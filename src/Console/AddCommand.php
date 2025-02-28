@@ -35,12 +35,12 @@ class AddCommand extends Command
      */
     public function handle()
     {
-        $availableServices = $this->getAvailableServices();
+        $availableServices = Sail::availableServices();
 
         if ($this->argument('services')) {
             $services = $this->argument('services') == 'none' ? [] : explode(',', $this->argument('services'));
         } elseif ($this->option('no-interaction')) {
-            $services = $this->defaultServices;
+            $services = Sail::availableServices(true);
         } else {
             $services = $this->gatherServicesInteractively();
         }

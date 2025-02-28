@@ -36,12 +36,12 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $availableServices = $this->getAvailableServices();
+        $availableServices = Sail::availableServices();
 
         if ($this->option('with')) {
             $services = $this->option('with') == 'none' ? [] : explode(',', $this->option('with'));
         } elseif ($this->option('no-interaction')) {
-            $services = $this->defaultServices;
+            $services = Sail::availableServices(true);
         } else {
             $services = $this->gatherServicesInteractively();
         }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static self addService(string $service, string $stubPath, bool $persistent = false, ?Closure $afterInstall = null)
- * @method static array availableServices(array $defaultServices = [])
+ * @method static array availableServices(bool $default = false)
  * @method static string|null stub(string $service)
  * @method static bool isPersistent(string $service)
  * @method static void runHooks(mixed $command, array $services)

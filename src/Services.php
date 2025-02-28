@@ -7,14 +7,56 @@ use Illuminate\Console\Command;
 
 class Services
 {
-    protected Collection $stubs;
-
     /**
-     * The custom services registered with their stubs, persistence, and hooks.
+     * The services registered with their stubs, persistence, and hooks.
      *
-     * @var array<string, array{path: string, persistent: bool, after: ?Closure}>
+     * @var array<string, array{stub: ?string, persistent: bool, default: ?bool, after: ?Closure}>
      */
-    protected array $stubs = [];
+    protected array $services = [
+        'mysql' => [
+            'persistent' => true,
+            'default' => true,
+        ],
+        'pgsql' => [
+            'persistent' => true,
+        ],
+        'mariadb' => [
+            'persistent' => true,
+        ],
+        'mongodb' => [
+            'persistent' => true,
+        ],
+        'redis' => [
+            'persistent' => true,
+            'default' => true,
+        ],
+        'valkey' => [
+            'persistent' => true,
+        ],
+        'memcached' => [
+            'persistent' => false,
+        ],
+        'meilisearch' => [
+            'persistent' => true,
+        ],
+        'typesense' => [
+            'persistent' => true,
+        ],
+        'minio' => [
+            'persistent' => true,
+        ],
+        'mailpit' => [
+            'persistent' => false,
+            'default' => true,
+        ],
+        'selenium' => [
+            'persistent' => false,
+            'default' => true,
+        ],
+        'soketi' => [
+            'persistent' => false,
+        ],
+    ];
 
     /**
      * Register a new service with its Docker Compose stub.
@@ -27,8 +69,8 @@ class Services
      */
     public function addService(string $service, string $stubPath, bool $persistent = false, ?Closure $after = null): self
     {
-        $this->stubs[$service] = [
-            'path' => $stubPath,
+        $this->services[$service] = [
+            'stub' => $stubPath,
             'persistent' => $persistent,
             'after' => $after,
         ];
@@ -39,23 +81,29 @@ class Services
     /**
      * Get all available services, including defaults.
      *
-     * @param array $defaultServices
+     * @param bool $default If true, returns only default services
      * @return array
      */
-    public function availableServices(array $defaultServices = []): array
+    public function availableServices(bool $default = false): array
     {
-        return array_unique(array_merge(array_keys($this->stubs), $defaultServices));
+        $services = array_keys($this->services);
+
+        if ($default) {
+            return array_filter($services, fn ($service) => ($this->services[$service]['default'] ?? false));
+        }
+
+        return $services;
     }
 
     /**
      * Get the stub path for a given service.
      *
      * @param string $service
-     * @return string|null
+     * @return string
      */
-    public function stub(string $service): ?string
+    public function stub(string $service): string
     {
-        return $this->stubs[$service]['path'];
+        return $this->services[$service]['stub'] ?? __DIR__ . '/../stubs/'.$service.'.stub';
     }
 
     /**
@@ -66,7 +114,7 @@ class Services
      */
     public function isPersistent(string $service): bool
     {
-        return $this->stubs[$service]['persistent'] ?? false;
+        return $this->services[$service]['persistent'] ?? false;
     }
 
     /**
@@ -79,8 +127,8 @@ class Services
     public function runHooks(Command $command, array $services): void
     {
         foreach ($services as $service) {
-            if (isset($this->stubs[$service]) && $this->stubs[$service]['after'] !== null) {
-                $this->stubs[$service]['after']($command, [$service]);
+            if (isset($this->services[$service]) && $this->services[$service]['after'] !== null) {
+                $this->services[$service]['after']($command, [$service]);
             }
         }
     }
