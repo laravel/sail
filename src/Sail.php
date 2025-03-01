@@ -6,10 +6,11 @@ use Closure;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static self addService(string $service, string $stubPath, bool $persistent = false, ?Closure $afterInstall = null)
+ * @method static self addService(string $service, string $stubPath, bool $persistent = false, ?Closure $env = null, ?Closure $afterInstall = null)
  * @method static array availableServices(bool $default = false)
  * @method static string|null stub(string $service)
  * @method static bool isPersistent(string $service)
+ * @method static void replaceEnvVariables(string $environment, array $services): string
  * @method static void runHooks(mixed $command, array $services)
  */
 class Sail extends Facade
