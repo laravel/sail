@@ -10,7 +10,7 @@ class Services
     /**
      * The services registered with their stubs, persistence, and hooks.
      *
-     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, configuring_env: ?Closure, after: ?Closure}>
+     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, dependable: ?bool, configuring_env: ?Closure, after: ?Closure}>
      */
     protected array $services = [
         'mysql' => [
@@ -172,7 +172,8 @@ class Services
      * @param string $service
      * @param string $stubPath
      * @param bool $persistent
-     * @param bool|null $default
+     * @param bool $default
+     * @param bool $dependable
      * @param Closure|null $configuringEnv
      * @param Closure|null $after
      * @return self
@@ -180,7 +181,8 @@ class Services
     public function addService(string   $service,
                                string   $stubPath,
                                bool     $persistent = false,
-                               ?bool    $default = false,
+                               bool     $default = false,
+                               bool     $dependable = true,
                                ?Closure $configuringEnv = null,
                                ?Closure $after = null): self
     {
@@ -188,6 +190,7 @@ class Services
             'stub' => $stubPath,
             'persistent' => $persistent,
             'default' => $default,
+            'dependable' => $dependable,
             'configuring_env' => $configuringEnv,
             'after' => $after,
         ];
@@ -241,6 +244,17 @@ class Services
     public function isPersistent(string $service): bool
     {
         return $this->services[$service]['persistent'] ?? false;
+    }
+
+    /**
+     * Check if a service is required by laravel.test
+     *
+     * @param string $service
+     * @return bool
+     */
+    public function isDependedOn(string $service): bool
+    {
+        return $this->services[$service]['dependable'] ?? true;
     }
 
     /**

@@ -53,6 +53,9 @@ trait InteractsWithDockerComposeServices
         } else {
             $compose['services']['laravel.test']['depends_on'] = collect($compose['services']['laravel.test']['depends_on'] ?? [])
                 ->merge($services)
+                ->filter(function ($service) {
+                    return Sail::isDependedOn($service);
+                })
                 ->unique()
                 ->values()
                 ->all();
