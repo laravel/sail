@@ -40,7 +40,7 @@ trait InteractsWithDockerComposeServices
 
         $compose = file_exists($composePath)
             ? Yaml::parseFile($composePath)
-            : Yaml::parse(file_get_contents(__DIR__ . '/../../../stubs/docker-compose.stub'));
+            : Yaml::parse(file_get_contents(Sail::getBaseTemplate()));
 
         // Prepare the installation of the "mariadb-client" package if the MariaDB service is used...
         if (in_array('mariadb', $services)) {

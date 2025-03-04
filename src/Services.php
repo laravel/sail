@@ -52,6 +52,8 @@ class Services
         'soketi',
     ];
 
+    protected string $composeStub = __DIR__ . '../stubs/docker-compose.stub';
+
     public function __construct()
     {
         $uncommentDbVars = function (string $environment): string {
@@ -139,6 +141,29 @@ class Services
             $environment = preg_replace("/^PUSHER_SCHEME=(.*)/m", "PUSHER_SCHEME=http", $environment);
             return preg_replace("/^VITE_PUSHER_HOST=(.*)/m", "VITE_PUSHER_HOST=localhost", $environment);
         };
+    }
+
+    /**
+     * Set the base Docker Compose template containing 'laravel.test' service description
+     *
+     * @param string $stub Path to the base Docker Compose stub
+     * @return $this
+     */
+    public function setBaseTemplate(string $stub): self
+    {
+        $this->composeStub = $stub;
+
+        return $this;
+    }
+
+    /**
+     * Get the path to the base Docker Compose template
+     *
+     * @return string
+     */
+    public function getBaseTemplate(): string
+    {
+        return $this->composeStub;
     }
 
     /**
