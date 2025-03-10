@@ -144,7 +144,7 @@ class Services
     }
 
     /**
-     * Set the base Docker Compose template containing 'laravel.test' service description
+     * Set the base Docker Compose template containing a php service named as 'APP_SERVICE'
      *
      * @param string $stub Path to the base Docker Compose stub
      * @return $this
@@ -247,7 +247,7 @@ class Services
     }
 
     /**
-     * Check if a service is required by laravel.test
+     * Check if a service is required by APP_SERVICE
      *
      * @param string $service
      * @return bool

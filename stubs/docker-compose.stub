@@ -1,6 +1,6 @@
 # For more information: https://laravel.com/docs/sail
 services:
-    laravel.test:
+    APP_SERVICE:
         build:
             context: ./vendor/laravel/sail/runtimes/{{PHP_VERSION}}
             dockerfile: Dockerfile

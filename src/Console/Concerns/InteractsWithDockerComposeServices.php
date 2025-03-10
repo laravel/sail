@@ -91,7 +91,17 @@ trait InteractsWithDockerComposeServices
 
         $yaml = Yaml::dump($compose, Yaml::DUMP_OBJECT_AS_MAP);
 
-        $yaml = str_replace('{{PHP_VERSION}}', $this->hasOption('php') ? $this->option('php') : '8.4', $yaml);
+        $yaml = str_replace(
+            [
+                '{{PHP_VERSION}}',
+                'APP_SERVICE'
+            ],
+            [
+                $this->hasOption('php') ? $this->option('php') : '8.4',
+                'laravel.test'
+            ],
+            $yaml
+        );
 
         file_put_contents($this->laravel->basePath('docker-compose.yml'), $yaml);
     }
@@ -147,7 +157,11 @@ trait InteractsWithDockerComposeServices
 
         file_put_contents(
             $this->laravel->basePath('.devcontainer/devcontainer.json'),
-            file_get_contents(__DIR__.'/../../../stubs/devcontainer.stub')
+            str_replace(
+                'APP_SERVICE',
+                'laravel.test',
+                file_get_contents(__DIR__.'/../../../stubs/devcontainer.stub') ?: ''
+            )
         );
 
         $environment = file_get_contents($this->laravel->basePath('.env'));
