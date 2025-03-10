@@ -55,7 +55,7 @@ class AddCommand extends Command
         $this->replaceEnvVariables($services);
         $this->configurePhpUnit();
 
-        Sail::runHooks($this, $services);
+        Sail::runInstallHooks($this, $services);
 
         $this->prepareInstallation($services);
 

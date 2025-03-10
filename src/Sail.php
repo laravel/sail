@@ -7,14 +7,16 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static self setBaseTemplate(string $stub)
- * @method static string getBaseTemplate()
  * @method static self addService(string $service, string $stubPath, bool $persistent = false, bool $default = false, bool $dependable = true, ?Closure $configuringEnv = null, ?Closure $afterInstall = null)
+ * @method static self registerPublishHook(Closure $closure)
+ * @method static string getBaseTemplate()
  * @method static array availableServices(bool $default = false)
  * @method static string stub(string $service)
  * @method static bool isPersistent(string $service)
  * @method static bool isDependedOn(string $service)
- * @method static void replaceEnvVariables(string $environment, array $services): string
- * @method static void runHooks(mixed $command, array $services)
+ * @method static void replaceEnvVariables(string $environment, array $services)
+ * @method static void runInstallHooks(mixed $command, array $services)
+ * @method static void runPublishingHooks(mixed $command)
  */
 class Sail extends Facade
 {
