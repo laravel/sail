@@ -10,7 +10,7 @@ class Services
     /**
      * The services registered with their stubs, persistence, and hooks.
      *
-     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, dependable: ?bool, configuring_env: ?Closure, after: ?Closure}>
+     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, dependable: ?bool, configuring_env: ?Closure, afterInstall: ?Closure}>
      */
     protected array $services = [
         'mysql' => [
@@ -175,7 +175,7 @@ class Services
      * @param bool $default
      * @param bool $dependable
      * @param Closure|null $configuringEnv
-     * @param Closure|null $after
+     * @param Closure|null $afterInstall
      * @return self
      */
     public function addService(string   $service,
@@ -184,7 +184,7 @@ class Services
                                bool     $default = false,
                                bool     $dependable = true,
                                ?Closure $configuringEnv = null,
-                               ?Closure $after = null): self
+                               ?Closure $afterInstall = null): self
     {
         $this->services[$service] = [
             'stub' => $stubPath,
@@ -192,7 +192,7 @@ class Services
             'default' => $default,
             'dependable' => $dependable,
             'configuring_env' => $configuringEnv,
-            'after' => $after,
+            'after_install' => $afterInstall,
         ];
 
         return $this;
@@ -285,8 +285,8 @@ class Services
     public function runHooks(Command $command, array $services): void
     {
         foreach ($services as $service) {
-            if (isset($this->services[$service]) && is_array($this->services[$service]) && ($this->services[$service]['after'] ?? null) !== null) {
-                $this->services[$service]['after']($command, [$service]);
+            if (isset($this->services[$service]) && is_array($this->services[$service]) && ($this->services[$service]['after_install'] ?? null) !== null) {
+                $this->services[$service]['after_install']($command, $services);
             }
         }
     }
