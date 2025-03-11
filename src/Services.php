@@ -60,6 +60,13 @@ class Services
     protected string $composeStub = __DIR__ . '../stubs/docker-compose.stub';
 
     /**
+     * Hooks to be run after all services are configured
+     *
+     * @var Closure[]
+     */
+    protected array $afterInstall = [];
+
+    /**
      * Hooks to be run during the publish command
      *
      * @var Closure[]
@@ -238,6 +245,19 @@ class Services
     }
 
     /**
+     * Add a hook to the pipeline executed during the installation command.
+     *
+     * @param Closure $closure
+     * @return $this
+     */
+    public function registerInstallHook(Closure $closure): self
+    {
+        $this->afterInstall[] = $closure;
+
+        return $this;
+    }
+
+    /**
      * Add a hook to the pipeline executed during the publish command.
      *
      * @param Closure $closure
@@ -328,7 +348,7 @@ class Services
     }
 
     /**
-     * Execute hooks for the requested services.
+     * Execute hooks set for the installation command.
      *
      * @param Command $command
      * @param array $services
@@ -341,6 +361,9 @@ class Services
             if (isset($this->services[$service]) && is_array($this->services[$service]) && ($this->services[$service]['after_install'] ?? null) !== null) {
                 $this->services[$service]['after_install']($command, $services, $appService);
             }
+        }
+        foreach ($this->afterInstall as $hook) {
+            $hook($command, $services, $appService);
         }
     }
 
