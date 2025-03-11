@@ -209,29 +209,29 @@ class Services
      * Register a new service with its Docker Compose stub.
      *
      * @param string $service
-     * @param string $stubPath
-     * @param bool $persistent
-     * @param bool $default
-     * @param bool $dependable
+     * @param string|null $stubPath
+     * @param bool|null $persistent
+     * @param bool|null $default
+     * @param bool|null $dependable
      * @param Closure|null $configuringEnv
      * @param Closure|null $afterInstall
      * @return self
      */
     public function addService(string   $service,
-                               string   $stubPath,
-                               bool     $persistent = false,
-                               bool     $default = false,
-                               bool     $dependable = true,
+                               ?string   $stubPath = null,
+                               ?bool     $persistent = null,
+                               ?bool     $default = null,
+                               ?bool     $dependable = null,
                                ?Closure $configuringEnv = null,
                                ?Closure $afterInstall = null): self
     {
         $this->services[$service] = [
-            'stub' => $stubPath,
-            'persistent' => $persistent,
-            'default' => $default,
-            'dependable' => $dependable,
-            'configuring_env' => $configuringEnv,
-            'after_install' => $afterInstall,
+            'stub' => $stubPath ?? $this->services[$service]['stub'] ?? null,
+            'persistent' => $persistent ?? $this->services[$service]['persistent'] ?? null,
+            'default' => $default ?? $this->services[$service]['default'] ?? null,
+            'dependable' => $dependable ?? $this->services[$service]['dependable'] ?? null,
+            'configuring_env' => $configuringEnv ?? $this->services[$service]['configuring_env'] ?? null,
+            'after_install' => $afterInstall ?? $this->services[$service]['after_install'] ?? null,
         ];
 
         return $this;

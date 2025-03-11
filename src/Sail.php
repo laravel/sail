@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static self setBaseTemplate(string $stub)
- * @method static self addService(string $service, string $stubPath, bool $persistent = false, bool $default = false, bool $dependable = true, ?Closure $configuringEnv = null, ?Closure $afterInstall = null)
+ * @method static self addService(string $service, ?string $stubPath = null, ?bool $persistent = null, ?bool $default = null, ?bool $dependable = null, ?Closure $configuringEnv = null, ?Closure $afterInstall = null)
  * @method static self registerPublishHook(Closure $closure)
  * @method static string getBaseTemplate()
  * @method static array availableServices(bool $default = false)
