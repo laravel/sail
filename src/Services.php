@@ -10,7 +10,7 @@ class Services
     /**
      * The services registered with their stubs, persistence, and hooks.
      *
-     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, dependable: ?bool, configuring_env: ?Closure, after_install: ?Closure}>
+     * @var array<int|string, string|array{stub: ?string, persistent: ?bool, default: ?bool, dependency: ?bool, configuring_env: ?Closure, after_install: ?Closure}>
      */
     protected array $services = [
         'mysql' => [
@@ -219,7 +219,7 @@ class Services
      * @param string|null $stubPath
      * @param bool|null $persistent
      * @param bool|null $default
-     * @param bool|null $dependable
+     * @param bool|null $dependency
      * @param Closure|null $configuringEnv
      * @param Closure|null $afterInstall
      * @return self
@@ -228,7 +228,7 @@ class Services
                                ?string   $stubPath = null,
                                ?bool     $persistent = null,
                                ?bool     $default = null,
-                               ?bool     $dependable = null,
+                               ?bool     $dependency = null,
                                ?Closure $configuringEnv = null,
                                ?Closure $afterInstall = null): self
     {
@@ -236,7 +236,7 @@ class Services
             'stub' => $stubPath ?? $this->services[$service]['stub'] ?? null,
             'persistent' => $persistent ?? $this->services[$service]['persistent'] ?? null,
             'default' => $default ?? $this->services[$service]['default'] ?? null,
-            'dependable' => $dependable ?? $this->services[$service]['dependable'] ?? null,
+            'dependency' => $dependency ?? $this->services[$service]['dependency'] ?? null,
             'configuring_env' => $configuringEnv ?? $this->services[$service]['configuring_env'] ?? null,
             'after_install' => $afterInstall ?? $this->services[$service]['after_install'] ?? null,
         ];
@@ -326,7 +326,7 @@ class Services
      */
     public function isDependedOn(string $service): bool
     {
-        return $this->services[$service]['dependable'] ?? true;
+        return $this->services[$service]['dependency'] ?? true;
     }
 
     /**
