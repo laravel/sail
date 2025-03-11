@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool isPersistent(string $service)
  * @method static bool isDependedOn(string $service)
  * @method static void replaceEnvVariables(string $environment, array $services)
- * @method static void runInstallHooks(mixed $command, array $services)
+ * @method static void runInstallHooks(mixed $command, array $services, string $appService = 'laravel.test')
  * @method static void runPublishingHooks(mixed $command)
  */
 class Sail extends Facade

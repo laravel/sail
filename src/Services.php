@@ -332,13 +332,14 @@ class Services
      *
      * @param Command $command
      * @param array $services
+     * @param string $appService
      * @return void
      */
-    public function runInstallHooks(Command $command, array $services): void
+    public function runInstallHooks(Command $command, array $services, string $appService = 'laravel.test'): void
     {
         foreach ($services as $service) {
             if (isset($this->services[$service]) && is_array($this->services[$service]) && ($this->services[$service]['after_install'] ?? null) !== null) {
-                $this->services[$service]['after_install']($command, $services);
+                $this->services[$service]['after_install']($command, $services, $appService);
             }
         }
     }
