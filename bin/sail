@@ -24,6 +24,8 @@ if test -t 1; then
         BOLD="$(tput bold)"
         YELLOW="$(tput setaf 3)"
         GREEN="$(tput setaf 2)"
+        MAGENTA="$(tput setaf 5)"
+        CYAN="$(tput setaf 6)"
         NC="$(tput sgr0)"
     fi
 fi
@@ -37,6 +39,18 @@ function display_help {
     echo
     echo "Unknown commands are passed to the docker-compose binary."
     echo
+    if ! grep -q "alias sail=" ~/.bashrc ~/.zshrc 2>/dev/null; then
+        echo "${YELLOW}Configuring A Shell Alias:${NC}"
+        echo "However, instead of repeatedly typing ./bin/sail to execute Sail commands,"
+        echo "you may wish to configure a shell alias that allows you to execute Sail's commands more easily:"
+        echo
+        echo "${BOLD}${MAGENTA}alias ${YELLOW}sail${MAGENTA}=${CYAN}'bash \$([ -f sail ] && echo sail || echo bin/sail)'${NC}"
+        echo
+        echo "To make sure this is always available,"
+        echo "you may add this to your shell configuration file in your home directory,"
+        echo "such as ${YELLOW}${BOLD}~/.zshrc${NC} or ${YELLOW}${BOLD}~/.bashrc${NC}, and then restart your shell."
+        echo
+    fi
     echo "${YELLOW}docker-compose Commands:${NC}"
     echo "  ${GREEN}sail up${NC}        Start the application"
     echo "  ${GREEN}sail up -d${NC}     Start the application in the background"
