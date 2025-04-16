@@ -226,7 +226,14 @@ trait InteractsWithDockerComposeServices
         $phpunit = file_get_contents($path);
 
         $phpunit = preg_replace('/^.*DB_CONNECTION.*\n/m', '', $phpunit);
-        $phpunit = str_replace('<!-- <env name="DB_DATABASE" value=":memory:"/> -->', '<env name="DB_DATABASE" value="testing"/>', $phpunit);
+        $phpunit = str_replace(
+            [
+                '<!-- <env name="DB_DATABASE" value=":memory:"/> -->',
+                '<env name="DB_DATABASE" value=":memory:"/>',
+            ],
+            '<env name="DB_DATABASE" value="testing"/>',
+            $phpunit
+        );
 
         file_put_contents($this->laravel->basePath('phpunit.xml'), $phpunit);
     }
