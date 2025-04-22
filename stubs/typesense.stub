@@ -11,6 +11,6 @@ typesense:
     networks:
         - sail
     healthcheck:
-        test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:8108/health"]
+        test: [CMD, bash, -c, "exec 3<>/dev/tcp/localhost/8108 && printf 'GET /health HTTP/1.1\\r\\nConnection: close\\r\\n\\r\\n' >&3 && head -n1 <&3 | grep '200' && exec 3>&-"]
         retries: 5
         timeout: 7s
