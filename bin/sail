@@ -346,14 +346,14 @@ elif [ "$1" == "pint" ]; then
         sail_is_not_running
     fi
 
-# Proxy the "PHPStan" command to "php vendor/bin/phpstan analyse --generate-baseline"...
+# Proxy the "PHPStan" command to "php vendor/bin/phpstan analyse"...
 elif [ "$1" == "phpstan" ]; then
     shift 1
 
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u "$APP_USER")
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php vendor/bin/phpstan analyse --generate-baseline)
+        ARGS+=("$APP_SERVICE" php vendor/bin/phpstan analyse)
     else
         sail_is_not_running
     fi
