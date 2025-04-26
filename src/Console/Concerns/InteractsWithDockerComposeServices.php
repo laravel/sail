@@ -26,6 +26,7 @@ trait InteractsWithDockerComposeServices
         'mailpit',
         'selenium',
         'soketi',
+        'rabbitmq',
     ];
 
     /**
@@ -203,6 +204,10 @@ trait InteractsWithDockerComposeServices
             $environment = preg_replace("/^MAIL_MAILER=(.*)/m", "MAIL_MAILER=smtp", $environment);
             $environment = preg_replace("/^MAIL_HOST=(.*)/m", "MAIL_HOST=mailpit", $environment);
             $environment = preg_replace("/^MAIL_PORT=(.*)/m", "MAIL_PORT=1025", $environment);
+        }
+
+        if (in_array('rabbitmq', $services)) {
+            $environment = str_replace('RABBITMQ_HOST=127.0.0.1', 'RABBITMQ_HOST=rabbitmq', $environment);
         }
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
