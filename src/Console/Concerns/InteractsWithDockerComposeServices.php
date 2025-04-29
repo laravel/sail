@@ -24,9 +24,9 @@ trait InteractsWithDockerComposeServices
         'typesense',
         'minio',
         'mailpit',
+        'rabbitmq',
         'selenium',
         'soketi',
-        'rabbitmq',
     ];
 
     /**
