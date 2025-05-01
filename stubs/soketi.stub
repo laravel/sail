@@ -7,7 +7,7 @@ soketi:
         SOKETI_DEFAULT_APP_KEY: '${PUSHER_APP_KEY}'
         SOKETI_DEFAULT_APP_SECRET: '${PUSHER_APP_SECRET}'
     ports:
-        - '${PUSHER_PORT:-6001}:6001'
-        - '${PUSHER_METRICS_PORT:-9601}:9601'
+        - '${SAIL_IP:-172.20.0.10}:${PUSHER_PORT:-6001}:6001'
+        - '${SAIL_IP:-172.20.0.10}:${PUSHER_METRICS_PORT:-9601}:9601'
     networks:
         - sail

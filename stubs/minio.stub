@@ -1,13 +1,14 @@
 minio:
     image: 'minio/minio:latest'
     ports:
-        - '${FORWARD_MINIO_PORT:-9000}:9000'
-        - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_MINIO_PORT:-9000}:9000'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
     environment:
         MINIO_ROOT_USER: 'sail'
-        MINIO_ROOT_PASSWORD: 'password'
+        MINIO_ROOT_PASSWORD: 'minio123'
     volumes:
-        - 'sail-minio:/data'
+        - sail-minio:/data
+        - ./vendor/reyemtech/sail/certs:/root/.minio/certs:ro,z
     networks:
         - sail
     command: minio server /data --console-address ":8900"

@@ -1,7 +1,7 @@
 pgsql:
     image: 'postgres:18-alpine'
     ports:
-        - '${FORWARD_DB_PORT:-5432}:5432'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_DB_PORT:-5432}:5432'
     environment:
         PGPASSWORD: '${DB_PASSWORD:-secret}'
         POSTGRES_DB: '${DB_DATABASE}'

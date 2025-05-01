@@ -3,6 +3,7 @@
 namespace Laravel\Sail\Console;
 
 use Illuminate\Console\Command;
+use MirazMac\DotEnv\Writer;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Process\Process;
@@ -36,6 +37,11 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+        $project = $this->getProjectName();
+        $ip = $this->getIpAddress();
+        $domain = $this->getDomainName($project);
+        $this->writePorjectEnv($project, $ip, $domain);
+
         if ($this->option('with')) {
             $services = $this->option('with') == 'none' ? [] : explode(',', $this->option('with'));
         } elseif ($this->option('no-interaction')) {
@@ -45,13 +51,13 @@ class InstallCommand extends Command
         }
 
         if ($invalidServices = array_diff($services, $this->services)) {
-            $this->components->error('Invalid services ['.implode(',', $invalidServices).'].');
+            $this->components->error('Invalid services [' . implode(',', $invalidServices) . '].');
 
             return 1;
         }
 
-        $this->buildDockerCompose($services);
-        $this->replaceEnvVariables($services);
+        $this->buildDockerCompose($project, $services);
+        $this->replaceEnvVariables($project, $services);
         $this->configurePhpUnit();
 
         if ($this->option('devcontainer')) {
@@ -65,9 +71,11 @@ class InstallCommand extends Command
 
         $this->output->writeln('<fg=gray>➜</> <options=bold>./vendor/bin/sail up</>');
 
-        if (in_array('mysql', $services) ||
+        if (
+            in_array('mysql', $services) ||
             in_array('mariadb', $services) ||
-            in_array('pgsql', $services)) {
+            in_array('pgsql', $services)
+        ) {
             $this->components->warn('A database service was installed. Run "artisan migrate" to prepare your database:');
 
             $this->output->writeln('<fg=gray>➜</> <options=bold>./vendor/bin/sail artisan migrate</>');

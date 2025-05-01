@@ -1,7 +1,7 @@
 typesense:
     image: 'typesense/typesense:27.1'
     ports:
-        - '${FORWARD_TYPESENSE_PORT:-8108}:8108'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_TYPESENSE_PORT:-8108}:8108'
     environment:
         TYPESENSE_DATA_DIR: '${TYPESENSE_DATA_DIR:-/typesense-data}'
         TYPESENSE_API_KEY: '${TYPESENSE_API_KEY:-xyz}'

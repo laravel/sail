@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo ""
+echo "==============================================="
+echo " Starting Queue Worker..."
+echo "==============================================="
+echo ""
+if grep -q '^QUEUE_CONNECTION=redis' /var/www/.env && php artisan horizon > /dev/null 2>&1; then
+    php artisan horizon:terminate
+    php artisan horizon
+else
+    php artisan queue:work --tries=3 --timeout=90 --sleep=3 --queue=default,high,low
+fi

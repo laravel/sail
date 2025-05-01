@@ -1,6 +1,6 @@
 memcached:
     image: 'memcached:alpine'
     ports:
-        - '${FORWARD_MEMCACHED_PORT:-11211}:11211'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_MEMCACHED_PORT:-11211}:11211'
     networks:
         - sail

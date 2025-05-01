@@ -6,7 +6,7 @@ mongodb:
     volumes:
         - 'sail-mongodb:/data/db'
     ports:
-        - '${FORWARD_MONGODB_PORT:-27017}:27017'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_MONGODB_PORT:-27017}:27017'
     networks:
         - sail
     healthcheck:

@@ -1,7 +1,8 @@
 redis:
     image: 'redis:alpine'
+    restart: unless-stopped
     ports:
-        - '${FORWARD_REDIS_PORT:-6379}:6379'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_REDIS_PORT:-6379}:6379'
     volumes:
         - 'sail-redis:/data'
     networks:

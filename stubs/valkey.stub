@@ -1,7 +1,7 @@
 valkey:
     image: 'valkey/valkey:alpine'
     ports:
-        - '${FORWARD_VALKEY_PORT:-6379}:6379'
+        - '${SAIL_IP:-172.20.0.10}:${FORWARD_VALKEY_PORT:-6379}:6379'
     volumes:
         - 'sail-valkey:/data'
     networks:

@@ -4,7 +4,9 @@ namespace Laravel\Sail;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Application as LaravelApplication;
 use Laravel\Sail\Console\AddCommand;
+use Laravel\Sail\Console\BuildCommand;
 use Laravel\Sail\Console\InstallCommand;
 use Laravel\Sail\Console\PublishCommand;
 
@@ -19,6 +21,23 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->registerCommands();
         $this->configurePublishing();
+        $this->setupConfig();
+    }
+
+    /**
+     * Setup the config.
+     *
+     * @return void
+     */
+    private function setupConfig(): void
+    {
+        $source = realpath($raw = __DIR__ . '/../config/sail.php') ?: $raw;
+
+        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
+            $this->publishes([$source => config_path('sail.php')], 'config');
+        }
+
+        $this->mergeConfigFrom($source, 'sail');
     }
 
     /**
@@ -33,6 +52,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 InstallCommand::class,
                 AddCommand::class,
                 PublishCommand::class,
+                BuildCommand::class
             ]);
         }
     }
@@ -51,8 +71,8 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
 
             $this->publishes([
                 __DIR__ . '/../bin/sail' => $this->app->basePath('sail'),
+                __DIR__ . '/../bin/sail-setup' => $this->app->basePath('sail-setup'),
             ], ['sail', 'sail-bin']);
-
             $this->publishes([
                 __DIR__ . '/../database' => $this->app->basePath('docker'),
             ], ['sail', 'sail-database']);
@@ -69,6 +89,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
         return [
             InstallCommand::class,
             PublishCommand::class,
+            BuildCommand::class,
         ];
     }
 }

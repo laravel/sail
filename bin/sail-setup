@@ -1,0 +1,216 @@
+#!/usr/bin/env bash
+
+UNAMEOUT="$(uname -s)"
+DOMAIN="$(grep -E '^APP_URL=' .env | cut -d '=' -f2 | sed 's|http[s]*://||' | cut -d '/' -f1)"
+SAIL_IP=$(grep -E '^SAIL_IP=' .env | cut -d '=' -f2 | sed 's|http[s]*://||' | cut -d '/' -f1 | tr -d '"')
+
+# Verify operating system is supported...
+case "${UNAMEOUT}" in
+Linux*) MACHINE=linux ;;
+Darwin*) MACHINE=mac ;;
+*) MACHINE="UNKNOWN" ;;
+esac
+
+if [ "$MACHINE" == "UNKNOWN" ]; then
+    echo "Unsupported operating system [$(uname -s)]. Laravel Sail supports macOS, Linux, and Windows (WSL2)." >&2
+
+    exit 1
+fi
+
+# Determine if stdout is a terminal...
+if test -t 1; then
+    # Determine if colors are supported...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test "$ncolors" -ge 8; then
+        BOLD="$(tput bold)"
+        YELLOW="$(tput setaf 3)"
+        GREEN="$(tput setaf 2)"
+        RED="$(tput setaf 1)"
+        ORANGE="$(tput setaf 6)"
+        BLUE="$(tput setaf 4)"
+        NC="$(tput sgr0)"
+    fi
+fi
+
+function header() {
+    # Print a header message...
+    echo ""
+    echo "${BOLD}${BLUE}===============================================${NC}"
+    echo "${BOLD}${BLUE} $1 ${NC}"
+    echo "${BOLD}${BLUE}===============================================${NC}"
+    echo ""
+}
+
+function success {
+    # Print a success message...
+    echo "${GREEN}==> $1${NC} $2"
+}
+function error {
+    # Print an error message...
+    echo "${RED}==> $1${NC} $2" >&2
+}
+function warning {
+    # Print a warning message...
+    echo "${BLUE}==> $1${NC} $2"
+}
+function info {
+    # Print an info message...
+    echo "${YELLOW}==> $1${NC} $2"
+}
+
+function create_ip_alias {
+    header "Creating IP alias for $SAIL_IP"
+
+    # Create an IP alias for the host machine using the SAIL_IP from the .env file...
+    if [ -z "$SAIL_IP" ]; then
+        echo "{$RED}SAIL_IP is not defined in the .env file. Exiting.${NC}" >&2
+        exit 1
+    fi
+
+    if [ "$MACHINE" == "mac" ]; then
+        if ! ifconfig lo0 | grep -q "$SAIL_IP"; then
+            sudo ifconfig lo0 alias $SAIL_IP
+            success "IP alias created:" "$SAIL_IP"
+        else
+            info "IP alias already exists:" "$SAIL_IP"
+        fi
+    elif [ "$MACHINE" == "linux" ]; then
+        if ! ip addr show dev lo | grep -q "$SAIL_IP"; then
+            sudo ip addr add $SAIL_IP/32 dev lo
+            success "IP alias created:" "$SAIL_IP"
+        else
+            info "IP alias already exists:" "$SAIL_IP"
+        fi
+    fi
+}
+
+function add_hosts_entry {
+    create_ip_alias
+
+    header "Adding entry to /etc/hosts for $DOMAIN"
+
+    if grep -q "$SAIL_IP" /etc/hosts || grep -q "$DOMAIN" /etc/hosts; then
+        sudo sed -i.bak "/$SAIL_IP/d" /etc/hosts
+        sudo sed -i.bak "/$DOMAIN/d" /etc/hosts
+        info "Existing entry removed from" "/etc/hosts"
+    fi
+
+    echo "$SAIL_IP  $DOMAIN" | sudo tee -a /etc/hosts >/dev/null
+
+    success "Entry added to /etc/hosts:" "$SAIL_IP  $DOMAIN"
+}
+
+function install_brew {
+    # Install Homebrew on macOS...
+    if [ "$MACHINE" == "mac" ]; then
+        if ! command -v brew &>/dev/null; then
+            header "Installing Homebrew"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            success "Homebrew installed successfully."
+        fi
+    fi
+}
+
+function install_docker {
+    # Install Docker on macOS...
+    if [ "$MACHINE" == "mac" ]; then
+        if !command -v brew &>/dev/null; then
+            install_brew
+        fi
+        if ! command -v docker &>/dev/null; then
+            header "Installing Docker"
+            brew install --cask docker
+            success "Docker installed successfully."
+        fi
+    fi
+}
+
+function install_mkcert {
+    if [ -z "$(command -v mkcert)" ]; then
+        header "Installing mkcert"
+
+        if [ "$MACHINE" == "mac" ]; then
+            if !command -v brew &>/dev/null; then
+                install_brew
+            fi
+            brew install mkcert
+            brew install nss # For Firefox support
+
+        elif [ "$MACHINE" == "linux" ]; then
+            if command -v apt-get &>/dev/null; then
+                sudo apt-get update
+                sudo apt-get install -y libnss3-tools
+                curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+                chmod +x mkcert-v*-linux-amd64
+                sudo mv mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+            elif command -v yum &>/dev/null; then
+                sudo yum install -y nss-tools
+                curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+                chmod +x mkcert-v*-linux-amd64
+                sudo mv mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+            else
+                error "Unsupported Linux package manager. Please install mkcert manually."
+                exit 1
+            fi
+        else
+            error "Unsupported operating system. Please install mkcert manually."
+            exit 1
+        fi
+        success "mkcert installed successfully."
+    fi
+}
+
+function generate_certificates {
+    install_mkcert
+
+    header "Generating SSL certificates for $DOMAIN"
+    # Generate SSL certificates for the host machine using mkcert...
+
+    CERT_FOLDER="vendor/reyemtech/sail/certs"
+
+    if [ ! -f "$CERT_FOLDER/$DOMAIN.crt" ] || [ ! -f "$CERT_FOLDER/$DOMAIN.key" ] ||
+        ! openssl x509 -checkend 86400 -noout -in "$CERT_FOLDER/$DOMAIN.crt" >/dev/null 2>&1; then
+        [ -d "$CERT_FOLDER" ] || mkdir -p "$CERT_FOLDER"
+        mkcert -install >/dev/null 2>&1
+        mkcert -cert-file "$CERT_FOLDER/$DOMAIN.crt" -key-file "$CERT_FOLDER/$DOMAIN.key" "$DOMAIN" "minio" >/dev/null 2>&1
+        cp "$CERT_FOLDER/$DOMAIN.crt" "$CERT_FOLDER/public.crt"
+        cp "$CERT_FOLDER/$DOMAIN.key" "$CERT_FOLDER/private.key"
+        cp "$(mkcert -CAROOT)/rootCA.pem" "$CERT_FOLDER/mkcert-rootCA.pem"
+
+        success "Certificates created or renewed successfully in the ${NC}$CERT_FOLDER${GREEN} folder."
+    else
+        info "Certificates are valid and not expired. Skipping creation."
+    fi
+
+    LINK_FOLDERS=(
+        "vendor/reyemtech/sail/runtimes/8.x"
+    )
+    for folder in "${LINK_FOLDERS[@]}"; do
+        rm -rf "$(pwd)/$folder/certs"
+        cp -fr "$(pwd)/$CERT_FOLDER" "$(pwd)/$folder"
+    done
+}
+
+function link_application {
+    header "Linking application directory to Sail container"
+    # Link the application directory to the Sail container...
+    if [ ! -d "vendor/reyemtech/sail/runtimes/8.x/app" ]; then
+        ln -s "$(pwd)" "vendor/reyemtech/sail/runtimes/8.x/app"
+        success "Linked application directory to Sail container."
+    else
+        info "Application directory already linked to Sail container."
+    fi
+}
+
+install_brew
+install_docker
+add_hosts_entry
+generate_certificates
+# link_application
+
+echo ""
+echo "${BOLD}${GREEN}===============================================${NC}"
+echo "${BOLD}${GREEN} Sail setup completed successfully! ${NC}"
+echo "${BOLD}${GREEN}===============================================${NC}"
+echo ""
