@@ -10,7 +10,7 @@ rabbitmq:
         RABBITMQ_VHOST: '${RABBITMQ_VHOST}'
         RABBITMQ_QUEUE: '${RABBITMQ_QUEUE}'
     volumes:
-        - 'sail-rabbitmq:/var/lib/rabbitmq'
+        - 'sail-rabbitmq:/rabbitmq_data'
     networks:
         - sail
     healthcheck:
