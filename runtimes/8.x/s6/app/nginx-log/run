@@ -1,0 +1,2 @@
+#!/bin/sh
+exec s6-log -b n20 s10000000 T !"gzip -nq9" /var/log/nginx p[nginx] 1

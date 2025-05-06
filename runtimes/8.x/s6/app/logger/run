@@ -1,0 +1,10 @@
+#!/bin/sh
+exec /bin/bash -c '
+  while true; do
+    find /var/log -type f -name "*.log" | while read file; do
+      filename=$(basename "$file")
+      tail -n0 -F "$file" | awk -v f="$filename" '"'"'{ print "[" f "] " $0; fflush(); }'"'"' &
+    done
+    sleep 10
+  done
+'

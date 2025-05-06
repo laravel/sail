@@ -12,6 +12,8 @@ use Symfony\Component\Process\Process;
 class BuildCommand extends Command
 {
     use Concerns\InteractsWithDocker;
+    use Concerns\InteractsWithHelm;
+
     /**
      * The name and signature of the console command.
      *
@@ -33,6 +35,7 @@ class BuildCommand extends Command
             $environments = $this->gatherEnvironmentsInteractively();
             $architectures = $this->gatherArchitecturesInteractively();
             $repository = $this->gatherRepositoryInteractively($environments);
+            $this->getVersionChoice();
             $this->writeConfig($environments, $architectures, $repository);
         } else {
             $environments = $config['environments'] ?? [];
@@ -48,5 +51,7 @@ class BuildCommand extends Command
             }
             $this->buildDockerImages($environment, $architectures, $repository);
         }
+
+        $this->buildHelm();
     }
 }

@@ -1,0 +1,10 @@
+#!/usr/bin/execlineb
+with-contenv
+
+cd /var/www
+
+background {
+    ifelse { php artisan | grep -q horizon }
+    { php artisan horizon }
+    sleep infinity
+}

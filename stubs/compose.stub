@@ -5,11 +5,11 @@ services:
     laravel:
         build:
             context: ./vendor/reyemtech/sail/runtimes/8.x
-            dockerfile: Dockerfile
+            target: app
             args:
                 PHP_VERSION: '${PHP_VERSION}'
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-{{PHP_VERSION}}/app
+        image: '${SAIL_BUILD_ORGANIZATION}/laravel:${SAIL_BUILD_VERSION}'
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         expose:

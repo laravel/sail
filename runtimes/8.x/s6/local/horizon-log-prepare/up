@@ -1,0 +1,4 @@
+#!/bin/sh
+mkdir -p /var/log/horizon
+chown www-data:www-data /var/log/horizon
+chmod 02755 /var/log/horizon

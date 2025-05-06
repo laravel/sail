@@ -1,0 +1,45 @@
+{{ define "sail.laravelSpec" }}
+{{ if .enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .main.name | default "website" | lower}}-{{ .tier }}
+  labels:
+    app: {{ .main.name | default "website" | lower}}
+    tier: {{ .tier }}
+spec:
+  replicas: {{ .replicaCount | default .main.global.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .main.name | default "website" | lower }}
+      tier: {{ .tier }}
+  template:
+    metadata:
+      labels:
+        app: {{ .main.name | default "website" | lower }}
+        tier: {{ .tier }}
+    spec:
+      {{ if and .main.secret.enabled (or .imagePullSecret .main.global.imagePullSecret) }}
+      imagePullSecrets:
+        - name: {{ .imagePullSecret | default .main.global.imagePullSecret }}
+      {{ end }}
+      containers:
+        - name: {{ .tier }}
+          image: {{ .image.repository | default "ghcr.io/example/app" | lower }}:{{ .image.tag | default .main.global.tag | default "latest" | lower }}
+          imagePullPolicy: {{ .image.pullPolicy | default .main.global.pullPolicy | default "IfNotPresent" }}
+          {{ if eq .tier "web" }}
+          ports:
+            - containerPort: 80
+          {{ end }}
+          {{ if eq .tier "worker" }}
+            {{ if .horizon }}
+          command: ["php", "artisan", "horizon"]
+            {{ else }}
+          command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--no-interaction"]
+            {{ end }}
+          {{ end }}
+          envFrom:
+            - secretRef:
+                name: {{ .main.name | default "website" | lower }}-environment
+{{ end }}
+{{ end }}

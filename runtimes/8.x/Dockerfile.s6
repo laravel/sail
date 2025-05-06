@@ -1,0 +1,23 @@
+FROM alpine AS s6builder
+
+ARG TARGETPLATFORM
+ARG OVERLAY_VERSION="3.2.0.3"
+RUN case "$TARGETPLATFORM" in \
+    "linux/amd64") ARCH=amd64 ;; \
+    "linux/arm64") ARCH=aarch64 ;; \
+    "linux/arm/v7") ARCH=arm ;; \
+    "linux/arm/v6") ARCH=armhf ;; \
+    "linux/ppc64le") ARCH=powerpc64le ;; \
+    "linux/ppc64") ARCH=powerpc64 ;; \
+    "linux/riscv64") ARCH=riscv64 ;; \
+    "linux/s390x") ARCH=s390x ;; \
+    *) echo "Unsupported arch: $TARGETPLATFORM" && exit 1 ;; \
+    esac && \
+    mkdir -p /s6root && \
+    curl -L -o /tmp/s6-noarch.tar.xz https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VERSION}/s6-overlay-noarch.tar.xz && \
+    tar -C /s6root -Jxpf /tmp/s6-noarch.tar.xz && \
+    curl -L -o /tmp/s6.tar.xz https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VERSION}/s6-overlay-$ARCH.tar.xz && \
+    tar -C /s6root -Jxpf /tmp/s6.tar.xz && \
+    rm /tmp/s6.tar.xz /tmp/s6-noarch.tar.xz
+
+COPY --from=runtime ./s6/app /s6root/etc/s6-overlay/s6-rc.d/

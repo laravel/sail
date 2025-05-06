@@ -1,0 +1,4 @@
+#!/bin/sh
+mkdir -p /var/log/nginx
+chown root:root /var/log/nginx
+chmod 02755 /var/log/nginx

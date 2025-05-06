@@ -251,6 +251,47 @@ if [ "$1" == "php" ]; then
         sail_is_not_running
     fi
 
+# Builds the application containers with Bake...
+elif [ "$1" == "build" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(build)
+        ARGS+=("$@")
+    else
+        sail_is_not_running
+    fi
+
+elif [ "$1" == "up" ]; then
+    shift 1
+
+    ORG=$(grep -m 1 '^SAIL_BUILD_ORGANIZATION=' .env | cut -d '=' -f2 || echo "default")
+    APP_NAME=$(grep -m 1 '^APP_NAME=' .env | cut -d '=' -f2 | awk '{print tolower($0)}' || echo "default")
+    VERSION=$(grep -m 1 '^SAIL_BUILD_VERSION=' .env | cut -d '=' -f2 | tr -d '"' || echo "default")
+    APP_DIR=$(realpath)
+    RUNTIME_DIR=$(realpath vendor/reyemtech/sail/runtimes/8.x)
+
+    if [ ! -d "$RUNTIME_DIR/certs" ]; then
+        vendor/bin/sail-setup
+    fi
+
+    BAKE_CMD="docker buildx bake -f ${RUNTIME_DIR}/docker-bake.hcl app"
+    if ! docker image inspect "$ORG/$APP_NAME:$VERSION" > /dev/null 2>&1; then
+        echo "Docker image $ORG/$APP_NAME:$VERSION does not exist. Building the image..." >&2
+        APP_DIR=$APP_DIR RUNTIME_DIR=$RUNTIME_DIR ORG=$ORG APP_NAME=$APP_NAME VERSION=$VERSION $BAKE_CMD
+    else
+        echo "Docker image $ORG/$APP_NAME:$VERSION already exists. Skipping build." >&2
+    fi
+
+    if [ "$EXEC" == "yes" ]; then
+        docker compose restart "$@"
+    else
+        docker compose up "$@"
+    fi
+
+    exit 1
+
+
 # Proxy vendor binary commands on the application container...
 elif [ "$1" == "bin" ]; then
     shift 1

@@ -240,9 +240,53 @@ trait InteractsWithDocker
             $this->output->writeln('    <fg=green>-</> ' . $arch);
         }
 
-        $commands = $this->buildCommands($archs, $environment, $repository);
+        // $commands = $this->buildCommands($archs, $environment, $repository);
+
+        $args = [
+            'ARCHS' => $archs,
+            'PUSH' => $this->push,
+            'APP_NAME' => Str::slug(Config('app.name')),
+            'VERSION' => config('sail.build.version', '1.0.0'),
+            'APP_DIR' => realpath('.'),
+            'RUNTIME_DIR' => realpath(InstalledVersions::getInstallPath('reyemtech/sail') . '/runtimes/8.x'),
+            'ORG' => $this->organization,
+        ];
+
+        if ($this->useRepository) {
+            $args['REGISTRY'] = $repository;
+        };
+
+        $path = realpath(InstalledVersions::getInstallPath('reyemtech/sail'));
+        if (!is_dir("{$path}/certs")) {
+            $commands[] = "{$path}/bin/sail-setup";
+        }
+        $commands[] = $this->createBakeCommand($args);
 
         return $this->runCommands($commands);
+    }
+
+    protected function createBakeCommand(array $args)
+    {
+        $bakeCommand = '';
+        foreach ($args as $key => $value) {
+            if (is_array($value)) {
+                $bakeCommand .= ' ' . $key . '=' . implode(',', $value);
+            } else {
+                $bakeCommand .= ' ' . $key . '=' . $value;
+            }
+        }
+
+        $bakeCommand .= ' docker buildx bake ';
+        $bakeCommand .= ' -f ' . realpath(InstalledVersions::getInstallPath('reyemtech/sail') . '/runtimes/8.x/docker-bake.hcl');
+
+        // $bakeCommand .= ' --print ';
+
+        $bakeCommand .= $this->useRepository ? ' default' : ' app';
+
+        $this->output->writeln(' <fg=blue>=> Commands:</>');
+        $this->output->writeln('    <fg=green>-</> ' . $bakeCommand);
+
+        return $bakeCommand;
     }
 
     /**
@@ -309,7 +353,7 @@ trait InteractsWithDocker
             }
             $this->output->writeln('<fg=yellow>==></> <fg=green>Repository:</> ' . $config['repository']);
             $this->output->writeln('<fg=yellow>==></> <fg=green>Organization:</> ' . $config['organization']);
-            $this->output->writeln('<fg=yellow>==></> <fg=green>Push:</> ' . ($config['push'] ? '<bg=green;fg-black>true</>' : '<bg=red;fg=black>false</>'));
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Push:</> ' . ($config['push'] ? '<bg=green;fg-black> true </>' : '<bg=red;fg=black> false </>'));
             $this->output->writeln('<fg=yellow>==></> <fg=green>Version:</> ' . $config['version']);
 
             if ($config['repository'] && $config['repository'] !== 'none') {
@@ -334,30 +378,47 @@ trait InteractsWithDocker
             }
 
             if ($this->reuseConfig) {
-                $options = ['no', 'major', 'minor', 'patch'];
-                if (function_exists('\Laravel\Prompts\confirm')) {
-                    $increment = \Laravel\Prompts\select(
-                        label: 'Increment version?',
-                        options: $options,
-                        default: 'no',
-                    );
-                } else {
-                    $increment = $this->choice('Increment version?', 0, null, false);
-                }
-
-                if ($increment !== 'no') {
-                    $version = $this->bumpVersion($config['version'], $increment);
-                    $this->output->writeln('<fg=yellow>==></> <fg=green>New Version:</> ' . $version);
-                    $this->output->writeln('');
-                    $config['version'] = $version;
-                    Config::set('sail.build.version', $version);
-                }
+                $config['version'] = $this->getVersionChoice();
             }
         }
 
         return $this->reuseConfig ? $config : null;
     }
 
+    protected function getVersionChoice()
+    {
+        $options = ['no', 'major', 'minor', 'patch'];
+        $version = config('sail.build.version');
+
+        if($version === null) {
+            return;
+        }
+
+        if (function_exists('\Laravel\Prompts\confirm')) {
+            $increment = \Laravel\Prompts\select(
+                label: 'Increment version?',
+                options: $options,
+                default: 'no',
+            );
+        } else {
+            $increment = $this->choice('Increment version?', $options, 0, null, false);
+        }
+
+        if ($increment !== 'no') {
+            $version = $this->bumpVersion($version, $increment);
+            $this->output->writeln('<fg=yellow>==></> <fg=green>New Version:</> ' . $version);
+            $this->output->writeln('');
+        }
+
+        return $version;
+    }
+    /**
+     * Bump the version number.
+     *
+     * @param  string  $version
+     * @param  string  $type
+     * @return string
+     */
     function bumpVersion(string $version, string $type = 'patch'): string
     {
         [$major, $minor, $patch] = explode('.', $version);
@@ -378,7 +439,15 @@ trait InteractsWithDocker
                 break;
         }
 
-        return "{$major}.{$minor}.{$patch}";
+        $new = "{$major}.{$minor}.{$patch}";
+
+        $writer = new Writer(base_path('.env'));
+        $writer->set('SAIL_BUILD_VERSION', $new);
+        $writer->write();
+
+        Config::set('sail.build.version', $new);
+
+        return $new;
     }
 
     protected function writeConfig($environments, $architectures, $repository)

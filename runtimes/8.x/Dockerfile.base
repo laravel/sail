@@ -1,0 +1,97 @@
+ARG ALPINE_VERSION=3.21
+FROM alpine:${ALPINE_VERSION}
+
+WORKDIR /var/www/
+
+ENV TZ=UTC
+
+ARG PHP_VERSION=8.4
+ARG GUID=1000
+
+ENV VERSION=${PHP_VERSION//./}
+
+# Copy mkcert root CA certificate
+COPY --from=runtime certs/mkcert-rootCA.pem /usr/local/share/ca-certificates/mkcert-rootCA.crt
+
+# Install runtime system dependencies (Alpine packages)
+RUN apk add --no-cache \
+    tzdata \
+    gnupg \
+    bash \
+    curl \
+    libpng \
+    libjpeg-turbo \
+    libwebp \
+    libzip \
+    oniguruma \
+    icu \
+    zlib \
+    libxml2 \
+    git \
+    zip \
+    xz \
+    unzip \
+    nginx \
+    s6-overlay \
+    su-exec \
+    npm \
+    libcap-setcap \
+    php${VERSION} \
+    php${VERSION}-fpm \
+    php${VERSION}-gd \
+    php${VERSION}-intl \
+    php${VERSION}-mbstring \
+    php${VERSION}-mysqlnd \
+    php${VERSION}-opcache \
+    php${VERSION}-pcntl \
+    php${VERSION}-pdo \
+    php${VERSION}-pdo_mysql \
+    php${VERSION}-pdo_pgsql \
+    php${VERSION}-pgsql \
+    php${VERSION}-xml \
+    php${VERSION}-zip \
+    php${VERSION}-curl \
+    php${VERSION}-exif \
+    php${VERSION}-fileinfo \
+    php${VERSION}-sqlite3 \
+    php${VERSION}-xdebug\
+    php${VERSION}-bcmath \
+    php${VERSION}-dom \
+    php${VERSION}-fileinfo \
+    php${VERSION}-json \
+    php${VERSION}-session \
+    php${VERSION}-simplexml \
+    php${VERSION}-tokenizer \
+    php${VERSION}-xmlreader \
+    php${VERSION}-xmlwriter \
+    php${VERSION}-zip \
+    php${VERSION}-zlib \
+    php${VERSION}-phar \
+    php${VERSION}-pecl-redis \
+    && ln -ns /usr/bin/php${VERSION} /usr/bin/php \
+    && ln -ns /usr/sbin/php${VERSION}-fpm /usr/sbin/php-fpm \
+    && ln -ns /etc/php${VERSION} /etc/php \
+    && rm -rf /var/cache/apk/* \
+    && sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd \
+    && update-ca-certificates \
+    && addgroup -g ${GUID} www-data || echo "Group www-data already exists" \
+    && adduser -u ${GUID} -D -h /var/www -s /bin/bash -G www-data www-data || echo "User www-data already exists" \
+    && rm -rf /var/www/* \
+    && mkdir -p /var/log/nginx /var/log/php-fpm /var/log/php \
+    && chown -R www-data:www-data /var \
+    && chmod -R 755 /var \
+    && rm -rf /usr/local/etc/php-fpm.d/docker.conf
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy Sail files
+COPY --from=runtime php.ini /etc/php/conf.d/99-sail.ini
+COPY --from=runtime laravel-queue /usr/local/bin/laravel-queue
+COPY --from=runtime nginx.conf /etc/nginx/http.d/default.conf
+COPY --from=runtime php-fpm.conf /etc/php/php-fpm.d/docker.conf
+
+# S6
+COPY --from=runtime ./s6/app /etc/s6-overlay/s6-rc.d/
+RUN ln -s /etc/s6-overlay/s6-rc.d/logger/ /etc/s6-overlay/s6-rc.d/user/contents.d/logger
+

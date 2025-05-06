@@ -1,0 +1,9 @@
+{{- $tier := "worker" }}
+{{- $scoped := get .Values $tier | default dict }}
+{{- $main := dict
+    "global" (.Values.global | default dict)
+    "secret" (.Values.secret | default dict)
+    "name" (.Values.name | default "website")
+}}
+{{- $ctx := merge (dict "tier" $tier "main" $main) $scoped }}
+{{- include "sail.laravelSpec" $ctx }}

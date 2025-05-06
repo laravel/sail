@@ -1,0 +1,16 @@
+#!/usr/bin/execlineb -P
+
+echo Starting php-fpm-log-prepare >&2
+
+mkdir -p /var/log/php-fpm /var/log/php
+
+importas -u uid UID
+importas -u gid GID
+
+id >&2
+ls -ld /var/log/php* >&2
+
+chown -R www-data:www-data /var/log/php-fpm /var/log/php
+chmod 02755 /var/log/php-fpm /var/log/php
+
+echo php-fpm-log-prepare completed > /tmp/php-fpm-log-prepare-ran

@@ -1,0 +1,4 @@
+#!/bin/sh
+mkdir -p /var/log/schedule
+chown www-data:www-data /var/log/schedule
+chmod 02755 /var/log/schedule

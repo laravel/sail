@@ -1,0 +1,30 @@
+FROM base
+
+# Clean application directory
+RUN rm -rf /var/www/*
+
+COPY --from=app --chown=www-data:www-data / /var/www/
+
+# Recreate empty storage structure
+RUN rm -rf /var/www/storage /var/www/vendor /var/www/node_modules /var/www/.env* \
+    && mkdir -p /var/www/storage/app \
+    /var/www/bootstrap/cache \
+    /var/www/storage/framework/cache \
+    /var/www/storage/framework/sessions \
+    /var/www/storage/framework/views \
+    /var/www/storage/logs
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www
+RUN chmod -R 755 /var/www/
+
+# Install PHP dependencies using Composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Install and build frontend assets using npm
+RUN npm ci
+
+RUN npm run build
+
+# Clean up build artifacts to reduce final image size
+RUN rm -rf /var/www/node_modules

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'domain' => env('SAIL_DOMAIN', 'localhost'),
     'build' => [
         'environments' => env('SAIL_BUILD_ENVIRONMENT'),
         'architectures' => env('SAIL_BUILD_ARCHITECTURES'),

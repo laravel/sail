@@ -1,0 +1,64 @@
+# ------------------------------------------------------------------------------
+# Sail Helm Chart Values - Configuration Reference
+# This file defines default values for customizing the Sail Laravel deployment.
+# ------------------------------------------------------------------------------
+
+# Global defaults applied to all components (web, worker, etc.)
+globals:
+  # replicaCount: 2
+  tag: latest
+  pullPolicy: IfNotPresent
+  imagePullSecret: ghcr-auth
+
+# Web application deployment settings
+web:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ghcr.io/<organization>/<package>
+    # tag: latest
+    # pullPolicy: IfNotPresent
+    # imagePullSecret: ghcr-auth
+
+# Queue worker deployment settings
+worker:
+  enabled: true
+  horizon: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/<organization>/<package>
+    # tag: latest
+    # pullPolicy: IfNotPresent
+    # imagePullSecret: ghcr-auth
+
+# Base name used for resources (e.g., service, ingress)
+name: <project-name>
+
+# External secrets configuration (e.g., from Vault)
+secret:
+  enabled: true
+  path: <path-to-secret>
+  store: <secret-store-name>
+
+# Service definition for exposing the Laravel web container
+service:
+  type: ClusterIP
+  port: 80
+
+# Kubernetes resource requests/limits (CPU/memory)
+resources: {}
+
+# Ingress settings (e.g., for Traefik or NGINX)
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    "kubernetes.io/ingress.class": "traefik"
+    "traefik.ingress.kubernetes.io/router.entrypoints": "websecure"
+    "traefik.ingress.kubernetes.io/router.tls.certresolver": "myresolver"
+  hosts:
+    - host: <host>
+      paths:
+        - path: /  # Path-based routing (e.g., / routes to the Laravel app)
+          pathType: ImplementationSpecific
+  tls: []
