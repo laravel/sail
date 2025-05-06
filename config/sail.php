@@ -3,11 +3,11 @@
 return [
     'domain' => env('SAIL_DOMAIN', 'localhost'),
     'build' => [
-        'environments' => env('SAIL_BUILD_ENVIRONMENT'),
-        'architectures' => env('SAIL_BUILD_ARCHITECTURES'),
-        'repository' => env('SAIL_BUILD_REPOSITORY'),
-        'push' => env('SAIL_BUILD_PUSH'),
-        'organization' => env('SAIL_BUILD_ORGANIZATION'),
-        'version' => env('SAIL_BUILD_VERSION'),
+        'environments' => env('SAIL_BUILD_ENVIRONMENT', 'production'),
+        'architectures' => env('SAIL_BUILD_ARCHITECTURES', 'linux/amd64,linux/arm64'),
+        'repository' => env('SAIL_BUILD_REPOSITORY', 'sail'),
+        'push' => env('SAIL_BUILD_PUSH', false),
+        'organization' => env('SAIL_BUILD_ORGANIZATION', 'reyemtech'),
+        'version' => env('SAIL_BUILD_VERSION', "1.0.0"),
     ],
 ];

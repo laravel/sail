@@ -87,7 +87,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy Sail files
 COPY --from=runtime php.ini /etc/php/conf.d/99-sail.ini
-COPY --from=runtime laravel-queue /usr/local/bin/laravel-queue
 COPY --from=runtime nginx.conf /etc/nginx/http.d/default.conf
 COPY --from=runtime php-fpm.conf /etc/php/php-fpm.d/docker.conf
 
