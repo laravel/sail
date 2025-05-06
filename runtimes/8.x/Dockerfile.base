@@ -67,6 +67,8 @@ RUN apk add --no-cache \
     php${VERSION}-zip \
     php${VERSION}-zlib \
     php${VERSION}-phar \
+    php${VERSION}-iconv \
+    php${VERSION}-posix \
     php${VERSION}-pecl-redis \
     && ln -ns /usr/bin/php${VERSION} /usr/bin/php \
     && ln -ns /usr/sbin/php${VERSION}-fpm /usr/sbin/php-fpm \
