@@ -1,0 +1,8 @@
+adminer:
+    image: 'adminer:latest'
+    ports:
+        - '${FORWARD_ADMINER_PORT:-8065}:8080'
+    environment:
+        ADMINER_DESIGN: pepa-linha
+    networks:
+        - sail

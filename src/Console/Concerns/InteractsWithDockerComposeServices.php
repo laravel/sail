@@ -27,6 +27,7 @@ trait InteractsWithDockerComposeServices
         'rabbitmq',
         'selenium',
         'soketi',
+        'adminer',
     ];
 
     /**
