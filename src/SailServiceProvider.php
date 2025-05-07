@@ -2,6 +2,7 @@
 
 namespace Laravel\Sail;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Application as LaravelApplication;
@@ -9,6 +10,7 @@ use Laravel\Sail\Console\AddCommand;
 use Laravel\Sail\Console\BuildCommand;
 use Laravel\Sail\Console\InstallCommand;
 use Laravel\Sail\Console\PublishCommand;
+use Reyemtech\Sail\Http\Middleware\ForceHttps;
 
 class SailServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -19,6 +21,11 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function boot()
     {
+        if ($this->app->environment('production')) {
+            $kernel = $this->app->make(Kernel::class);
+            $kernel->pushMiddleware(ForceHttps::class);
+        }
+
         $this->registerCommands();
         $this->configurePublishing();
         $this->setupConfig();

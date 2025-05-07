@@ -4,6 +4,7 @@ FROM base
 RUN rm -rf /var/www/*
 
 COPY --from=app --chown=www-data:www-data / /var/www/
+COPY --from=app vendor/reyemtech/sail/preload/opcache.preload.php /var/www/bootstrap/opcache.preload.php
 
 # Recreate empty storage structure
 RUN rm -rf /var/www/storage /var/www/vendor /var/www/node_modules /var/www/.env* \
