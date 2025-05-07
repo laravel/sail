@@ -35,6 +35,7 @@ class BuildCommand extends Command
             $environments = $this->gatherEnvironmentsInteractively();
             $architectures = $this->gatherArchitecturesInteractively();
             $repository = $this->gatherRepositoryInteractively($environments);
+            $this->gatherDeploymentDomainsInteractively();
             $this->getVersionChoice();
             $this->writeConfig($environments, $architectures, $repository);
         } else {

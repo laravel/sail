@@ -412,6 +412,7 @@ trait InteractsWithDocker
         if ($config['environments']) {
             $config['environments'] = explode(',', $config['environments']);
             $config['architectures'] = explode(',', $config['architectures']);
+            $this->deploymentDomains = explode(',', config('sail.deploy.domains'));
             $this->output->writeln('');
             $this->output->writeln('<info>Previous build configuration found</info>');
             $this->output->writeln('');
@@ -422,6 +423,10 @@ trait InteractsWithDocker
             $this->output->writeln('<fg=yellow>==></> <fg=green>Architectures:</>');
             foreach ($config['architectures'] as $arch) {
                 $this->output->writeln('    <fg=green>-</> ' . $arch);
+            }
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Domains:</>');
+            foreach ($this->deploymentDomains as $domain) {
+                $this->output->writeln('    <fg=green>-</> ' . $domain);
             }
             $this->output->writeln('<fg=yellow>==></> <fg=green>Repository:</> ' . $config['repository']);
             $this->output->writeln('<fg=yellow>==></> <fg=green>Organization:</> ' . $config['organization']);
