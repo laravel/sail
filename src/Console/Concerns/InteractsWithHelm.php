@@ -143,6 +143,17 @@ trait InteractsWithHelm
         $values['secret']['path'] = config('sail.secret.path', 'secret/laravel/production');
         $values['secret']['store'] = config('sail.secret.store', 'vault-backend');
 
+        $domains = explode(',', config('sail.deploy.domains', 'reyemtech.com'));
+        foreach ($domains as $key => $domain) {
+            $values['ingress']['hosts'][$key]['host'] = $domain;
+            $values['ingress']['hosts'][$key]['paths'] = [
+                [
+                    'path' => '/',
+                    'pathType' => 'Prefix',
+                ],
+            ];
+        }
+
         $yaml = Yaml::dump($values, Yaml::DUMP_OBJECT_AS_MAP);
 
         file_put_contents($valuesPath, $yaml);

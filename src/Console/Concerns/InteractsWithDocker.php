@@ -99,6 +99,13 @@ trait InteractsWithDocker
     protected ?string $organization = null;
 
     /**
+     * The domains to be used for deployment.
+     *
+     * @var array<string>|null
+     */
+    protected ?array $deploymentDomains = null;
+
+    /**
      * Gather the desired Sail services using an interactive prompt.
      *
      * @return array
@@ -132,7 +139,7 @@ trait InteractsWithDocker
         if (!in_array('production', $environments)) {
             return 'none';
         }
-        if (function_exists('\Laravel\Prompts\multiselect')) {
+        if (function_exists('\Laravel\Prompts\select')) {
             $repositories = \Laravel\Prompts\select(
                 label: 'Which repository would you like to use?',
                 options: $this->repositories,
@@ -168,6 +175,71 @@ trait InteractsWithDocker
             );
         } else {
             $this->push = $this->confirm('Would you like to push the images to the repository?', config('sail.build.push', false));
+        }
+    }
+
+    /**
+     * Gather the desired Sail domains using an interactive prompt.
+     *
+     * @return array
+     */
+    protected function gatherDeploymentDomainsInteractively()
+    {
+        $this->deploymentDomains = explode(',', config('sail.deploy.domains'));
+        $domains = $this->deploymentDomains;
+        $domains = array_unique(array_merge(["** Add new domain **"], $this->deploymentDomains));
+
+        if (function_exists('\Laravel\Prompts\multiselect')) {
+            $selected = \Laravel\Prompts\multiselect(
+                label: 'Which repository would you like to use?',
+                options: $domains,
+                default: $this->deploymentDomains,
+                scroll: sizeof($domains) > 20 ? 15 : sizeof($domains),
+                required: true,
+            );
+        } else {
+            $selected = $this->choice('Which repository would you like to use?', $domains, 0, null, false);
+        }
+
+        if (in_array('** Add new domain **', $selected)) {
+            $this->deploymentDomains = array_diff($selected, ['** Add new domain **']);
+
+            do {
+                $this->gatherNewDomainInteractively();
+            } while ($this->moreDomains());
+        } else {
+            $this->deploymentDomains = $selected;
+        }
+
+        return $this->deploymentDomains;
+    }
+
+    protected function moreDomains()
+    {
+        if (function_exists('\Laravel\Prompts\confirm')) {
+            return \Laravel\Prompts\confirm(
+                label: 'Would you like to add another domain?',
+                default: false,
+            );
+        } else {
+            return $this->confirm('Would you like to add another domain?', false);
+        }
+    }
+
+    /**
+     * Gather the desired Sail domains using an interactive prompt.
+     *
+     * @return string
+     */
+    protected function gatherNewDomainInteractively(): void
+    {
+        if (function_exists('\Laravel\Prompts\input')) {
+            $this->deploymentDomains[] = \Laravel\Prompts\text(
+                label: 'What is the new domain?',
+                required: true,
+            );
+        } else {
+            $this->deploymentDomains[] = $this->ask('What is the new domain?');
         }
     }
 
@@ -467,6 +539,7 @@ trait InteractsWithDocker
         $writer->set('SAIL_BUILD_PUSH', $config['push'] ?? 'false');
         $writer->set('SAIL_BUILD_ORGANIZATION', $config['organization'] ?? '');
         $writer->set('SAIL_BUILD_VERSION', $config['version'] ?? '1.0.0');
+        $writer->set('SAIL_DEPLOY_DOMAINS', implode(',', $this->deploymentDomains) ?? '');
         $writer->write();
 
         Config::set('sail.build.environments', $config['environments'] ?? '');
@@ -475,6 +548,7 @@ trait InteractsWithDocker
         Config::set('sail.build.push', $config['push'] ? true : false);
         Config::set('sail.build.organization', $config['organization'] ?? '');
         Config::set('sail.build.version', $config['version'] ?? '1.0.0');
+        Config::set('sail.deploy.domains', implode(',', $this->deploymentDomains) ?? '');
     }
 
     /**

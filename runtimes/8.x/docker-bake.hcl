@@ -61,6 +61,7 @@ target "app-build" {
         "base" = "target:base-${tgt}"
         "app" = "${APP_DIR}"
         "runtime" = "${RUNTIME_DIR}"
+        "package" = "${RUNTIME_DIR}/../../"
     }
     dockerfile= "Dockerfile.app-build"
     platforms = PUSH ? split(",", ARCHS) : ["local"]

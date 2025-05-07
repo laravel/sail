@@ -10,4 +10,7 @@ return [
         'organization' => env('SAIL_BUILD_ORGANIZATION', 'reyemtech'),
         'version' => env('SAIL_BUILD_VERSION', "1.0.0"),
     ],
+    'deploy' => [
+        'domains' => env('SAIL_DEPLOY_DOMAINS', '.reyemtech.com'),
+    ],
 ];
