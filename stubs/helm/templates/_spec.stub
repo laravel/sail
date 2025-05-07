@@ -30,6 +30,13 @@ spec:
           {{ if eq .tier "web" }}
           ports:
             - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            failureThreshold: 5
           {{ end }}
           {{ if eq .tier "worker" }}
             {{ if .horizon }}

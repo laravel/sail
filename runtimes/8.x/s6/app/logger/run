@@ -1,9 +1,11 @@
 #!/bin/sh
 exec /bin/bash -c '
   while true; do
-    find /var/log -type f -name "*.log" | while read file; do
+    find /var/log /var/www/storage/log -type f -name "*.log" | while read file; do
       filename=$(basename "$file")
-      tail -n0 -F "$file" | awk -v f="$filename" '"'"'{ print "[" f "] " $0; fflush(); }'"'"' &
+      if ! pgrep -f "tail -n0 -F $file" > /dev/null; then
+        tail -n0 -F "$file" | awk -v f="$filename" '"'"'{ print "[" f "] " $0; fflush(); }'"'"' &
+      fi
     done
     sleep 10
   done
