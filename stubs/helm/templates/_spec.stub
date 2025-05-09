@@ -37,6 +37,13 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 20
             failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 3
           {{ end }}
           {{ if eq .tier "worker" }}
             {{ if .horizon }}
