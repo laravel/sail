@@ -233,7 +233,7 @@ trait InteractsWithDocker
      */
     protected function gatherNewDomainInteractively(): void
     {
-        if (function_exists('\Laravel\Prompts\input')) {
+        if (function_exists('\Laravel\Prompts\text')) {
             $this->deploymentDomains[] = \Laravel\Prompts\text(
                 label: 'What is the new domain?',
                 required: true,
@@ -407,7 +407,8 @@ trait InteractsWithDocker
         return $cmds;
     }
 
-    protected function getConfig() {
+    protected function getConfig()
+    {
         $config = config('sail.build');
         if ($config['environments']) {
             $config['environments'] = explode(',', $config['environments']);
@@ -467,7 +468,7 @@ trait InteractsWithDocker
         $options = ['no', 'major', 'minor', 'patch'];
         $version = config('sail.build.version');
 
-        if($version === null) {
+        if ($version === null) {
             return;
         }
 
@@ -545,6 +546,7 @@ trait InteractsWithDocker
         $writer->set('SAIL_BUILD_ORGANIZATION', $config['organization'] ?? '');
         $writer->set('SAIL_BUILD_VERSION', $config['version'] ?? '1.0.0');
         $writer->set('SAIL_DEPLOY_DOMAINS', implode(',', $this->deploymentDomains) ?? '');
+        $writer->set('VITE_DEV_SERVER_URL', "https://" . config('sail.domain') . "/vite");
         $writer->write();
 
         Config::set('sail.build.environments', $config['environments'] ?? '');
