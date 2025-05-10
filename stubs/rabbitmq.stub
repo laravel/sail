@@ -1,5 +1,6 @@
 rabbitmq:
     image: 'rabbitmq:4-management'
+    hostname: 'rabbitmq'
     ports:
         - '${FORWARD_RABBITMQ_PORT:-5672}:5672'
         - '${FORWARD_RABBITMQ_DASHBOARD_PORT:-15672}:15672'
