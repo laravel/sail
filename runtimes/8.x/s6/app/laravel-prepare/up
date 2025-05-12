@@ -12,4 +12,7 @@ foreground {
   composer install --optimize-autoloader --prefer-dist
 }
 foreground { php artisan migrate --force }
+
+foreground { php artisan optimize }
+
 foreground { echo ready >&3 }
