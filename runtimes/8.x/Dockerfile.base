@@ -70,6 +70,7 @@ RUN apk add --no-cache \
     php${VERSION}-iconv \
     php${VERSION}-posix \
     php${VERSION}-pecl-redis \
+    php${VERSION}-xdebug \
     && ln -ns /usr/bin/php${VERSION} /usr/bin/php \
     && ln -ns /usr/sbin/php${VERSION}-fpm /usr/sbin/php-fpm \
     && ln -ns /etc/php${VERSION} /etc/php \
