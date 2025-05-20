@@ -1,7 +1,4 @@
 #!/usr/bin/execlineb
 with-contenv
 
-cd /var/www
-
-if { php artisan horizon:publish --help }
-background { php artisan horizon }
+foreground { /usr/local/bin/run-horizon }

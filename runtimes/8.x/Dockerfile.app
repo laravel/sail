@@ -23,6 +23,7 @@ WORKDIR /var/www/
 # COPY --from=base /etc/s6-linux-init /etc/s6-linux-init
 # COPY --from=runtime ./s6/app /etc/s6-overlay/s6-rc.d/
 COPY --from=runtime ./s6/local /etc/s6-overlay/s6-rc.d/
+COPY --from=runtime --chmod=775 ./run-horizon.sh /usr/local/bin/run-horizon
 
 # ARG WWWGROUP=1000
 # ARG WWWUSER=1000
