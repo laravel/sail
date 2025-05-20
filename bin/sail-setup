@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 UNAMEOUT="$(uname -s)"
-DOMAIN=$(grep -E '^APP_URL=' .env | cut -d '=' -f2 | sed 's|http[s]*://||' | cut -d '/' -f1)
+DOMAIN=$(grep -E '^APP_URL=' .env | cut -d '=' -f2 | sed 's|http[s]*://||' | cut -d '/' -f1 | tr -d '"')
 SAIL_IP=$(grep -E '^SAIL_IP=' .env | cut -d '=' -f2 | sed 's|http[s]*://||' | cut -d '/' -f1 | tr -d '"')
 
 # Verify operating system is supported...
