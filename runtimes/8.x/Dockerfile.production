@@ -16,6 +16,7 @@ WORKDIR /var/www/
 # COPY --from=base /usr/bin/composer /usr/bin/composer
 # COPY --from=base /usr/local/bin /usr/local/bin
 COPY --from=app-build /var/www/ /var/www/
+COPY --from=runtime opcache.ini /etc/php/conf.d/98-opcache.ini
 
 # S6
 # COPY --from=base /init /init

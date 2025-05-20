@@ -60,6 +60,7 @@ RUN apk add --no-cache \
     php${VERSION}-fileinfo \
     php${VERSION}-json \
     php${VERSION}-session \
+    php${VERSION}-sodium \
     php${VERSION}-simplexml \
     php${VERSION}-tokenizer \
     php${VERSION}-xmlreader \

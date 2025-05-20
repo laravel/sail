@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 # Global defaults applied to all components (web, worker, etc.)
-globals:
+global:
   # replicaCount: 2
   tag: latest
   pullPolicy: IfNotPresent
