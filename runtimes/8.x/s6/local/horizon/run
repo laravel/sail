@@ -4,7 +4,7 @@ with-contenv
 cd /var/www
 
 background {
-    ifelse { php artisan | grep -q horizon }
+    ifelse { php artisan horizon:publish --help }
     { php artisan horizon }
     sleep infinity
 }
