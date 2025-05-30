@@ -55,5 +55,9 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ .main.name | default "website" | lower }}-environment
+            {{- if .main.typesense.enabled }}
+            - secretRef:
+                name: {{ .main.typesense.secret | default "typesense" | lower }}
+            {{- end }}
 {{ end }}
 {{ end }}

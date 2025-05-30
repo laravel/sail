@@ -48,6 +48,10 @@ service:
 # Kubernetes resource requests/limits (CPU/memory)
 resources: {}
 
+# Typesense
+typesense:
+  enabled: false
+
 # Ingress settings (e.g., for Traefik or NGINX)
 ingress:
   enabled: true
