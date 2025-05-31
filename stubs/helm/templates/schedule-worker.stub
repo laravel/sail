@@ -1,0 +1,30 @@
+{{- if .Values.scheduler.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}-scheduler
+  labels:
+    app: {{ .Values.name | default "website" | lower}}
+    tier: scheduler
+spec:
+  schedule: {{ .Values.scheduler.schedule | default "* * * * *" }}
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: scheduler
+              image: "{{ .Values.worker.image.repository | lower }}:{{ .Values.worker.image.tag | default .Values.global.tag | default "latest" | lower }}"
+              imagePullPolicy: {{ .Values.worker.image.pullPolicy | default .Values.global.pullPolicy | default "IfNotPresent" }}
+              command: ["php", "artisan", "schedule:run"]
+            envFrom:
+              - secretRef:
+                  name: {{ .Values.name | default "website" | lower }}-environment
+              {{- if .Values.typesense.enabled }}
+              - secretRef:
+                  name: {{ .Values.typesense.secret | default "typesense" | lower }}
+              {{- end }}
+          restartPolicy: OnFailure
+{{- end -}}

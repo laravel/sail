@@ -31,6 +31,11 @@ worker:
     # pullPolicy: IfNotPresent
     # imagePullSecret: ghcr-auth
 
+# Laravel scheduler configuration
+scheduler:
+  enabled: true
+  schedule: "*/5 * * * *"
+
 # Base name used for resources (e.g., service, ingress)
 name: <project-name>
 

@@ -4,6 +4,7 @@
     "global" (.Values.global | default dict)
     "secret" (.Values.secret | default dict)
     "name" (.Values.name | default "website")
+    "typesense" (.Values.typesense | default dict)
 }}
 {{- $ctx := merge (dict "tier" $tier "main" $main) $scoped }}
 {{- include "sail.laravelSpec" $ctx }}

@@ -15,4 +15,6 @@ foreground { php artisan migrate --force }
 
 foreground { php artisan optimize }
 
+foregroud { chown -R www-data:www-data /var/www/storage/logs }
+
 foreground { echo ready >&3 }
