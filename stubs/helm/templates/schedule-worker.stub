@@ -14,6 +14,8 @@ spec:
     spec:
       template:
         spec:
+          imagePullSecrets:
+            - name: {{ .Values.worker.imagePullSecret | default .Values.global.imagePullSecret }}
           containers:
             - name: scheduler
               image: "{{ .Values.worker.image.repository | lower }}:{{ .Values.worker.image.tag | default .Values.global.tag | default "latest" | lower }}"
