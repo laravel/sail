@@ -7,7 +7,7 @@ COPY --from=app --chown=www-data:www-data / /var/www/
 COPY --from=package preload/opcache.preload.php /var/www/bootstrap/opcache.preload.php
 
 # Recreate empty storage structure
-RUN rm -rf /var/www/storage /var/www/vendor /var/www/node_modules /var/www/.env* \
+RUN rm -rf /var/www/storage /var/www/vendor /var/www/node_modules /var/www/.env* /var/www/public/hot \
     && mkdir -p /var/www/storage/app \
     /var/www/bootstrap/cache \
     /var/www/storage/framework/cache \

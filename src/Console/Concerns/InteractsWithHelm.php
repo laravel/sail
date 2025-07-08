@@ -140,7 +140,7 @@ trait InteractsWithHelm
         $values['web']['image']['repository'] = "{$repository}-web";
         $values['worker']['image']['repository'] = "{$repository}-worker";
 
-        $values['secret']['path'] = config('sail.secret.path', 'secret/laravel/production');
+        $values['secret']['path'] = config('sail.secret.path', "secret/laravel/{$this->projectName}");
         $values['secret']['store'] = config('sail.secret.store', 'vault-backend');
 
         $domains = explode(',', config('sail.deploy.domains', 'reyemtech.com'));
