@@ -1,5 +1,5 @@
 rabbitmq:
-    image: 'rabbitmq:4-management'
+    image: 'rabbitmq:4-management-alpine'
     hostname: 'rabbitmq'
     ports:
         - '${FORWARD_RABBITMQ_PORT:-5672}:5672'
