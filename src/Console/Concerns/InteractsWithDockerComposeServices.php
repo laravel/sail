@@ -327,7 +327,7 @@ trait InteractsWithDockerComposeServices
     }
 
     /**
-     * Get the path to an existing compose file or fall back to default `compose.yaml`.
+     * Get the path to an existing Compose file or fall back to a default of `compose.yaml`.
      *
      * @return string
      */
