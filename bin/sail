@@ -141,6 +141,7 @@ fi
 # Define environment variables...
 export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
+export MARIADB_SERVICE=${MARIADB_SERVICE:-"mariadb"}
 export APP_USER=${APP_USER:-"sail"}
 export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
@@ -501,7 +502,7 @@ elif [ "$1" == "mariadb" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(mariadb bash -c)
+        ARGS+=("$MARIADB_SERVICE" bash -c)
         ARGS+=("MYSQL_PWD=\${MYSQL_PASSWORD} mariadb -u \${MYSQL_USER} \${MYSQL_DATABASE}")
     else
         sail_is_not_running
