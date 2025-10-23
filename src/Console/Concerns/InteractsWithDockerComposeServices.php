@@ -210,6 +210,8 @@ trait InteractsWithDockerComposeServices
             $environment = str_replace('RABBITMQ_HOST=127.0.0.1', 'RABBITMQ_HOST=rabbitmq', $environment);
         }
 
+        $environment = str_replace('# PHP_CLI_SERVER_WORKERS=4', 'PHP_CLI_SERVER_WORKERS=4', $environment);
+
         file_put_contents($this->laravel->basePath('.env'), $environment);
     }
 
