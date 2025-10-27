@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^2.0"
     },
     "bin": [
         "bin/sail"
