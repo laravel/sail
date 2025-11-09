@@ -19,11 +19,7 @@ rustfs:
     networks:
         - sail
     healthcheck:
-        test:
-          - "CMD"
-          - "sh"
-          - "-c"
-          - "curl -f http://127.0.0.1:9000/health && curl -f http://127.0.0.1:9001/health"
+        test: ["CMD", "sh", "-c", "curl -f http://127.0.0.1:9000/health && curl -f http://127.0.0.1:9001/health"]
         interval: 30s
         timeout: 10s
         retries: 3
