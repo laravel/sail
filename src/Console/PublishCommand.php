@@ -39,6 +39,7 @@ class PublishCommand extends Command
             $this->composePath(),
             str_replace(
                 [
+                    './vendor/laravel/sail/runtimes/8.5',
                     './vendor/laravel/sail/runtimes/8.4',
                     './vendor/laravel/sail/runtimes/8.3',
                     './vendor/laravel/sail/runtimes/8.2',
@@ -48,6 +49,7 @@ class PublishCommand extends Command
                     './vendor/laravel/sail/database/pgsql'
                 ],
                 [
+                    './docker/8.5',
                     './docker/8.4',
                     './docker/8.3',
                     './docker/8.2',

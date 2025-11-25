@@ -122,7 +122,7 @@ trait InteractsWithDockerComposeServices
 
         $yaml = Yaml::dump($compose, Yaml::DUMP_OBJECT_AS_MAP);
 
-        $yaml = str_replace('{{PHP_VERSION}}', $this->hasOption('php') ? $this->option('php') : '8.4', $yaml);
+        $yaml = str_replace('{{PHP_VERSION}}', $this->hasOption('php') ? $this->option('php') : '8.5', $yaml);
 
         file_put_contents($composePath, $yaml);
     }
