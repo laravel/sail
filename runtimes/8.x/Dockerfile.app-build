@@ -7,7 +7,8 @@ COPY --from=app --chown=www-data:www-data / /var/www/
 COPY --from=package preload/opcache.preload.php /var/www/bootstrap/opcache.preload.php
 
 # Recreate empty storage structure
-RUN rm -rf /var/www/storage /var/www/vendor /var/www/node_modules /var/www/.env* /var/www/public/hot \
+RUN find /var/www/storage ! -name '*.json' -mindepth 1 -delete \
+    && rm -rf /var/www/vendor /var/www/node_modules /var/www/.env* /var/www/public/hot \
     && mkdir -p /var/www/storage/app \
     /var/www/bootstrap/cache \
     /var/www/storage/framework/cache \
@@ -20,7 +21,7 @@ RUN chown -R www-data:www-data /var/www
 RUN chmod -R 755 /var/www/
 
 # Install PHP dependencies using Composer
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 # Install and build frontend assets using npm
 RUN npm ci
@@ -29,3 +30,11 @@ RUN npm run build
 
 # Clean up build artifacts to reduce final image size
 RUN rm -rf /var/www/node_modules
+RUN rm -rf /var/www/vendor
+
+RUN rm -rf /var/www/storage/framework/cache/*
+RUN rm -rf /var/www/storage/framework/sessions/*
+RUN rm -rf /var/www/storage/framework/views/*
+RUN rm -rf /var/www/storage/logs/*
+
+RUN rm -rf /var/www/bootstrap/cache/*
