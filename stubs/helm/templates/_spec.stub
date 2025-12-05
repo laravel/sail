@@ -47,7 +47,7 @@ spec:
           {{ end }}
           {{ if eq .tier "worker" }}
             {{ if .horizon }}
-          command: ["php", "artisan", "horizon"]
+          command: ["/usr/local/bin/run-horizon"]
             {{ else }}
           command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--no-interaction"]
             {{ end }}

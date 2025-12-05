@@ -2,6 +2,8 @@
 
 cd /var/www
 
+composer install --optimize-autoloader --prefer-dist --no-dev
+
 # Check if horizon command exists (still optional)
 php artisan horizon:publish --help > /dev/null 2>&1 || exit 0
 
