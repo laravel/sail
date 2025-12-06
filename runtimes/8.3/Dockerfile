@@ -44,6 +44,7 @@ RUN apt-get update && apt-get upgrade -y \
     && npm install -g npm \
     && npm install -g pnpm \
     && npm install -g bun \
+    && npm install -g rust-just \
     && npx playwright install-deps \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /etc/apt/keyrings/yarn.gpg >/dev/null \
     && echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
