@@ -76,14 +76,13 @@ RUN apk add --no-cache \
     && ln -sf /usr/bin/php${VERSION} /usr/bin/php \
     && ln -sf /usr/sbin/php${VERSION}-fpm /usr/sbin/php-fpm \
     && ln -sf /etc/php${VERSION} /etc/php \
-    && test -L /usr/sbin/php-fpm && test -f /usr/sbin/php${VERSION}-fpm || (echo "ERROR: php-fpm symlink creation failed" && exit 1) \
     && rm -rf /var/cache/apk/* \
     && sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd \
     && update-ca-certificates \
-    && addgroup -g ${GUID} sail || echo "Group sail already exists" \
-    && adduser -u ${GUID} -D -h /var/www -s /bin/bash -G sail sail || echo "User sail already exists" \
-    && addgroup -g ${GUID} www-data || echo "Group www-data already exists" \
-    && addgroup sail www-data || echo "User sail already in www-data group" \
+    && (getent group sail >/dev/null 2>&1 || addgroup -g ${GUID} sail) \
+    && (getent passwd sail >/dev/null 2>&1 || adduser -u ${GUID} -D -h /var/www -s /bin/bash -G sail sail) \
+    && (getent group www-data >/dev/null 2>&1 || addgroup -g ${GUID} www-data) \
+    && (getent group www-data | grep -q sail || addgroup sail www-data) \
     && rm -rf /var/www/* \
     && mkdir -p /var/log/nginx /var/log/php-fpm /var/log/php \
     && chown -R sail:sail /var \

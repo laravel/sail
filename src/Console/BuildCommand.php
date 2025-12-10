@@ -58,11 +58,13 @@ class BuildCommand extends Command
             return 1;
         }
 
-        $config = $this->configFromOptions($bump) ?? $this->getConfig($this->option('use-previous'));
+        $config = $this->configFromOptions($bump);
 
         if ($this->validationFailed) {
             return 1;
         }
+
+        $config = $config ?? $this->getConfig($this->option('use-previous'));
 
         if (! $config) {
             $environments = $this->gatherEnvironmentsInteractively();

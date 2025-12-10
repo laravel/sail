@@ -324,6 +324,7 @@ trait InteractsWithDocker
             $args['REGISTRY'] = $repository;
         }
 
+        $commands = [];
         $path = realpath(InstalledVersions::getInstallPath('reyemtech/sail'));
         if (! is_dir("{$path}/certs")) {
             $commands[] = "{$path}/bin/sail-setup";
@@ -339,6 +340,9 @@ trait InteractsWithDocker
         foreach ($args as $key => $value) {
             if (is_array($value)) {
                 $bakeCommand .= ' '.$key.'='.implode(',', $value);
+            } elseif (is_bool($value)) {
+                // HCL requires "true" or "false" as strings for boolean variables
+                $bakeCommand .= ' '.$key.'='.($value ? 'true' : 'false');
             } else {
                 $bakeCommand .= ' '.$key.'='.$value;
             }
@@ -602,9 +606,24 @@ trait InteractsWithDocker
 
         $startTime = time();
         $lastProgress = 0;
+        $hasError = false;
+        $errorOutput = '';
 
-        return $process->run(function ($type, $line) use (&$lastProgress, $startTime) {
+        $exitCode = $process->run(function ($type, $line) use (&$lastProgress, $startTime, &$hasError, &$errorOutput) {
             $elapsed = time() - $startTime;
+
+            // Capture error output - check for various error patterns
+            $lineLower = strtolower($line);
+            if ($type === Process::ERR ||
+                stripos($line, 'ERROR') !== false ||
+                stripos($line, 'error:') !== false ||
+                stripos($line, 'failed to') !== false ||
+                stripos($line, 'Invalid value') !== false ||
+                stripos($line, 'failed to parse') !== false ||
+                stripos($line, 'failed to solve') !== false) {
+                $hasError = true;
+                $errorOutput .= $line;
+            }
 
             // Show progress indicator every 5 seconds
             if ($elapsed - $lastProgress >= 5) {
@@ -615,10 +634,43 @@ trait InteractsWithDocker
             }
 
             // Show important build output
-            if (stripos($line, 'error') !== false || stripos($line, 'warning') !== false || stripos($line, '#') !== false) {
+            if (stripos($line, 'error') !== false || stripos($line, 'warning') !== false || stripos($line, '#') !== false || stripos($line, 'ERROR') !== false) {
                 $this->output->writeln('');
                 $this->output->write('    '.$line);
             }
         });
+
+        // Check for errors in stderr as well
+        $stderr = $process->getErrorOutput();
+        $stdout = $process->getOutput();
+
+        // Check both stdout and stderr for errors (docker-bake errors can appear in either)
+        $allOutput = $stdout.$stderr;
+        if (! empty($allOutput) && (
+            stripos($allOutput, 'ERROR') !== false ||
+            stripos($allOutput, 'error:') !== false ||
+            stripos($allOutput, 'failed to solve') !== false ||
+            stripos($allOutput, 'failed to parse') !== false ||
+            stripos($allOutput, 'Invalid value') !== false
+        )) {
+            $hasError = true;
+            $errorOutput .= $allOutput;
+        }
+
+        // If process failed or had errors, return non-zero
+        if ($exitCode !== 0) {
+            return $exitCode;
+        }
+
+        if ($hasError) {
+            // Process returned 0 but had errors in output - this shouldn't happen but handle it
+            $this->output->writeln('');
+            $this->components->error('Build completed but errors were detected:');
+            $this->output->writeln($errorOutput);
+
+            return 1;
+        }
+
+        return $exitCode;
     }
 }
