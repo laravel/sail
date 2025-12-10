@@ -6,9 +6,10 @@ WORKDIR /var/www/
 ENV TZ=UTC
 
 ARG PHP_VERSION=8.4
+ARG PHP_VERSION_NUM=84
 ARG GUID=1000
 
-ENV VERSION=${PHP_VERSION//./}
+ENV VERSION=${PHP_VERSION_NUM}
 
 # Copy mkcert root CA certificate
 COPY --from=runtime certs/mkcert-rootCA.pem /usr/local/share/ca-certificates/mkcert-rootCA.crt

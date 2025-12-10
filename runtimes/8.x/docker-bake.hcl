@@ -52,6 +52,7 @@ target "base" {
     args = {
         BASE_IMAGE = "php:${PHP_VERSION}-${tgt}-alpine"
         PHP_VERSION = "${PHP_VERSION}"
+        PHP_VERSION_NUM = replace("${PHP_VERSION}", ".", "")
     }
 }
 
