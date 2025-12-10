@@ -21,7 +21,8 @@ RUN chown -R sail:sail /var/www
 RUN chmod -R 755 /var/www/
 
 # Install PHP dependencies using Composer
-RUN composer install --optimize-autoloader
+# Skip scripts during build to avoid database connection requirements
+RUN composer install --optimize-autoloader --no-scripts
 
 # Install and build frontend assets using npm
 RUN npm ci

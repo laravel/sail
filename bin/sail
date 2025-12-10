@@ -207,7 +207,7 @@ function detect_app_service {
     if SERVICES=$("${DOCKER_COMPOSE[@]}" config --services 2>/dev/null); then
         # Prefer laravel.test if present, otherwise first service
         for SVC in $SERVICES; do
-            if [ "$SVC" == "laravel.test" ]; then
+            if [ "$SVC" = "laravel.test" ] || [ "$SVC" = "laravel" ]; then
                 echo "$SVC"
                 return
             fi
