@@ -60,7 +60,7 @@ php artisan sail:build \
   --repository=ghcr.io \
   --organization=acme \
   --domains=app.example.com \
-  --version=1.2.3 \
+  --build-version=1.2.3 \
   --push \
   --use-previous \
   --bump=patch

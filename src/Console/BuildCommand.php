@@ -23,7 +23,7 @@ class BuildCommand extends Command
                             {--repository= : Container registry host (or "none" for local only)}
                             {--organization= : Registry organization / namespace}
                             {--domains= : Comma-separated deployment domains}
-                            {--version= : Version to use for the build}
+                            {--build-version= : Version to use for the build}
                             {--push : Push built images to the registry}
                             {--use-previous : Reuse the last saved build configuration without prompts}
                             {--bump= : Bump the version (patch, minor, major, no)}';
@@ -91,7 +91,7 @@ class BuildCommand extends Command
         $repoOption = $this->option('repository');
         $orgOption = $this->option('organization');
         $domainsOption = $this->option('domains');
-        $versionOption = $this->option('version');
+        $versionOption = $this->option('build-version');
         $pushOption = $this->option('push');
 
         $overridesProvided = $envOption !== null

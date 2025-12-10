@@ -17,7 +17,7 @@
   - `--repository=ghcr.io|registry.gitlab.com|docker.io|none`
   - `--organization=acme`
   - `--domains=app.example.com,api.example.com`
-  - `--version=1.2.3`
+  - `--build-version=1.2.3`
   - `--push` (push built images)
   - `--use-previous` (reuse last saved config, no prompts)
   - `--bump=patch|minor|major|no` (increments version; `no` keeps current)
@@ -33,7 +33,7 @@
 
 ## Common Tasks
 - Build with stored config and bump patch: `php artisan sail:build --use-previous --bump=patch`.
-- Fully specified build: `php artisan sail:build --environments=production --architectures=linux/amd64,linux/arm64 --repository=ghcr.io --organization=acme --domains=app.example.com --version=1.2.3 --push --bump=no`.
+- Fully specified build: `php artisan sail:build --environments=production --architectures=linux/amd64,linux/arm64 --repository=ghcr.io --organization=acme --domains=app.example.com --build-version=1.2.3 --push --bump=no`.
 
 ## AI Hints
 - Prefer non-interactive flags in automation (CI/CD).
