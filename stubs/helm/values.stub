@@ -57,7 +57,20 @@ service:
   port: 80
 
 # Kubernetes resource requests/limits (CPU/memory)
-resources: {}
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Pod/container security context defaults
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  allowPrivilegeEscalation: false
 
 # Typesense
 typesense:

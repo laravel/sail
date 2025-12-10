@@ -86,6 +86,11 @@ trait InteractsWithDocker
     protected bool $reuseConfig = false;
 
     /**
+     * Indicates if CLI validation failed.
+     */
+    protected bool $validationFailed = false;
+
+    /**
      * The name of the organization to be used.
      */
     protected ?string $organization = null;

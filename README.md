@@ -8,28 +8,69 @@
 
 ## Introduction
 
-Sail provides a Docker powered local development experience for Laravel that is compatible with macOS, Windows (WSL2), and Linux. Other than Docker, no software or libraries are required to be installed on your local computer before using Sail. Sail's simple CLI means you can start building your Laravel application without any previous Docker experience.
+This fork of Laravel Sail adds:
+- Helm chart generation (with scheduler vendor PVC support)
+- Non-interactive `sail:build` flags (`--use-previous`, `--bump`, etc.)
+- Laravel Boost guideline for IDE/AI context
+- Multi-stage Docker builds (bake) shared across PHP versions (8.x/8.5)
 
-#### Inspiration
+## Quick start
 
-Laravel Sail is inspired by and derived from [Vessel](https://github.com/shipping-docker/vessel) by [Chris Fidao](https://github.com/fideloper). If you're looking for a thorough introduction to Docker, check out Chris' course: [Shipping Docker](https://serversforhackers.com/shipping-docker).
+```bash
+composer require reyemtech/sail --dev
+php artisan sail:install --php=8.4   # or 8.5
+php artisan sail:publish
+```
 
-## Official Documentation
+## Build with bake + Helm
 
-Documentation for Sail can be found on the [Laravel website](https://laravel.com/docs/sail).
+```bash
+php artisan sail:build \
+  --environments=production \
+  --architectures=linux/amd64,linux/arm64 \
+  --repository=ghcr.io \
+  --organization=acme \
+  --domains=app.example.com \
+  --version=1.2.3 \
+  --push \
+  --use-previous \
+  --bump=patch
+```
 
-## Contributing
+Key flags:
+- `--use-previous`: reuse the last saved config without prompts
+- `--bump=patch|minor|major|no`: bump version non-interactively
+- `--repository=none`: local-only build (disables push)
 
-Thank you for considering contributing to Sail! You can read the contribution guide [here](.github/CONTRIBUTING.md).
+Validation:
+- Environments must be in `local, production`
+- Architectures must be in the allowed list from the package
+- Repository must be one of the known registries or `none`
 
-## Code of Conduct
+## Helm chart notes
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Stubs live in `stubs/helm`
+- Scheduler vendor PVC: enabled by default (`scheduler.vendorPvc.*`), default size 5Gi, storage class `sata`
+- Resources & security defaults:
+  - `resources` requests/limits set in `values.stub`
+  - `securityContext` defaults to non-root, fsGroup 1000
+- Probes: web gets readiness/liveness on `/up`
 
-## Security Vulnerabilities
+## Docker runtime
 
-Please review [our security policy](https://github.com/laravel/sail/security/policy) on how to report security vulnerabilities.
+- PHP 8.x bake files reside in `runtimes/8.x`
+- PHP 8.5 reuses the 8.x bake structure (`runtimes/8.5/docker-bake.hcl` targets 8.x, PHP_VERSION=8.5)
+- Multi-stage targets: base, app, production (cli/fpm)
 
-## License
+## Rollback (Helm)
 
-Laravel Sail is open-sourced software licensed under the [MIT license](LICENSE.md).
+```bash
+helm rollback <release> <revision>
+helm history <release>
+```
+
+## Contributing / Security
+
+- Issues: https://github.com/reyemtech/sail/issues
+- Security: https://github.com/laravel/sail/security/policy
+- License: MIT

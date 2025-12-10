@@ -19,6 +19,10 @@ spec:
         app: {{ .main.name | default "website" | lower }}
         tier: {{ .tier }}
     spec:
+      {{- if .securityContext }}
+      securityContext:
+        {{- toYaml .securityContext | nindent 8 }}
+      {{- end }}
       {{ if and .main.secret.enabled (or .imagePullSecret .main.global.imagePullSecret) }}
       imagePullSecrets:
         - name: {{ .imagePullSecret | default .main.global.imagePullSecret }}
@@ -27,6 +31,10 @@ spec:
         - name: {{ .tier }}
           image: {{ .image.repository | default "ghcr.io/example/app" | lower }}:{{ .image.tag | default .main.global.tag | default "latest" | lower }}
           imagePullPolicy: {{ .image.pullPolicy | default .main.global.pullPolicy | default "IfNotPresent" }}
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{ if eq .tier "web" }}
           ports:
             - containerPort: 80

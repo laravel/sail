@@ -45,6 +45,10 @@ class BuildCommand extends Command
 
         $config = $this->configFromOptions($bump) ?? $this->getConfig($this->option('use-previous'));
 
+        if ($this->validationFailed) {
+            return 1;
+        }
+
         if (! $config) {
             $environments = $this->gatherEnvironmentsInteractively();
             $architectures = $this->gatherArchitecturesInteractively();
@@ -133,6 +137,12 @@ class BuildCommand extends Command
             Config::set('sail.build.version', $version);
         }
 
+        if ($this->hasInvalidOptions($environments, $architectures, $repository)) {
+            $this->validationFailed = true;
+
+            return null;
+        }
+
         return [
             'environments' => $environments,
             'architectures' => $architectures,
@@ -141,5 +151,36 @@ class BuildCommand extends Command
             'push' => $this->push,
             'version' => $version,
         ];
+    }
+
+    /**
+     * Validate CLI overrides against allowed values.
+     */
+    protected function hasInvalidOptions(array $environments, array $architectures, string $repository): bool
+    {
+        $invalidEnvs = array_diff($environments, $this->environments);
+        if ($invalidEnvs) {
+            $this->components->error('Invalid environments: '.implode(', ', $invalidEnvs).'. Allowed: '.implode(', ', $this->environments));
+
+            return true;
+        }
+
+        $invalidArchs = array_diff($architectures, $this->archs);
+        if ($invalidArchs) {
+            $this->components->error('Invalid architectures: '.implode(', ', $invalidArchs).'. Allowed: '.implode(', ', $this->archs));
+
+            return true;
+        }
+
+        $allowedRepositories = array_keys($this->repositories);
+        $allowedRepositories[] = 'none';
+
+        if ($repository && ! in_array($repository, $allowedRepositories, true)) {
+            $this->components->error('Invalid repository: '.$repository.'. Allowed: '.implode(', ', $allowedRepositories));
+
+            return true;
+        }
+
+        return false;
     }
 }
