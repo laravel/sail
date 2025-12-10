@@ -78,11 +78,14 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/* \
     && sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd \
     && update-ca-certificates \
+    && addgroup -g ${GUID} sail || echo "Group sail already exists" \
+    && adduser -u ${GUID} -D -h /var/www -s /bin/bash -G sail sail || echo "User sail already exists" \
     && addgroup -g ${GUID} www-data || echo "Group www-data already exists" \
-    && adduser -u ${GUID} -D -h /var/www -s /bin/bash -G www-data www-data || echo "User www-data already exists" \
+    && addgroup sail www-data || echo "User sail already in www-data group" \
     && rm -rf /var/www/* \
     && mkdir -p /var/log/nginx /var/log/php-fpm /var/log/php \
-    && chown -R www-data:www-data /var \
+    && chown -R sail:sail /var \
+    && chown -R sail:sail /var/www \
     && chmod -R 755 /var \
     && rm -rf /usr/local/etc/php-fpm.d/docker.conf
 

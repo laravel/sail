@@ -7,7 +7,7 @@ set -e
 if [ -n "$NIGHTWATCH_TOKEN" ]; then
   # Check if the command nightwatch:agent exists in Artisan
   if php artisan | grep -q 'nightwatch:agent'; then
-    exec s6-setuidgid www-data php artisan nightwatch:agent
+    exec s6-setuidgid sail php artisan nightwatch:agent
   else
     echo "Command nightwatch:agent not found. Skipping nightwatch agent."
   fi

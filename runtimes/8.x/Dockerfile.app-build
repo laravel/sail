@@ -3,7 +3,7 @@ FROM base
 # Clean application directory
 RUN rm -rf /var/www/*
 
-COPY --from=app --chown=www-data:www-data / /var/www/
+COPY --from=app --chown=sail:sail / /var/www/
 COPY --from=package preload/opcache.preload.php /var/www/bootstrap/opcache.preload.php
 
 # Recreate empty storage structure
@@ -17,7 +17,7 @@ RUN find /var/www/storage ! -name '*.json' -mindepth 1 -delete \
     /var/www/storage/logs
 
 # Set proper permissions
-RUN chown -R www-data:www-data /var/www
+RUN chown -R sail:sail /var/www
 RUN chmod -R 755 /var/www/
 
 # Install PHP dependencies using Composer

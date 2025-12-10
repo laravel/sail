@@ -1,4 +1,4 @@
 #!/bin/sh
 exec 2>&1
 cd /var/www
-exec with-contenv su-exec www-data /usr/sbin/php-fpm84 -F
+exec with-contenv su-exec sail /usr/sbin/php${VERSION}-fpm -F
