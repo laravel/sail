@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Sail wrapper - finds and executes the nearest project's sail script
+# This allows multiple Sail projects on the same machine without PATH conflicts
+
+set -euo pipefail
+
+# Walk up the directory tree to find a project with vendor/bin/sail
+dir="$(pwd -P)"
+
+while [ "$dir" != "/" ]; do
+    if [ -x "$dir/vendor/bin/sail" ]; then
+        exec "$dir/vendor/bin/sail" "$@"
+    fi
+
+    # Also check for docker-compose.yml as a hint this might be a Sail project
+    if [ -f "$dir/docker-compose.yml" ] || [ -f "$dir/compose.yaml" ]; then
+        # Check if vendor/bin/sail exists (might not be executable yet)
+        if [ -f "$dir/vendor/bin/sail" ]; then
+            exec "$dir/vendor/bin/sail" "$@"
+        fi
+    fi
+
+    dir="$(dirname "$dir")"
+done
+
+# No project found
+echo "Error: No Laravel Sail project found from $(pwd) upward." >&2
+echo "" >&2
+echo "Make sure you're in a Laravel project directory with Sail installed." >&2
+echo "You can install Sail with: composer require reyemtech/sail --dev" >&2
+
+exit 1

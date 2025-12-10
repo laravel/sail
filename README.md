@@ -22,6 +22,35 @@ php artisan sail:install --php=8.4   # or 8.5
 php artisan sail:publish
 ```
 
+## Multi-project support
+
+This fork includes a `sail-wrapper` that automatically finds and runs the nearest project's Sail script. This allows you to use `sail` from any directory when working with multiple Sail projects on the same machine.
+
+**Automatic installation**: The wrapper is automatically installed to `~/.local/bin/sail` (or `~/bin` if available) when you install or update the package via Composer.
+
+**Usage**: Simply run `sail` from any directory, and it will automatically find and execute the nearest project's `vendor/bin/sail`:
+
+```bash
+cd /path/to/project-a
+sail up -d        # Uses project-a's Sail
+
+cd /path/to/project-b
+sail artisan migrate  # Uses project-b's Sail
+```
+
+**Manual installation**: If automatic installation fails, you can manually install:
+
+```bash
+cp vendor/reyemtech/sail/bin/sail-wrapper ~/.local/bin/sail
+chmod +x ~/.local/bin/sail
+```
+
+**Note**: Make sure `~/.local/bin` (or `~/bin`) is in your PATH. Add to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
 ## Build with bake + Helm
 
 ```bash
