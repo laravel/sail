@@ -35,6 +35,12 @@ worker:
 scheduler:
   enabled: true
   schedule: "*/5 * * * *"
+  vendorPvc:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    storageClassName: "sata"
 
 # Base name used for resources (e.g., service, ingress)
 name: <project-name>

@@ -1,0 +1,18 @@
+{{- if and (.Values.scheduler.enabled) (.Values.scheduler.vendorPvc.enabled | default true) -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.name | default "website" | lower }}-scheduler-vendor
+spec:
+  accessModes:
+    {{- range .Values.scheduler.vendorPvc.accessModes | default (list "ReadWriteOnce") }}
+    - {{ . }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.scheduler.vendorPvc.size | default "1Gi" }}
+  {{- $sc := .Values.scheduler.vendorPvc.storageClassName | default "sata" }}
+  {{- if $sc }}
+  storageClassName: {{ $sc }}
+  {{- end }}
+{{- end -}}
