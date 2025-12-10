@@ -35,6 +35,8 @@ worker:
 scheduler:
   enabled: true
   schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
   vendorPvc:
     enabled: true
     accessModes:

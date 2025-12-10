@@ -51,6 +51,7 @@ target "base" {
     dockerfile= "Dockerfile.base"
     args = {
         BASE_IMAGE = "php:${PHP_VERSION}-${tgt}-alpine"
+        PHP_VERSION = "${PHP_VERSION}"
     }
 }
 

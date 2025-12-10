@@ -1,4 +1,19 @@
 #!/bin/sh
 exec 2>&1
 cd /var/www
-exec with-contenv su-exec sail /usr/sbin/php-fpm -F
+
+# Find php-fpm binary - try symlink first, then find versioned binary
+PHP_FPM_BIN=""
+if [ -x /usr/sbin/php-fpm ]; then
+    PHP_FPM_BIN=/usr/sbin/php-fpm
+else
+    # Fallback: find any php*-fpm binary in /usr/sbin
+    PHP_FPM_BIN=$(find /usr/sbin -name 'php*-fpm' -type f -executable 2>/dev/null | head -n 1)
+    if [ -z "$PHP_FPM_BIN" ]; then
+        echo "ERROR: php-fpm binary not found in /usr/sbin" >&2
+        ls -la /usr/sbin/php* 2>&1 || true
+        exit 1
+    fi
+fi
+
+exec with-contenv su-exec sail "$PHP_FPM_BIN" -F

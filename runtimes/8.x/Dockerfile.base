@@ -75,6 +75,7 @@ RUN apk add --no-cache \
     && ln -sf /usr/bin/php${VERSION} /usr/bin/php \
     && ln -sf /usr/sbin/php${VERSION}-fpm /usr/sbin/php-fpm \
     && ln -sf /etc/php${VERSION} /etc/php \
+    && test -L /usr/sbin/php-fpm && test -f /usr/sbin/php${VERSION}-fpm || (echo "ERROR: php-fpm symlink creation failed" && exit 1) \
     && rm -rf /var/cache/apk/* \
     && sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd \
     && update-ca-certificates \

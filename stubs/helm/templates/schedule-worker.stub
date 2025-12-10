@@ -8,12 +8,18 @@ metadata:
     tier: scheduler
 spec:
   schedule: "{{ .Values.scheduler.schedule | default "* * * * *" }}"
-  successfulJobsHistoryLimit: 5
-  failedJobsHistoryLimit: 5
+  successfulJobsHistoryLimit: {{ .Values.scheduler.successfulJobsHistoryLimit | default 5 }}
+  failedJobsHistoryLimit: {{ .Values.scheduler.failedJobsHistoryLimit | default 5 }}
   jobTemplate:
     spec:
       template:
         spec:
+          {{- $vendorPvcEnabled := true }}
+          {{- if .Values.scheduler.vendorPvc }}
+            {{- if hasKey .Values.scheduler.vendorPvc "enabled" }}
+              {{- $vendorPvcEnabled = .Values.scheduler.vendorPvc.enabled }}
+            {{- end }}
+          {{- end }}
           imagePullSecrets:
             - name: {{ .Values.worker.imagePullSecret | default .Values.global.imagePullSecret }}
           containers:
@@ -29,12 +35,12 @@ spec:
                 - secretRef:
                     name: {{ .Values.typesense.secret | default "typesense" | lower }}
                 {{- end }}
-              {{- if .Values.scheduler.vendorPvc.enabled | default true }}
+              {{- if $vendorPvcEnabled }}
               volumeMounts:
                 - name: vendors
                   mountPath: /var/www/vendor
               {{- end }}
-          {{- if .Values.scheduler.vendorPvc.enabled | default true }}
+          {{- if $vendorPvcEnabled }}
           volumes:
             - name: vendors
               persistentVolumeClaim:
