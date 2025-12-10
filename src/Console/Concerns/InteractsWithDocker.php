@@ -4,9 +4,9 @@ namespace Laravel\Sail\Console\Concerns;
 
 use Composer\InstalledVersions;
 use Illuminate\Support\Facades\Config;
-use Symfony\Component\Process\Process;
 use Illuminate\Support\Str;
 use MirazMac\DotEnv\Writer;
+use Symfony\Component\Process\Process;
 
 trait InteractsWithDocker
 {
@@ -72,29 +72,21 @@ trait InteractsWithDocker
 
     /**
      * Indicates if the repository should be used.
-     *
-     * @var bool
      */
     protected bool $useRepository = false;
 
     /**
      * Indicates if the images should be pushed to the repository.
-     *
-     * @var bool
      */
     protected bool $push = false;
 
     /**
      * Indicates if the configuration should be reused.
-     *
-     * @var bool
      */
     protected bool $reuseConfig = false;
 
     /**
      * The name of the organization to be used.
-     *
-     * @var string|null
      */
     protected ?string $organization = null;
 
@@ -121,7 +113,7 @@ trait InteractsWithDocker
                 label: 'Which environments would you like to use?',
                 options: $environments,
                 default: $defaultEnvs,
-                scroll: sizeof($environments) > 20 ? 15 : sizeof($environments),
+                scroll: count($environments) > 20 ? 15 : count($environments),
                 required: true,
             );
         }
@@ -136,7 +128,7 @@ trait InteractsWithDocker
      */
     protected function gatherRepositoryInteractively(array $environments)
     {
-        if (!in_array('production', $environments)) {
+        if (! in_array('production', $environments)) {
             return 'none';
         }
         if (function_exists('\Laravel\Prompts\select')) {
@@ -144,7 +136,7 @@ trait InteractsWithDocker
                 label: 'Which repository would you like to use?',
                 options: $this->repositories,
                 default: 'ghcr.io',
-                scroll: sizeof($this->repositories) > 20 ? 15 : sizeof($this->repositories),
+                scroll: count($this->repositories) > 20 ? 15 : count($this->repositories),
                 required: true,
             );
         } else {
@@ -158,6 +150,7 @@ trait InteractsWithDocker
             $this->choosePush();
             $this->gatherOrtanizationNameInteractively();
         }
+
         return $repositories;
     }
 
@@ -187,14 +180,14 @@ trait InteractsWithDocker
     {
         $this->deploymentDomains = explode(',', config('sail.deploy.domains'));
         $domains = $this->deploymentDomains;
-        $domains = array_unique(array_merge(["** Add new domain **"], $this->deploymentDomains));
+        $domains = array_unique(array_merge(['** Add new domain **'], $this->deploymentDomains));
 
         if (function_exists('\Laravel\Prompts\multiselect')) {
             $selected = \Laravel\Prompts\multiselect(
                 label: 'Which repository would you like to use?',
                 options: $domains,
                 default: $this->deploymentDomains,
-                scroll: sizeof($domains) > 20 ? 15 : sizeof($domains),
+                scroll: count($domains) > 20 ? 15 : count($domains),
                 required: true,
             );
         } else {
@@ -259,7 +252,7 @@ trait InteractsWithDocker
                 label: 'Which architectures would you like to use?',
                 options: $archs,
                 default: $defaultArchs,
-                scroll: sizeof($archs) > 20 ? 15 : sizeof($archs),
+                scroll: count($archs) > 20 ? 15 : count($archs),
                 required: true,
             );
         }
@@ -297,19 +290,16 @@ trait InteractsWithDocker
     /**
      * Build the Docker images.
      *
-     * @param  string  $environment
-     * @param  array  $archs
-     * @param  string  $repository
      * @param  string  $organization
      * @return int
      */
     protected function buildDockerImages(string $environment, array $archs, string $repository)
     {
         $this->output->writeln('Building Docker Images...');
-        $this->output->writeln(' <fg=blue>=> Environment:</> ' . $environment);
+        $this->output->writeln(' <fg=blue>=> Environment:</> '.$environment);
         $this->output->writeln(' <fg=blue>=> Architectures:</>');
         foreach ($archs as $arch) {
-            $this->output->writeln('    <fg=green>-</> ' . $arch);
+            $this->output->writeln('    <fg=green>-</> '.$arch);
         }
 
         // $commands = $this->buildCommands($archs, $environment, $repository);
@@ -320,16 +310,16 @@ trait InteractsWithDocker
             'APP_NAME' => Str::slug(Config('app.name')),
             'VERSION' => config('sail.build.version', '1.0.0'),
             'APP_DIR' => realpath('.'),
-            'RUNTIME_DIR' => realpath(InstalledVersions::getInstallPath('reyemtech/sail') . '/runtimes/8.x'),
+            'RUNTIME_DIR' => realpath(InstalledVersions::getInstallPath('reyemtech/sail').'/runtimes/8.x'),
             'ORG' => $this->organization,
         ];
 
         if ($this->useRepository) {
             $args['REGISTRY'] = $repository;
-        };
+        }
 
         $path = realpath(InstalledVersions::getInstallPath('reyemtech/sail'));
-        if (!is_dir("{$path}/certs")) {
+        if (! is_dir("{$path}/certs")) {
             $commands[] = "{$path}/bin/sail-setup";
         }
         $commands[] = $this->createBakeCommand($args);
@@ -342,21 +332,21 @@ trait InteractsWithDocker
         $bakeCommand = '';
         foreach ($args as $key => $value) {
             if (is_array($value)) {
-                $bakeCommand .= ' ' . $key . '=' . implode(',', $value);
+                $bakeCommand .= ' '.$key.'='.implode(',', $value);
             } else {
-                $bakeCommand .= ' ' . $key . '=' . $value;
+                $bakeCommand .= ' '.$key.'='.$value;
             }
         }
 
         $bakeCommand .= ' docker buildx bake ';
-        $bakeCommand .= ' -f ' . realpath(InstalledVersions::getInstallPath('reyemtech/sail') . '/runtimes/8.x/docker-bake.hcl');
+        $bakeCommand .= ' -f '.realpath(InstalledVersions::getInstallPath('reyemtech/sail').'/runtimes/8.x/docker-bake.hcl');
 
         // $bakeCommand .= ' --print ';
 
         $bakeCommand .= $this->useRepository ? ' default' : ' app';
 
         $this->output->writeln(' <fg=blue>=> Commands:</>');
-        $this->output->writeln('    <fg=green>-</> ' . $bakeCommand);
+        $this->output->writeln('    <fg=green>-</> '.$bakeCommand);
 
         return $bakeCommand;
     }
@@ -372,14 +362,14 @@ trait InteractsWithDocker
     protected function buildCommands($archs, $environment, $repository)
     {
         $path = InstalledVersions::getInstallPath('reyemtech/sail');
-        $dockerpath = $path . '/runtimes/8.x';
+        $dockerpath = $path.'/runtimes/8.x';
 
-        if (!is_dir("{$path}/certs")) {
+        if (! is_dir("{$path}/certs")) {
             $cmds[] = "{$path}/bin/sail-setup";
         }
 
         $baseCmd = "docker buildx build --build-context mainapp=. --build-context runtime={$dockerpath} -f {$dockerpath}/Dockerfile";
-        $platformCmd = $baseCmd . ' --platform ' . implode(',', $archs);
+        $platformCmd = $baseCmd.' --platform '.implode(',', $archs);
 
         if ($this->push) {
             $baseCmd .= ' --push ';
@@ -389,25 +379,25 @@ trait InteractsWithDocker
             if ($this->push) {
                 $platformCmd .= ' --push ';
             }
-            $cmds[] = $platformCmd . ' --target production ' . $this->buildTags('web', $environment, $repository) . ' .';
-            $cmds[] = $platformCmd . ' --target worker' . $this->buildTags('worker', $environment, $repository) . ' .';
-            if (!$this->push) {
-                $cmds[] = "{$baseCmd} --target app --load " . $this->buildTags('web', $environment, $repository) . ' .';
-                $cmds[] = "{$baseCmd} --target worker --load " . $this->buildTags('worker', $environment, $repository) . ' .';
+            $cmds[] = $platformCmd.' --target production '.$this->buildTags('web', $environment, $repository).' .';
+            $cmds[] = $platformCmd.' --target worker'.$this->buildTags('worker', $environment, $repository).' .';
+            if (! $this->push) {
+                $cmds[] = "{$baseCmd} --target app --load ".$this->buildTags('web', $environment, $repository).' .';
+                $cmds[] = "{$baseCmd} --target worker --load ".$this->buildTags('worker', $environment, $repository).' .';
             }
         } else {
-            $cmds[] = $platformCmd . ' --target app --load ' . $this->buildTags('local', $environment, $repository) . ' .';
+            $cmds[] = $platformCmd.' --target app --load '.$this->buildTags('local', $environment, $repository).' .';
         }
 
         $this->output->writeln(' <fg=blue>=> Commands:</>');
         foreach ($cmds as $command) {
-            $this->output->writeln('    <fg=green>-</> ' . $command);
+            $this->output->writeln('    <fg=green>-</> '.$command);
         }
 
         return $cmds;
     }
 
-    protected function getConfig()
+    protected function getConfig(bool $forceReuse = false)
     {
         $config = config('sail.build');
         if ($config['environments']) {
@@ -419,20 +409,20 @@ trait InteractsWithDocker
             $this->output->writeln('');
             $this->output->writeln('<fg=yellow>==></> <fg=green>Environments:</>');
             foreach ($config['environments'] as $environment) {
-                $this->output->writeln('    <fg=green>-</> ' . $environment);
+                $this->output->writeln('    <fg=green>-</> '.$environment);
             }
             $this->output->writeln('<fg=yellow>==></> <fg=green>Architectures:</>');
             foreach ($config['architectures'] as $arch) {
-                $this->output->writeln('    <fg=green>-</> ' . $arch);
+                $this->output->writeln('    <fg=green>-</> '.$arch);
             }
             $this->output->writeln('<fg=yellow>==></> <fg=green>Domains:</>');
             foreach ($this->deploymentDomains as $domain) {
-                $this->output->writeln('    <fg=green>-</> ' . $domain);
+                $this->output->writeln('    <fg=green>-</> '.$domain);
             }
-            $this->output->writeln('<fg=yellow>==></> <fg=green>Repository:</> ' . $config['repository']);
-            $this->output->writeln('<fg=yellow>==></> <fg=green>Organization:</> ' . $config['organization']);
-            $this->output->writeln('<fg=yellow>==></> <fg=green>Push:</> ' . ($config['push'] ? '<bg=green;fg-black> true </>' : '<bg=red;fg=black> false </>'));
-            $this->output->writeln('<fg=yellow>==></> <fg=green>Version:</> ' . $config['version']);
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Repository:</> '.$config['repository']);
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Organization:</> '.$config['organization']);
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Push:</> '.($config['push'] ? '<bg=green;fg-black> true </>' : '<bg=red;fg=black> false </>'));
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Version:</> '.$config['version']);
 
             if ($config['repository'] && $config['repository'] !== 'none') {
                 $this->useRepository = true;
@@ -446,13 +436,16 @@ trait InteractsWithDocker
                 $this->organization = $config['organization'];
             }
 
-            if (function_exists('\Laravel\Prompts\confirm')) {
-                $this->reuseConfig = \Laravel\Prompts\confirm(
-                    label: 'Would you like to build this configuration again?',
-                    default: true,
-                );
-            } else {
-                $this->reuseConfig = $this->confirm('Would you like to build this configuration again?', true);
+            $this->reuseConfig = $forceReuse ? true : $this->reuseConfig;
+            if (! $forceReuse) {
+                if (function_exists('\Laravel\Prompts\confirm')) {
+                    $this->reuseConfig = \Laravel\Prompts\confirm(
+                        label: 'Would you like to build this configuration again?',
+                        default: true,
+                    );
+                } else {
+                    $this->reuseConfig = $this->confirm('Would you like to build this configuration again?', true);
+                }
             }
 
             if ($this->reuseConfig) {
@@ -465,7 +458,7 @@ trait InteractsWithDocker
 
     protected function getVersionChoice()
     {
-        $options = ['no', 'major', 'minor', 'patch'];
+        $options = ['patch', 'minor', 'major', 'no'];
         $version = config('sail.build.version');
 
         if ($version === null) {
@@ -484,20 +477,17 @@ trait InteractsWithDocker
 
         if ($increment !== 'no') {
             $version = $this->bumpVersion($version, $increment);
-            $this->output->writeln('<fg=yellow>==></> <fg=green>New Version:</> ' . $version);
+            $this->output->writeln('<fg=yellow>==></> <fg=green>New Version:</> '.$version);
             $this->output->writeln('');
         }
 
         return $version;
     }
+
     /**
      * Bump the version number.
-     *
-     * @param  string  $version
-     * @param  string  $type
-     * @return string
      */
-    function bumpVersion(string $version, string $type = 'patch'): string
+    public function bumpVersion(string $version, string $type = 'patch'): string
     {
         [$major, $minor, $patch] = explode('.', $version);
 
@@ -546,7 +536,7 @@ trait InteractsWithDocker
         $writer->set('SAIL_BUILD_ORGANIZATION', $config['organization'] ?? '');
         $writer->set('SAIL_BUILD_VERSION', $config['version'] ?? '1.0.0');
         $writer->set('SAIL_DEPLOY_DOMAINS', implode(',', $this->deploymentDomains) ?? '');
-        $writer->set('VITE_DEV_SERVER_URL', "https://" . config('sail.domain') . "/vite");
+        $writer->set('VITE_DEV_SERVER_URL', 'https://'.config('sail.domain').'/vite');
         $writer->write();
 
         Config::set('sail.build.environments', $config['environments'] ?? '');
@@ -570,9 +560,9 @@ trait InteractsWithDocker
     {
         $version = config('sail.build.version', '1.0.0');
 
-        $tag = $this->useRepository && $repository !== 'none' ?  $repository . '/' : '';
-        $tag .= $this->useRepository && $repository !== 'none' && $this->organization ? $this->organization . '/' : '';
-        $tag .= Str::slug(Config('app.name')) . '-' . $name;
+        $tag = $this->useRepository && $repository !== 'none' ? $repository.'/' : '';
+        $tag .= $this->useRepository && $repository !== 'none' && $this->organization ? $this->organization.'/' : '';
+        $tag .= Str::slug(Config('app.name')).'-'.$name;
 
         $tags[] = "$tag:$environment";
         if ($environment === 'production') {
@@ -580,7 +570,7 @@ trait InteractsWithDocker
             $tags[] = "$tag:$version";
         }
 
-        return ' --tag ' . implode(' --tag ', $tags);
+        return ' --tag '.implode(' --tag ', $tags);
     }
 
     /**
@@ -597,12 +587,12 @@ trait InteractsWithDocker
             try {
                 $process->setTty(true);
             } catch (\RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
             }
         }
 
         return $process->run(function ($type, $line) {
-            $this->output->write('    ' . $line);
+            $this->output->write('    '.$line);
         });
     }
 }
