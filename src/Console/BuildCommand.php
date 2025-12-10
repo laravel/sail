@@ -5,6 +5,7 @@ namespace Laravel\Sail\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Process\Process;
 
 #[AsCommand(name: 'sail:build')]
 class BuildCommand extends Command
@@ -26,7 +27,8 @@ class BuildCommand extends Command
                             {--build-version= : Version to use for the build}
                             {--push : Push built images to the registry}
                             {--use-previous : Reuse the last saved build configuration without prompts}
-                            {--bump= : Bump the version (patch, minor, major, no)}';
+                            {--bump= : Bump the version (patch, minor, major, no)}
+                            {--dry-run : Preview what would be built without executing}';
 
     /**
      * Execute the console command.
@@ -35,10 +37,23 @@ class BuildCommand extends Command
      */
     public function handle()
     {
+        $dryRun = $this->option('dry-run');
+
+        if ($dryRun) {
+            $this->components->info('🔍 DRY RUN MODE: No changes will be made');
+            $this->output->writeln('');
+        }
+
+        // Validate prerequisites
+        if (! $this->validatePrerequisites($dryRun)) {
+            return 1;
+        }
+
         $bump = $this->option('bump');
 
         if ($bump && ! in_array($bump, ['patch', 'minor', 'major', 'no'], true)) {
             $this->components->error('Invalid bump option. Use patch, minor, major, or no.');
+            $this->components->warn('💡 Tip: Valid options are: patch, minor, major, no');
 
             return 1;
         }
@@ -69,16 +84,61 @@ class BuildCommand extends Command
             $this->writeConfig($environments, $architectures, $repository);
         }
 
+        // Update Helm chart version BEFORE building (so we can revert if build fails)
+        $originalVersion = null;
+        $versionUpdated = false;
+        $chartExisted = false;
+        if (! $dryRun) {
+            $version = config('sail.build.version');
+            if ($version) {
+                $result = $this->updateHelmChartVersion($version);
+                $originalVersion = $result['originalVersion'] ?? null;
+                $chartExisted = $result['chartExisted'] ?? false;
+                $versionUpdated = true;
+            }
+        }
+
+        $buildFailed = false;
         foreach ($environments as $environment) {
             if (! in_array($environment, $this->environments)) {
                 $this->components->error('Invalid environment ['.implode(',', $environment).'].');
+                $this->components->warn('💡 Tip: Valid environments are: '.implode(', ', $this->environments));
 
                 return 1;
             }
-            $this->buildDockerImages($environment, $architectures, $repository);
+
+            if ($dryRun) {
+                $this->components->info("Would build Docker images for environment: {$environment}");
+                $this->output->writeln('  Architectures: '.implode(', ', $architectures));
+                $this->output->writeln('  Repository: '.($repository === 'none' ? 'local only' : $repository));
+            } else {
+                $result = $this->buildDockerImages($environment, $architectures, $repository);
+                if ($result !== 0) {
+                    $buildFailed = true;
+                    break;
+                }
+            }
         }
 
-        $this->buildHelm();
+        // Revert version if build failed
+        if ($buildFailed && $versionUpdated && $chartExisted && $originalVersion !== null) {
+            $this->output->writeln('');
+            $this->components->error('Build failed! Reverting Helm chart version...');
+            $this->revertHelmChartVersion($originalVersion);
+            $this->output->writeln('  <fg=yellow>✓</> Version reverted to: '.$originalVersion);
+            $this->output->writeln('');
+
+            return 1;
+        }
+
+        if ($dryRun) {
+            $this->components->info('Would build Helm chart');
+            $this->output->writeln('');
+            $this->components->info('✅ Dry run completed. Use without --dry-run to execute.');
+        } else {
+            // If chart existed, version already updated; if not, create with version
+            $this->buildHelm(! $chartExisted);
+        }
     }
 
     /**
@@ -158,29 +218,157 @@ class BuildCommand extends Command
      */
     protected function hasInvalidOptions(array $environments, array $architectures, string $repository): bool
     {
+        $hasErrors = false;
+
         $invalidEnvs = array_diff($environments, $this->environments);
         if ($invalidEnvs) {
-            $this->components->error('Invalid environments: '.implode(', ', $invalidEnvs).'. Allowed: '.implode(', ', $this->environments));
-
-            return true;
+            $this->components->error('Invalid environments: '.implode(', ', $invalidEnvs));
+            $this->components->warn('💡 Tip: Valid environments are: '.implode(', ', $this->environments));
+            $this->output->writeln('');
+            $hasErrors = true;
         }
 
         $invalidArchs = array_diff($architectures, $this->archs);
         if ($invalidArchs) {
-            $this->components->error('Invalid architectures: '.implode(', ', $invalidArchs).'. Allowed: '.implode(', ', $this->archs));
-
-            return true;
+            $this->components->error('Invalid architectures: '.implode(', ', $invalidArchs));
+            $this->components->warn('💡 Tip: Valid architectures are: '.implode(', ', array_slice($this->archs, 0, 5)).'...');
+            $this->output->writeln('   See all available architectures in the documentation.');
+            $this->output->writeln('');
+            $hasErrors = true;
         }
 
         $allowedRepositories = array_keys($this->repositories);
         $allowedRepositories[] = 'none';
 
         if ($repository && ! in_array($repository, $allowedRepositories, true)) {
-            $this->components->error('Invalid repository: '.$repository.'. Allowed: '.implode(', ', $allowedRepositories));
-
-            return true;
+            $this->components->error('Invalid repository: '.$repository);
+            $this->components->warn('💡 Tip: Valid repositories are: '.implode(', ', array_slice($allowedRepositories, 0, 5)).'...');
+            $this->output->writeln('   Use "none" for local-only builds.');
+            $this->output->writeln('');
+            $hasErrors = true;
         }
 
-        return false;
+        return $hasErrors;
+    }
+
+    /**
+     * Validate prerequisites (docker, docker buildx, helm).
+     */
+    protected function validatePrerequisites(bool $dryRun = false): bool
+    {
+        $this->components->info('Checking prerequisites...');
+
+        $missing = [];
+        $suggestions = [];
+
+        // Check Docker
+        $process = new Process(['docker', '--version']);
+        $process->run();
+        if (! $process->isSuccessful()) {
+            $missing[] = 'Docker';
+            $suggestions['Docker'] = 'Install Docker from https://docs.docker.com/get-docker/';
+        } else {
+            $this->output->writeln('  <fg=green>✓</> Docker: '.trim($process->getOutput()));
+        }
+
+        // Check Docker Buildx
+        $process = new Process(['docker', 'buildx', 'version']);
+        $process->run();
+        if (! $process->isSuccessful()) {
+            $missing[] = 'Docker Buildx';
+            $suggestions['Docker Buildx'] = 'Enable buildx: docker buildx install';
+        } else {
+            $this->output->writeln('  <fg=green>✓</> Docker Buildx: '.trim($process->getOutput()));
+        }
+
+        // Check Helm
+        $process = new Process(['helm', 'version', '--short']);
+        $process->run();
+        if (! $process->isSuccessful()) {
+            $missing[] = 'Helm';
+            $suggestions['Helm'] = 'Install Helm from https://helm.sh/docs/intro/install/';
+        } else {
+            $this->output->writeln('  <fg=green>✓</> Helm: '.trim($process->getOutput()));
+        }
+
+        if (! empty($missing)) {
+            $this->output->writeln('');
+            $this->components->error('Missing prerequisites: '.implode(', ', $missing));
+            $this->output->writeln('');
+            $this->components->warn('Installation suggestions:');
+            foreach ($suggestions as $tool => $suggestion) {
+                $this->output->writeln("  <fg=yellow>→</> {$tool}: {$suggestion}");
+            }
+
+            return false;
+        }
+
+        $this->output->writeln('');
+
+        return true;
+    }
+
+    /**
+     * Update Helm chart version before building.
+     *
+     * @return array{originalVersion: string|null, chartExisted: bool}
+     */
+    protected function updateHelmChartVersion(string $newVersion): array
+    {
+        $helmPath = base_path('helm');
+        $chartPath = $helmPath.'/Chart.yaml';
+
+        if (! file_exists($chartPath)) {
+            // Chart doesn't exist yet, will be created in buildHelm
+            $this->output->writeln('');
+            $this->components->info('📦 Helm chart will be created with version: '.$newVersion);
+            $this->output->writeln('');
+
+            return ['originalVersion' => null, 'chartExisted' => false];
+        }
+
+        $this->output->writeln('');
+        $this->components->info('📦 Updating Helm chart version...');
+
+        $chart = \Symfony\Component\Yaml\Yaml::parseFile($chartPath);
+        $originalVersion = $chart['version'] ?? null;
+
+        $chart['version'] = $newVersion;
+        $chart['appVersion'] = $newVersion;
+
+        $yaml = \Symfony\Component\Yaml\Yaml::dump($chart, \Symfony\Component\Yaml\Yaml::DUMP_OBJECT_AS_MAP);
+        file_put_contents($chartPath, $yaml);
+
+        $this->output->writeln('  <fg=green>✓</> Chart version updated to: '.$newVersion);
+        if ($originalVersion) {
+            $this->output->writeln('  <fg=blue>→</> Previous version: '.$originalVersion);
+        }
+        $this->output->writeln('');
+
+        return ['originalVersion' => $originalVersion, 'chartExisted' => true];
+    }
+
+    /**
+     * Revert Helm chart version on build failure.
+     */
+    protected function revertHelmChartVersion(?string $originalVersion): void
+    {
+        if ($originalVersion === null) {
+            return;
+        }
+
+        $helmPath = base_path('helm');
+        $chartPath = $helmPath.'/Chart.yaml';
+
+        if (! file_exists($chartPath)) {
+            return;
+        }
+
+        $chart = \Symfony\Component\Yaml\Yaml::parseFile($chartPath);
+        $chart['version'] = $originalVersion;
+        $chart['appVersion'] = $originalVersion;
+
+        $yaml = \Symfony\Component\Yaml\Yaml::dump($chart, \Symfony\Component\Yaml\Yaml::DUMP_OBJECT_AS_MAP);
+        file_put_contents($chartPath, $yaml);
     }
 }

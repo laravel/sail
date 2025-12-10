@@ -295,17 +295,18 @@ trait InteractsWithDocker
     /**
      * Build the Docker images.
      *
-     * @param  string  $organization
-     * @return int
+     * @return int Exit code (0 for success, non-zero for failure)
      */
-    protected function buildDockerImages(string $environment, array $archs, string $repository)
+    protected function buildDockerImages(string $environment, array $archs, string $repository): int
     {
-        $this->output->writeln('Building Docker Images...');
+        $this->output->writeln('');
+        $this->components->info('🐳 Building Docker Images...');
         $this->output->writeln(' <fg=blue>=> Environment:</> '.$environment);
         $this->output->writeln(' <fg=blue>=> Architectures:</>');
         foreach ($archs as $arch) {
             $this->output->writeln('    <fg=green>-</> '.$arch);
         }
+        $this->output->writeln('');
 
         // $commands = $this->buildCommands($archs, $environment, $repository);
 
@@ -350,8 +351,11 @@ trait InteractsWithDocker
 
         $bakeCommand .= $this->useRepository ? ' default' : ' app';
 
-        $this->output->writeln(' <fg=blue>=> Commands:</>');
-        $this->output->writeln('    <fg=green>-</> '.$bakeCommand);
+        $this->output->writeln(' <fg=blue>=> Build Command:</>');
+        $this->output->writeln('    <fg=green>→</> '.$bakeCommand);
+        $this->output->writeln('');
+        $this->components->warn('⏳ This may take several minutes. Building in progress...');
+        $this->output->writeln('');
 
         return $bakeCommand;
     }
@@ -596,8 +600,25 @@ trait InteractsWithDocker
             }
         }
 
-        return $process->run(function ($type, $line) {
-            $this->output->write('    '.$line);
+        $startTime = time();
+        $lastProgress = 0;
+
+        return $process->run(function ($type, $line) use (&$lastProgress, $startTime) {
+            $elapsed = time() - $startTime;
+
+            // Show progress indicator every 5 seconds
+            if ($elapsed - $lastProgress >= 5) {
+                $minutes = floor($elapsed / 60);
+                $seconds = $elapsed % 60;
+                $this->output->write(sprintf("\r  <fg=cyan>⏳ Building... (%dm %ds)</>", $minutes, $seconds));
+                $lastProgress = $elapsed;
+            }
+
+            // Show important build output
+            if (stripos($line, 'error') !== false || stripos($line, 'warning') !== false || stripos($line, '#') !== false) {
+                $this->output->writeln('');
+                $this->output->write('    '.$line);
+            }
         });
     }
 }
