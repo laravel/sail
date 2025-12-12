@@ -47,7 +47,7 @@ target "base" {
     matrix = {
         tgt = ["cli", "fpm"]
     }
-    platforms = PUSH ? split(",", ARCHS) : ["local"]
+    platforms = PUSH ? split(",", ARCHS) : split(",", ARCHS)
     dockerfile= "Dockerfile.base"
     args = {
         BASE_IMAGE = "php:${PHP_VERSION}-${tgt}-alpine"
@@ -66,7 +66,7 @@ target "app-build" {
         "package" = "${RUNTIME_DIR}/../../"
     }
     dockerfile= "Dockerfile.app-build"
-    platforms = PUSH ? split(",", ARCHS) : ["local"]
+    platforms = PUSH ? split(",", ARCHS) : split(",", ARCHS)
     matrix = {
         tgt = ["cli", "fpm"]
     }
@@ -102,7 +102,7 @@ target "production" {
         "org.opencontainers.image.title" = "${APP_NAME}-${tgt == "cli" ? "worker" : "web"}"
         "org.opencontainers.image.description" = "Production image for ${APP_NAME} (${tgt == "cli" ? "worker" : "web"})"
     }
-    platforms = PUSH ? split(",", ARCHS) : ["local"]
+    platforms = PUSH ? split(",", ARCHS) : split(",", ARCHS)
     tags = [
         "${REGISTRY}/${ORG}/${APP_NAME}-${tgt == "cli" ? "worker" : "web"}:${VERSION}",
         "${REGISTRY}/${ORG}/${APP_NAME}-${tgt == "cli" ? "worker" : "web"}:latest",
