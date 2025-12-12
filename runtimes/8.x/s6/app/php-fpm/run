@@ -4,13 +4,18 @@ cd /var/www
 
 # Find php-fpm binary - try symlink first, then find versioned binary
 PHP_FPM_BIN=""
-if [ -x /usr/sbin/php-fpm ]; then
+if [ -L /usr/sbin/php-fpm ] && [ -e /usr/sbin/php-fpm ]; then
+    # Symlink exists and is valid
+    PHP_FPM_BIN=/usr/sbin/php-fpm
+elif [ -x /usr/sbin/php-fpm ]; then
+    # Direct executable exists
     PHP_FPM_BIN=/usr/sbin/php-fpm
 else
-    # Fallback: find any php*-fpm binary in /usr/sbin
-    PHP_FPM_BIN=$(find /usr/sbin -name 'php*-fpm' -type f -executable 2>/dev/null | head -n 1)
+    # Fallback: find any php*-fpm or php-fpm* binary in /usr/sbin
+    PHP_FPM_BIN=$(find /usr/sbin -name 'php*-fpm' -o -name 'php-fpm*' -type f -executable 2>/dev/null | head -n 1)
     if [ -z "$PHP_FPM_BIN" ]; then
         echo "ERROR: php-fpm binary not found in /usr/sbin" >&2
+        echo "Checking for php-fpm files:" >&2
         ls -la /usr/sbin/php* 2>&1 || true
         exit 1
     fi

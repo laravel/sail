@@ -74,7 +74,7 @@ RUN apk add --no-cache \
     php${VERSION}-pecl-redis \
     php${VERSION}-xdebug \
     && ln -sf /usr/bin/php${VERSION} /usr/bin/php \
-    && ln -sf /usr/sbin/php${VERSION}-fpm /usr/sbin/php-fpm \
+    && ln -sf /usr/sbin/php-fpm${VERSION} /usr/sbin/php-fpm \
     && ln -sf /etc/php${VERSION} /etc/php \
     && rm -rf /var/cache/apk/* \
     && sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd \
