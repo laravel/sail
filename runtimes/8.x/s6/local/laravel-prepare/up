@@ -1,0 +1,14 @@
+#!/usr/bin/execlineb
+with-contenv
+cd /var/www
+
+# Local images always include dev dependencies
+foreground { composer install --optimize-autoloader --prefer-dist }
+
+foreground { php artisan migrate --force }
+
+foreground { php artisan optimize }
+
+foreground { chown -R sail:sail /var/www/storage/logs }
+
+foreground { echo ready >&3 }
