@@ -77,11 +77,15 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{/*
 Selector labels used by deployments, services, etc.
-NOTE: These labels must be immutable - do NOT include app.kubernetes.io/instance
-as it can change between releases and would cause selector update errors.
+NOTE: These labels must be immutable. We include app.kubernetes.io/instance
+for backward compatibility with existing deployments. If you need to change
+the release name, you will need to delete and recreate the Deployment.
 */}}
 {{- define "sail.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "sail.name" . }}
+{{- if .Release }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
 {{- end }}
 
 {{/*
