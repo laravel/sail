@@ -55,12 +55,18 @@ external-secrets.io/v1beta1
 
 {{/*
 Standard Kubernetes labels following best practices.
+Includes selector labels plus additional metadata labels.
+Note: app.kubernetes.io/instance is included here for pod identification
+but NOT in selectorLabels to keep selectors immutable.
 */}}
 {{- define "sail.labels" -}}
 {{- if .Chart }}
 helm.sh/chart: {{ include "sail.chart" . }}
 {{- end }}
 {{ include "sail.selectorLabels" . }}
+{{- if .Release }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -71,12 +77,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{/*
 Selector labels used by deployments, services, etc.
+NOTE: These labels must be immutable - do NOT include app.kubernetes.io/instance
+as it can change between releases and would cause selector update errors.
 */}}
 {{- define "sail.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "sail.name" . }}
-{{- if .Release }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
 {{- end }}
 
 {{/*

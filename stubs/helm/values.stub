@@ -9,6 +9,41 @@ global:
   tag: latest
   pullPolicy: IfNotPresent
   imagePullSecret: ghcr-auth
+  # Global probe defaults (can be overridden per tier)
+  probes:
+    # readinessProbe:
+    #   enabled: true
+    #   httpGet:
+    #     path: /up
+    #     port: 80
+    #     scheme: HTTP
+    #   initialDelaySeconds: 10
+    #   periodSeconds: 20
+    #   timeoutSeconds: 5
+    #   successThreshold: 1
+    #   failureThreshold: 5
+    # livenessProbe:
+    #   enabled: true
+    #   httpGet:
+    #     path: /up
+    #     port: 80
+    #     scheme: HTTP
+    #   initialDelaySeconds: 10
+    #   periodSeconds: 30
+    #   timeoutSeconds: 5
+    #   successThreshold: 1
+    #   failureThreshold: 3
+    # startupProbe:
+    #   enabled: false
+    #   httpGet:
+    #     path: /up
+    #     port: 80
+    #     scheme: HTTP
+    #   initialDelaySeconds: 0
+    #   periodSeconds: 10
+    #   timeoutSeconds: 5
+    #   successThreshold: 1
+    #   failureThreshold: 30
 
 # Web application deployment settings
 web:
@@ -19,6 +54,41 @@ web:
     # tag: latest
     # pullPolicy: IfNotPresent
     # imagePullSecret: ghcr-auth
+  # Health check probes for web tier (overrides global defaults)
+  probes:
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: /up
+        port: 80
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 20
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: /up
+        port: 80
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 8  # 30s * 8 = 240s = 4 minutes minimum before restart
+    # startupProbe:
+    #   enabled: false
+    #   httpGet:
+    #     path: /up
+    #     port: 80
+    #     scheme: HTTP
+    #   initialDelaySeconds: 0
+    #   periodSeconds: 10
+    #   timeoutSeconds: 5
+    #   successThreshold: 1
+    #   failureThreshold: 30
   # Horizontal Pod Autoscaler configuration (enabled by default for web tier)
   autoscaling:
     enabled: true
@@ -51,6 +121,45 @@ worker:
     # tag: latest
     # pullPolicy: IfNotPresent
     # imagePullSecret: ghcr-auth
+  # Health check probes for worker tier (overrides global defaults)
+  # Workers typically use exec probes to check queue status
+  probes:
+    readinessProbe:
+      enabled: true
+      exec:
+        command:
+          - php
+          - artisan
+          - queue:status
+      initialDelaySeconds: 30  # Workers take longer to start
+      periodSeconds: 30
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+    livenessProbe:
+      enabled: true
+      exec:
+        command:
+          - php
+          - artisan
+          - queue:status
+      initialDelaySeconds: 60  # Give workers more time before checking liveness
+      periodSeconds: 60        # Less frequent than readiness
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 4
+    # startupProbe:
+    #   enabled: false
+    #   exec:
+    #     command:
+    #       - php
+    #       - artisan
+    #       - queue:status
+    #   initialDelaySeconds: 0
+    #   periodSeconds: 10
+    #   timeoutSeconds: 10
+    #   successThreshold: 1
+    #   failureThreshold: 30
   # Horizontal Pod Autoscaler configuration
   # autoscaling:
   #   enabled: false

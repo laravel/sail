@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "sail.selectorLabels" . | nindent 8 }}
+        {{- include "sail.labels" . | nindent 8 }}
         tier: {{ .tier }}
       {{- with .main.podAnnotations }}
       annotations:
@@ -58,24 +58,105 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{ if eq .tier "web" }}
+          {{- if eq .tier "web" }}
           ports:
             - containerPort: 80
+          {{- end }}
+          {{- $tierProbes := .probes | default dict }}
+          {{- $globalProbes := .main.global.probes | default dict }}
+          {{- $readinessProbe := merge ($globalProbes.readinessProbe | default dict) ($tierProbes.readinessProbe | default dict) }}
+          {{- $livenessProbe := merge ($globalProbes.livenessProbe | default dict) ($tierProbes.livenessProbe | default dict) }}
+          {{- $startupProbe := merge ($globalProbes.startupProbe | default dict) ($tierProbes.startupProbe | default dict) }}
+          {{- $hasReadinessConfig := or $readinessProbe.httpGet $readinessProbe.exec $readinessProbe.tcpSocket }}
+          {{- $readinessEnabled := and $hasReadinessConfig (or (not (hasKey $readinessProbe "enabled")) $readinessProbe.enabled) }}
+          {{- if $readinessEnabled }}
           readinessProbe:
+            {{- if $readinessProbe.httpGet }}
             httpGet:
-              path: /up
-              port: 80
-            initialDelaySeconds: 10
-            periodSeconds: 20
-            failureThreshold: 5
+              {{- toYaml $readinessProbe.httpGet | nindent 14 }}
+            {{- else if $readinessProbe.exec }}
+            exec:
+              {{- toYaml $readinessProbe.exec | nindent 14 }}
+            {{- else if $readinessProbe.tcpSocket }}
+            tcpSocket:
+              {{- toYaml $readinessProbe.tcpSocket | nindent 14 }}
+            {{- end }}
+            {{- if $readinessProbe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $readinessProbe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $readinessProbe.periodSeconds }}
+            periodSeconds: {{ $readinessProbe.periodSeconds }}
+            {{- end }}
+            {{- if $readinessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ $readinessProbe.timeoutSeconds }}
+            {{- end }}
+            {{- if $readinessProbe.successThreshold }}
+            successThreshold: {{ $readinessProbe.successThreshold }}
+            {{- end }}
+            {{- if $readinessProbe.failureThreshold }}
+            failureThreshold: {{ $readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+          {{- $hasLivenessConfig := or $livenessProbe.httpGet $livenessProbe.exec $livenessProbe.tcpSocket }}
+          {{- $livenessEnabled := and $hasLivenessConfig (or (not (hasKey $livenessProbe "enabled")) $livenessProbe.enabled) }}
+          {{- if $livenessEnabled }}
           livenessProbe:
+            {{- if $livenessProbe.httpGet }}
             httpGet:
-              path: /up
-              port: 80
-            initialDelaySeconds: 10
-            periodSeconds: 30
-            failureThreshold: 3
-          {{ end }}
+              {{- toYaml $livenessProbe.httpGet | nindent 14 }}
+            {{- else if $livenessProbe.exec }}
+            exec:
+              {{- toYaml $livenessProbe.exec | nindent 14 }}
+            {{- else if $livenessProbe.tcpSocket }}
+            tcpSocket:
+              {{- toYaml $livenessProbe.tcpSocket | nindent 14 }}
+            {{- end }}
+            {{- if $livenessProbe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $livenessProbe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $livenessProbe.periodSeconds }}
+            periodSeconds: {{ $livenessProbe.periodSeconds }}
+            {{- end }}
+            {{- if $livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ $livenessProbe.timeoutSeconds }}
+            {{- end }}
+            {{- if $livenessProbe.successThreshold }}
+            successThreshold: {{ $livenessProbe.successThreshold }}
+            {{- end }}
+            {{- if $livenessProbe.failureThreshold }}
+            failureThreshold: {{ $livenessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+          {{- $hasStartupConfig := or $startupProbe.httpGet $startupProbe.exec $startupProbe.tcpSocket }}
+          {{- $startupEnabled := and $hasStartupConfig (hasKey $startupProbe "enabled") $startupProbe.enabled }}
+          {{- if $startupEnabled }}
+          startupProbe:
+            {{- if $startupProbe.httpGet }}
+            httpGet:
+              {{- toYaml $startupProbe.httpGet | nindent 14 }}
+            {{- else if $startupProbe.exec }}
+            exec:
+              {{- toYaml $startupProbe.exec | nindent 14 }}
+            {{- else if $startupProbe.tcpSocket }}
+            tcpSocket:
+              {{- toYaml $startupProbe.tcpSocket | nindent 14 }}
+            {{- end }}
+            {{- if $startupProbe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $startupProbe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $startupProbe.periodSeconds }}
+            periodSeconds: {{ $startupProbe.periodSeconds }}
+            {{- end }}
+            {{- if $startupProbe.timeoutSeconds }}
+            timeoutSeconds: {{ $startupProbe.timeoutSeconds }}
+            {{- end }}
+            {{- if $startupProbe.successThreshold }}
+            successThreshold: {{ $startupProbe.successThreshold }}
+            {{- end }}
+            {{- if $startupProbe.failureThreshold }}
+            failureThreshold: {{ $startupProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
           {{ if eq .tier "worker" }}
             {{ if .horizon }}
           command: ["/usr/local/bin/run-horizon"]
