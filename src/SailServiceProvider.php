@@ -4,8 +4,8 @@ namespace Laravel\Sail;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Application as LaravelApplication;
+use Illuminate\Support\ServiceProvider;
 use Laravel\Sail\Console\AddCommand;
 use Laravel\Sail\Console\BuildCommand;
 use Laravel\Sail\Console\InstallCommand;
@@ -33,12 +33,10 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
 
     /**
      * Setup the config.
-     *
-     * @return void
      */
     private function setupConfig(): void
     {
-        $source = realpath($raw = __DIR__ . '/../config/sail.php') ?: $raw;
+        $source = realpath($raw = __DIR__.'/../config/sail.php') ?: $raw;
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('sail.php')], 'config');
@@ -59,7 +57,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 InstallCommand::class,
                 AddCommand::class,
                 PublishCommand::class,
-                BuildCommand::class
+                BuildCommand::class,
                 HelmCommand::class,
                 CiCommand::class,
             ]);
@@ -75,15 +73,15 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../runtimes' => $this->app->basePath('docker'),
+                __DIR__.'/../runtimes' => $this->app->basePath('docker'),
             ], ['sail', 'sail-docker']);
 
             $this->publishes([
-                __DIR__ . '/../bin/sail' => $this->app->basePath('sail'),
-                __DIR__ . '/../bin/sail-setup' => $this->app->basePath('sail-setup'),
+                __DIR__.'/../bin/sail' => $this->app->basePath('sail'),
+                __DIR__.'/../bin/sail-setup' => $this->app->basePath('sail-setup'),
             ], ['sail', 'sail-bin']);
             $this->publishes([
-                __DIR__ . '/../database' => $this->app->basePath('docker'),
+                __DIR__.'/../database' => $this->app->basePath('docker'),
             ], ['sail', 'sail-database']);
         }
     }
