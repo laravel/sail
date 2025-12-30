@@ -103,6 +103,11 @@ trait InteractsWithDocker
     protected ?array $deploymentDomains = null;
 
     /**
+     * Indicates if vendor/ and node_modules/ should be removed from the final image.
+     */
+    protected ?bool $removeVendorNodeModules = null;
+
+    /**
      * Gather the desired Sail services using an interactive prompt.
      *
      * @return array
@@ -310,6 +315,8 @@ trait InteractsWithDocker
 
         // $commands = $this->buildCommands($archs, $environment, $repository);
 
+        $removeVendorNodeModules = $this->removeVendorNodeModules ?? config('sail.build.remove_vendor_node_modules', true);
+
         $args = [
             'ARCHS' => $archs,
             'PUSH' => $this->push,
@@ -318,6 +325,7 @@ trait InteractsWithDocker
             'APP_DIR' => realpath('.'),
             'RUNTIME_DIR' => realpath(InstalledVersions::getInstallPath('reyemtech/sail').'/runtimes/8.x'),
             'ORG' => $this->organization,
+            'REMOVE_VENDOR_NODE_MODULES' => $removeVendorNodeModules ? 'true' : 'false',
         ];
 
         if ($this->useRepository) {
@@ -436,6 +444,7 @@ trait InteractsWithDocker
             $this->output->writeln('<fg=yellow>==></> <fg=green>Organization:</> '.$config['organization']);
             $this->output->writeln('<fg=yellow>==></> <fg=green>Push:</> '.($config['push'] ? '<bg=green;fg-black> true </>' : '<bg=red;fg=black> false </>'));
             $this->output->writeln('<fg=yellow>==></> <fg=green>Version:</> '.$config['version']);
+            $this->output->writeln('<fg=yellow>==></> <fg=green>Remove vendor/node_modules:</> '.($config['remove_vendor_node_modules'] ?? true ? '<bg=green;fg-black> true </>' : '<bg=red;fg=black> false </>'));
 
             if ($config['repository'] && $config['repository'] !== 'none') {
                 $this->useRepository = true;
@@ -447,6 +456,10 @@ trait InteractsWithDocker
 
             if ($config['organization']) {
                 $this->organization = $config['organization'];
+            }
+
+            if (isset($config['remove_vendor_node_modules'])) {
+                $this->removeVendorNodeModules = (bool) $config['remove_vendor_node_modules'];
             }
 
             $this->reuseConfig = $forceReuse ? true : $this->reuseConfig;
@@ -533,6 +546,8 @@ trait InteractsWithDocker
 
     protected function writeConfig($environments, $architectures, $repository)
     {
+        $removeVendorNodeModules = $this->removeVendorNodeModules ?? config('sail.build.remove_vendor_node_modules', true);
+
         $config = [];
         $config['environments'] = implode(',', $environments);
         $config['architectures'] = implode(',', $architectures);
@@ -540,6 +555,7 @@ trait InteractsWithDocker
         $config['push'] = $this->push;
         $config['organization'] = $this->organization;
         $config['version'] = config('sail.build.version', '1.0.0');
+        $config['remove_vendor_node_modules'] = $removeVendorNodeModules;
 
         $writer = new Writer(base_path('.env'));
         $writer->set('SAIL_BUILD_ENVIRONMENT', $config['environments'] ?? '');
@@ -548,6 +564,7 @@ trait InteractsWithDocker
         $writer->set('SAIL_BUILD_PUSH', $config['push'] ?? 'false');
         $writer->set('SAIL_BUILD_ORGANIZATION', $config['organization'] ?? '');
         $writer->set('SAIL_BUILD_VERSION', $config['version'] ?? '1.0.0');
+        $writer->set('SAIL_BUILD_REMOVE_VENDOR_NODE_MODULES', $config['remove_vendor_node_modules'] ? 'true' : 'false');
         $writer->set('SAIL_DEPLOY_DOMAINS', implode(',', $this->deploymentDomains) ?? '');
         $writer->set('VITE_DEV_SERVER_URL', 'https://'.config('sail.domain').'/vite');
         $writer->write();
@@ -558,6 +575,7 @@ trait InteractsWithDocker
         Config::set('sail.build.push', $config['push'] ? true : false);
         Config::set('sail.build.organization', $config['organization'] ?? '');
         Config::set('sail.build.version', $config['version'] ?? '1.0.0');
+        Config::set('sail.build.remove_vendor_node_modules', $config['remove_vendor_node_modules']);
         Config::set('sail.deploy.domains', implode(',', $this->deploymentDomains) ?? '');
     }
 

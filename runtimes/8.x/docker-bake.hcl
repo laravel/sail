@@ -34,6 +34,10 @@ variable "ARCHS" {
     default = "linux/amd64,linux/arm64"
 }
 
+variable "REMOVE_VENDOR_NODE_MODULES" {
+    default = "true"
+}
+
 group "default" {
     targets = ["app", "production-cli", "production-fpm"]
 }
@@ -69,6 +73,9 @@ target "app-build" {
     platforms = PUSH ? split(",", ARCHS) : split(",", ARCHS)
     matrix = {
         tgt = ["cli", "fpm"]
+    }
+    args = {
+        REMOVE_VENDOR_NODE_MODULES = "${REMOVE_VENDOR_NODE_MODULES}"
     }
 }
 
