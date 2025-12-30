@@ -60,6 +60,8 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 AddCommand::class,
                 PublishCommand::class,
                 BuildCommand::class
+                HelmCommand::class,
+                CiCommand::class,
             ]);
         }
     }
