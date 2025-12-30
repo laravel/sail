@@ -12,5 +12,5 @@
     "tolerations" (.Values.tolerations | default list)
     "nodeSelector" (.Values.nodeSelector | default dict)
 }}
-{{- $ctx := merge (dict "tier" $tier "main" $main) $scoped }}
+{{- $ctx := merge (dict "tier" $tier "main" $main "Chart" .Chart "Release" .Release "Values" .Values "Capabilities" .Capabilities) $scoped }}
 {{- include "sail.laravelSpec" $ctx }}

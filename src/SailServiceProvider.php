@@ -10,6 +10,7 @@ use Laravel\Sail\Console\AddCommand;
 use Laravel\Sail\Console\BuildCommand;
 use Laravel\Sail\Console\CiCommand;
 use Laravel\Sail\Console\HelmCommand;
+use Laravel\Sail\Console\HelmValidateCommand;
 use Laravel\Sail\Console\InstallCommand;
 use Laravel\Sail\Console\PublishCommand;
 use Reyemtech\Sail\Http\Middleware\ForceHttps;
@@ -61,6 +62,7 @@ class SailServiceProvider extends ServiceProvider implements DeferrableProvider
                 PublishCommand::class,
                 BuildCommand::class,
                 HelmCommand::class,
+                HelmValidateCommand::class,
                 CiCommand::class,
             ]);
         }

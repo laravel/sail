@@ -10,8 +10,10 @@ Falls back to standard Helm naming if neither is available.
 {{- $name = .main.name | default "website" | lower }}
 {{- else if .Values.name }}
 {{- $name = .Values.name | default "website" | lower }}
-{{- else }}
+{{- else if .Chart }}
 {{- $name = default .Chart.Name .Values.nameOverride }}
+{{- else }}
+{{- $name = "website" }}
 {{- end }}
 {{- $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
@@ -25,13 +27,15 @@ Uses .Values.name if provided, otherwise falls back to standard Helm naming.
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else if .Values.name }}
 {{- .Values.name | lower | trunc 63 | trimSuffix "-" }}
-{{- else }}
+{{- else if and .Chart .Release }}
 {{- $name := default .Chart.Name .Values.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
+{{- else }}
+{{- include "sail.name" . }}
 {{- end }}
 {{- end }}
 
@@ -53,12 +57,16 @@ external-secrets.io/v1beta1
 Standard Kubernetes labels following best practices.
 */}}
 {{- define "sail.labels" -}}
+{{- if .Chart }}
 helm.sh/chart: {{ include "sail.chart" . }}
+{{- end }}
 {{ include "sail.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+{{- if .Release }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -66,14 +74,20 @@ Selector labels used by deployments, services, etc.
 */}}
 {{- define "sail.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "sail.name" . }}
+{{- if .Release }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
 {{- end }}
 
 {{/*
 Chart name and version as used by the chart label.
 */}}
 {{- define "sail.chart" -}}
+{{- if and .Chart .Chart.Name .Chart.Version }}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- "chart-unknown" }}
+{{- end }}
 {{- end }}
 
 {{/*
