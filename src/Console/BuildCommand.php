@@ -262,12 +262,25 @@ class BuildCommand extends Command
         $allowedRepositories = array_keys($this->repositories);
         $allowedRepositories[] = 'none';
 
+        // Check if repository is valid
         if ($repository && ! in_array($repository, $allowedRepositories, true)) {
-            $this->components->error('Invalid repository: '.$repository);
-            $this->components->warn('💡 Tip: Valid repositories are: '.implode(', ', array_slice($allowedRepositories, 0, 5)).'...');
-            $this->output->writeln('   Use "none" for local-only builds.');
-            $this->output->writeln('');
-            $hasErrors = true;
+            // Allow full ECR URLs (e.g., 888657980245.dkr.ecr.us-east-1.amazonaws.com)
+            $isECR = $this->isECRRegistry($repository);
+            // Allow full ACR URLs (e.g., myregistry.azurecr.io)
+            $isACR = $this->isACRRegistry($repository);
+            // Allow any URL that looks like a registry (contains dots, no spaces)
+            $isFullRegistryUrl = strpos($repository, '.') !== false &&
+                                 strpos($repository, ' ') === false &&
+                                 preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-\.]*[a-zA-Z0-9]$/', $repository);
+
+            if (! $isECR && ! $isACR && ! $isFullRegistryUrl) {
+                $this->components->error('Invalid repository: '.$repository);
+                $this->components->warn('💡 Tip: Valid repositories are: '.implode(', ', array_slice($allowedRepositories, 0, 5)).'...');
+                $this->output->writeln('   You can also use full registry URLs (e.g., registry.example.com, *.dkr.ecr.*.amazonaws.com, *.azurecr.io)');
+                $this->output->writeln('   Use "none" for local-only builds.');
+                $this->output->writeln('');
+                $hasErrors = true;
+            }
         }
 
         return $hasErrors;
