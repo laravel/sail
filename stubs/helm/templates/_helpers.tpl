@@ -6,7 +6,7 @@ Falls back to standard Helm naming if neither is available.
 */}}
 {{- define "sail.name" -}}
 {{- $name := "" }}
-{{- if .main.name }}
+{{- if and .main .main.name }}
 {{- $name = .main.name | default "website" | lower }}
 {{- else if .Values.name }}
 {{- $name = .Values.name | default "website" | lower }}
