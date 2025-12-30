@@ -1,0 +1,60 @@
+version: 0.2
+
+env:
+  variables:
+    REGISTRY: "{{REPOSITORY}}"
+    ORGANIZATION: "{{ORGANIZATION}}"
+    APP_NAME: "{{APP_NAME}}"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to container registry...
+      - |
+        if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
+          echo "$REGISTRY_PASSWORD" | docker login $REGISTRY -u "$REGISTRY_USERNAME" --password-stdin
+        fi
+      - |
+        if [ -n "$AZURE_CLIENT_ID" ] && [ -n "$AZURE_CLIENT_SECRET" ]; then
+          apt-get update && apt-get install -y azure-cli
+          az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID" || true
+        fi
+      - echo Installing PHP and Composer...
+      - apt-get update
+      - apt-get install -y php8.4-cli php8.4-xml php8.4-mbstring php8.4-curl php8.4-zip unzip
+      - curl -sS https://getcomposer.org/installer | php
+      - mv composer.phar /usr/local/bin/composer
+      - echo Installing dependencies...
+      - composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+      - |
+        if [ -n "$CODEBUILD_SOURCE_VERSION" ] && [[ "$CODEBUILD_SOURCE_VERSION" == v* ]]; then
+          VERSION=${CODEBUILD_SOURCE_VERSION#v}
+        else
+          VERSION=$(date +'%Y.%m.%d')-${CODEBUILD_SOURCE_VERSION:0:8}
+        fi
+        export VERSION
+        echo "Building version: $VERSION"
+  build:
+    commands:
+      - echo Building Docker images and Helm chart...
+      - |
+        php artisan sail:build \
+          --environments=production \
+          --architectures=linux/amd64,linux/arm64 \
+          --repository=$REGISTRY \
+          --organization=$ORGANIZATION \
+          --build-version=$VERSION \
+          --push \
+          --use-previous \
+          --bump=no
+
+artifacts:
+  files:
+    - helm/**/*
+    - '**/*'
+
+cache:
+  paths:
+    - vendor/**/*
+    - '**/node_modules/**/*'
+

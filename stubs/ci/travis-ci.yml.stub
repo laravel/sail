@@ -1,0 +1,49 @@
+language: php
+
+php:
+  - 8.4
+
+services:
+  - docker
+
+env:
+  global:
+    - REGISTRY={{REPOSITORY}}
+    - ORGANIZATION={{ORGANIZATION}}
+    - APP_NAME={{APP_NAME}}
+
+branches:
+  only:
+    - main
+    - master
+    - /^v.*/
+
+before_install:
+  - composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+before_script:
+  - |
+    if [ -n "$GHCR_IO_USERNAME" ] && [ -n "$GHCR_IO_PASSWORD" ]; then
+      echo "$GHCR_IO_PASSWORD" | docker login $REGISTRY -u "$GHCR_IO_USERNAME" --password-stdin
+    elif [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
+      echo "$REGISTRY_PASSWORD" | docker login $REGISTRY -u "$REGISTRY_USERNAME" --password-stdin
+    fi
+
+script:
+  - |
+    if [ -n "$TRAVIS_TAG" ]; then
+      VERSION=${TRAVIS_TAG#v}
+    else
+      VERSION=$(date +'%Y.%m.%d')-${TRAVIS_COMMIT:0:8}
+    fi
+  - |
+    php artisan sail:build \
+      --environments=production \
+      --architectures=linux/amd64,linux/arm64 \
+      --repository=$REGISTRY \
+      --organization=$ORGANIZATION \
+      --build-version=$VERSION \
+      --push \
+      --use-previous \
+      --bump=no
+

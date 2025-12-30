@@ -1,0 +1,73 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@2.3.0
+
+workflows:
+  build-and-push:
+    jobs:
+      - build-docker-images:
+          filters:
+            branches:
+              only:
+                - main
+                - master
+            tags:
+              only: /^v.*/
+
+jobs:
+  build-docker-images:
+    docker:
+      - image: cimg/php:8.4
+    environment:
+      REGISTRY: {{REPOSITORY}}
+      ORGANIZATION: {{ORGANIZATION}}
+      APP_NAME: {{APP_NAME}}
+    steps:
+      - checkout
+
+      - run:
+          name: Install Composer
+          command: |
+            curl -sS https://getcomposer.org/installer | php
+            sudo mv composer.phar /usr/local/bin/composer
+
+      - run:
+          name: Install Dependencies
+          command: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+      - setup_remote_docker:
+          version: 24.0.0
+
+      - run:
+          name: Login to Container Registry
+          command: |
+            if [ -n "$GHCR_IO_USERNAME" ] && [ -n "$GHCR_IO_PASSWORD" ]; then
+              echo "$GHCR_IO_PASSWORD" | docker login $REGISTRY -u "$GHCR_IO_USERNAME" --password-stdin
+            elif [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
+              echo "$REGISTRY_PASSWORD" | docker login $REGISTRY -u "$REGISTRY_USERNAME" --password-stdin
+            fi
+
+      - run:
+          name: Extract Version
+          command: |
+            if [ -n "$CIRCLE_TAG" ]; then
+              VERSION=${CIRCLE_TAG#v}
+            else
+              VERSION=$(date +'%Y.%m.%d')-${CIRCLE_SHA1:0:8}
+            fi
+            echo "export VERSION=$VERSION" >> $BASH_ENV
+
+      - run:
+          name: Build Docker Images and Helm Chart
+          command: |
+            php artisan sail:build \
+              --environments=production \
+              --architectures=linux/amd64,linux/arm64 \
+              --repository=$REGISTRY \
+              --organization=$ORGANIZATION \
+              --build-version=$VERSION \
+              --push \
+              --use-previous \
+              --bump=no
+
