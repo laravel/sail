@@ -1,0 +1,60 @@
+{{- range $tier := list "web" "worker" }}
+{{- $scoped := get $.Values $tier | default dict }}
+{{- $autoscalingEnabled := false }}
+{{- if hasKey $scoped.autoscaling "enabled" }}
+{{- $autoscalingEnabled = $scoped.autoscaling.enabled }}
+{{- else if eq $tier "web" }}
+{{- $autoscalingEnabled = true }}
+{{- end }}
+{{- if and $scoped.enabled $autoscalingEnabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "sail.name" $ }}-{{ $tier }}
+  labels:
+    {{- include "sail.labels" $ | nindent 4 }}
+    tier: {{ $tier }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "sail.name" $ }}-{{ $tier }}
+  minReplicas: {{ $scoped.autoscaling.minReplicas | default $scoped.replicaCount | default 1 }}
+  maxReplicas: {{ $scoped.autoscaling.maxReplicas | default 10 }}
+  metrics:
+    {{- if $scoped.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ $scoped.autoscaling.targetCPUUtilizationPercentage }}
+    {{- else if not $scoped.autoscaling.metrics }}
+    # Default to CPU-based scaling if no metrics specified
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    {{- end }}
+    {{- if $scoped.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ $scoped.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+    {{- if $scoped.autoscaling.metrics }}
+    {{- toYaml $scoped.autoscaling.metrics | nindent 4 }}
+    {{- end }}
+  {{- if $scoped.autoscaling.behavior }}
+  behavior:
+    {{- toYaml $scoped.autoscaling.behavior | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+

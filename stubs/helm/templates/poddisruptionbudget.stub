@@ -15,8 +15,11 @@ metadata:
 spec:
   {{- if $.Values.podDisruptionBudget.minAvailable }}
   minAvailable: {{ $.Values.podDisruptionBudget.minAvailable }}
+  {{- else if $.Values.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ $.Values.podDisruptionBudget.maxUnavailable }}
   {{- else }}
-  maxUnavailable: {{ $.Values.podDisruptionBudget.maxUnavailable | default 1 }}
+  # Default to percentage-based for autoscaling compatibility (allows HPA to scale down smoothly)
+  maxUnavailable: {{ $.Values.podDisruptionBudget.maxUnavailablePercent | default "50%" }}
   {{- end }}
   selector:
     matchLabels:
