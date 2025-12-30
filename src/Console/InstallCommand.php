@@ -56,7 +56,7 @@ class InstallCommand extends Command
             return 1;
         }
 
-        $this->buildDockerCompose($project, $services);
+        $this->buildDockerCompose($services, $project);
         $this->replaceEnvVariables($project, $services);
         $this->configurePhpUnit();
 

@@ -163,9 +163,10 @@ trait InteractsWithDockerComposeServices
      * Build the Docker Compose file.
      *
      * @param  array  $services
+     * @param  string  $project
      * @return void
      */
-    protected function buildDockerCompose(string $project = 'laravel', array $services)
+    protected function buildDockerCompose(array $services, string $project = 'laravel')
     {
         $composePath = $this->composePath();
 
