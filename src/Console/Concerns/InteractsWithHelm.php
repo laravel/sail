@@ -102,14 +102,34 @@ trait InteractsWithHelm
             $destinationFile = $path_to.'/'.str_replace('.stub', '.yaml', $file);
 
             if (is_file($sourceFile)) {
-                if ($file !== 'values.stub') {
+                if ($file === 'Chart.stub') {
+                    // Don't overwrite Chart.yaml if it exists - preserve version information
+                    // Chart.yaml will be updated by buildHelmChart() method
+                    if (! is_file($destinationFile)) {
+                        copy($sourceFile, $destinationFile);
+                        $changes = true;
+                    }
+                } elseif ($file === 'values.stub') {
+                    // Merge values.stub with existing values.yaml to add new configuration variables
+                    // Check for both cases (values.yaml and Values.yaml)
+                    $valuesYamlPath = $path_to.'/values.yaml';
+                    if (! is_file($valuesYamlPath)) {
+                        $valuesYamlPath = $path_to.'/Values.yaml';
+                    }
+
+                    if (is_file($valuesYamlPath)) {
+                        $this->output->writeln('  <bg=blue;fg=black> INFO </> Merging new configuration variables from values.stub...');
+                        $changes = $this->mergeValuesFile($sourceFile, $valuesYamlPath) || $changes;
+                    } else {
+                        copy($sourceFile, $destinationFile);
+                        $changes = true;
+                    }
+                } else {
+                    // For other files (templates), copy if different
                     if (! is_file($destinationFile) || hash_file('sha256', $sourceFile) !== hash_file('sha256', $destinationFile)) {
                         copy($sourceFile, $destinationFile);
                         $changes = true;
                     }
-                } elseif (! is_file($destinationFile)) {
-                    copy($sourceFile, $destinationFile);
-                    $changes = true;
                 }
             }
         }
@@ -158,8 +178,12 @@ trait InteractsWithHelm
      */
     protected function buildHelmValues()
     {
-        $this->output->writeln('  <bg=blue;fg=black> INFO </> Updating Values.yaml...');
-        $valuesPath = $this->helmPath.'/Values.yaml';
+        $this->output->writeln('  <bg=blue;fg=black> INFO </> Updating values.yaml...');
+        // Check for both cases (Values.yaml and values.yaml)
+        $valuesPath = $this->helmPath.'/values.yaml';
+        if (! file_exists($valuesPath)) {
+            $valuesPath = $this->helmPath.'/Values.yaml';
+        }
         $values = Yaml::parseFile($valuesPath);
 
         $values['name'] = $this->projectName;
@@ -267,5 +291,72 @@ trait InteractsWithHelm
         }
 
         return $size;
+    }
+
+    /**
+     * Merge values.stub with existing values.yaml to add new configuration variables.
+     *
+     * @param  string  $stubPath  Path to values.stub
+     * @param  string  $valuesPath  Path to values.yaml
+     * @return bool Returns true if changes were made
+     */
+    protected function mergeValuesFile(string $stubPath, string $valuesPath): bool
+    {
+        $stubValues = Yaml::parseFile($stubPath);
+        $existingValues = Yaml::parseFile($valuesPath);
+        $changes = false;
+        $newKeys = [];
+
+        // Recursively merge stub values into existing values
+        $merged = $this->mergeArrays($existingValues, $stubValues, $changes, $newKeys);
+
+        if ($changes) {
+            $yaml = Yaml::dump($merged, Yaml::DUMP_OBJECT_AS_MAP | Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+            file_put_contents($valuesPath, $yaml);
+
+            if (! empty($newKeys)) {
+                $this->output->writeln('  <fg=green>✓</> Added new configuration variables: '.implode(', ', array_slice($newKeys, 0, 5)));
+                if (count($newKeys) > 5) {
+                    $this->output->writeln('    ... and '.(count($newKeys) - 5).' more');
+                }
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
+     * Recursively merge two arrays, adding new keys from source to target.
+     *
+     * @param  array  $target  Existing values (target)
+     * @param  array  $source  Stub values (source)
+     * @param  bool  &$changes  Reference to track if changes were made
+     * @param  array  &$newKeys  Reference to track new keys added (optional)
+     * @param  string  $prefix  Prefix for tracking nested keys (internal use)
+     * @return array Merged array
+     */
+    protected function mergeArrays(array $target, array $source, bool &$changes, array &$newKeys = [], string $prefix = ''): array
+    {
+        foreach ($source as $key => $value) {
+            $fullKey = $prefix ? $prefix.'.'.$key : $key;
+
+            if (! isset($target[$key])) {
+                // Key doesn't exist in target, add it from source
+                $target[$key] = $value;
+                $changes = true;
+                $newKeys[] = $fullKey;
+            } elseif (is_array($value) && is_array($target[$key])) {
+                // Both are arrays, recursively merge
+                $originalTarget = $target[$key];
+                $target[$key] = $this->mergeArrays($target[$key], $value, $changes, $newKeys, $fullKey);
+                // Check if the merge actually changed anything
+                if ($target[$key] !== $originalTarget) {
+                    $changes = true;
+                }
+            }
+            // If key exists and is not an array, preserve existing value (don't overwrite)
+        }
+
+        return $target;
     }
 }
