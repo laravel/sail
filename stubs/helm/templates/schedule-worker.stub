@@ -20,8 +20,10 @@ spec:
               {{- $vendorPvcEnabled = .Values.scheduler.vendorPvc.enabled }}
             {{- end }}
           {{- end }}
+          {{- if or .Values.worker.imagePullSecret .Values.global.imagePullSecret }}
           imagePullSecrets:
             - name: {{ .Values.worker.imagePullSecret | default .Values.global.imagePullSecret }}
+          {{- end }}
           containers:
             - name: scheduler
               image: "{{ .Values.worker.image.repository | lower }}:{{ .Values.worker.image.tag | default .Values.global.tag | default "latest" | lower }}"
