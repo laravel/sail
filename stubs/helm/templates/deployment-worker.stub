@@ -5,6 +5,12 @@
     "secret" (.Values.secret | default dict)
     "name" (.Values.name | default "website")
     "typesense" (.Values.typesense | default dict)
+    "serviceAccountName" (include "sail.serviceAccountName" .)
+    "annotations" (.Values.annotations | default dict)
+    "podAnnotations" (.Values.podAnnotations | default dict)
+    "affinity" (.Values.affinity | default dict)
+    "tolerations" (.Values.tolerations | default list)
+    "nodeSelector" (.Values.nodeSelector | default dict)
 }}
 {{- $ctx := merge (dict "tier" $tier "main" $main) $scoped }}
 {{- include "sail.laravelSpec" $ctx }}

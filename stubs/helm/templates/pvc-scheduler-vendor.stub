@@ -3,6 +3,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "sail.name" . }}-scheduler-vendor
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+    tier: scheduler
 spec:
   accessModes:
     {{- range .Values.scheduler.vendorPvc.accessModes | default (list "ReadWriteOnce") }}

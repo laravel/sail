@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   name: {{ include "sail.name" . }}-scheduler
   labels:
-    app: {{ include "sail.name" . }}
+    {{- include "sail.labels" . | nindent 4 }}
     tier: scheduler
 spec:
   schedule: "{{ .Values.scheduler.schedule | default "* * * * *" }}"

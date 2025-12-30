@@ -57,6 +57,7 @@ secret:
 service:
   type: ClusterIP
   port: 80
+  # annotations: {}  # Annotations to add to the service
 
 # Kubernetes resource requests/limits (CPU/memory)
 resources:
@@ -73,6 +74,50 @@ securityContext:
   runAsUser: 1000
   fsGroup: 1000
   allowPrivilegeEscalation: false
+
+# ServiceAccount configuration
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# Pod Disruption Budget configuration
+podDisruptionBudget:
+  enabled: false
+  # minAvailable: 1  # Minimum number of pods that must be available
+  maxUnavailable: 1  # Maximum number of pods that can be unavailable
+
+# Pod scheduling configuration
+# Affinity rules for pod placement
+# affinity: {}
+# Example:
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#       - weight: 100
+#         podAffinityTerm:
+#           labelSelector:
+#             matchExpressions:
+#               - key: app
+#                 operator: In
+#                 values:
+#                   - {{ .Values.name }}
+#           topologyKey: kubernetes.io/hostname
+
+# Node selector for pod placement
+# nodeSelector: {}
+
+# Tolerations for pod scheduling
+# tolerations: []
+
+# Annotations to add to deployments
+# annotations: {}
+
+# Annotations to add to pods
+# podAnnotations: {}
 
 # Typesense
 typesense:

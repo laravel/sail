@@ -1,0 +1,29 @@
+{{- if and .Values.podDisruptionBudget.enabled (gt (int (.Values.replicaCount | default .Values.global.replicaCount | default 1)) 1) }}
+{{- range $tier := list "web" "worker" }}
+{{- $scoped := get $.Values $tier | default dict }}
+{{- if $scoped.enabled }}
+{{- $replicas := $scoped.replicaCount | default $.Values.global.replicaCount | default 1 }}
+{{- if gt (int $replicas) 1 }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "sail.name" $ }}-{{ $tier }}
+  labels:
+    {{- include "sail.labels" $ | nindent 4 }}
+    tier: {{ $tier }}
+spec:
+  {{- if $.Values.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ $.Values.podDisruptionBudget.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ $.Values.podDisruptionBudget.maxUnavailable | default 1 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "sail.selectorLabels" $ | nindent 6 }}
+      tier: {{ $tier }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+

@@ -49,3 +49,41 @@ external-secrets.io/v1beta1
 {{- end -}}
 {{- end }}
 
+{{/*
+Standard Kubernetes labels following best practices.
+*/}}
+{{- define "sail.labels" -}}
+helm.sh/chart: {{ include "sail.chart" . }}
+{{ include "sail.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels used by deployments, services, etc.
+*/}}
+{{- define "sail.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "sail.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Chart name and version as used by the chart label.
+*/}}
+{{- define "sail.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "sail.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "sail.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+

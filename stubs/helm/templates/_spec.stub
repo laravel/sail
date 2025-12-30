@@ -5,20 +5,31 @@ kind: Deployment
 metadata:
   name: {{ include "sail.name" . }}-{{ .tier }}
   labels:
-    app: {{ include "sail.name" . }}
+    {{- include "sail.labels" . | nindent 4 }}
     tier: {{ .tier }}
+  {{- with .main.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .replicaCount | default .main.global.replicaCount | default 1 }}
   selector:
     matchLabels:
-      app: {{ include "sail.name" . }}
+      {{- include "sail.selectorLabels" . | nindent 6 }}
       tier: {{ .tier }}
   template:
     metadata:
       labels:
-        app: {{ include "sail.name" . }}
+        {{- include "sail.selectorLabels" . | nindent 8 }}
         tier: {{ .tier }}
+      {{- with .main.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
+      {{- if .main.serviceAccountName }}
+      serviceAccountName: {{ .main.serviceAccountName }}
+      {{- end }}
       {{- if .securityContext }}
       securityContext:
         {{- toYaml .securityContext | nindent 8 }}
@@ -26,6 +37,18 @@ spec:
       {{- if or .imagePullSecret .main.global.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .imagePullSecret | default .main.global.imagePullSecret }}
+      {{- end }}
+      {{- with .main.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .main.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .main.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .tier }}
