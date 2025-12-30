@@ -1,8 +1,9 @@
 {{- range $tier := list "web" "worker" }}
 {{- $scoped := get $.Values $tier | default dict }}
+{{- $autoscaling := $scoped.autoscaling | default dict }}
 {{- $autoscalingEnabled := false }}
-{{- if hasKey $scoped.autoscaling "enabled" }}
-{{- $autoscalingEnabled = $scoped.autoscaling.enabled }}
+{{- if hasKey $autoscaling "enabled" }}
+{{- $autoscalingEnabled = $autoscaling.enabled }}
 {{- else if eq $tier "web" }}
 {{- $autoscalingEnabled = true }}
 {{- end }}
@@ -20,17 +21,17 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "sail.name" $ }}-{{ $tier }}
-  minReplicas: {{ $scoped.autoscaling.minReplicas | default $scoped.replicaCount | default 1 }}
-  maxReplicas: {{ $scoped.autoscaling.maxReplicas | default 10 }}
+  minReplicas: {{ $autoscaling.minReplicas | default $scoped.replicaCount | default 1 }}
+  maxReplicas: {{ $autoscaling.maxReplicas | default 10 }}
   metrics:
-    {{- if $scoped.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if $autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ $scoped.autoscaling.targetCPUUtilizationPercentage }}
-    {{- else if not $scoped.autoscaling.metrics }}
+          averageUtilization: {{ $autoscaling.targetCPUUtilizationPercentage }}
+    {{- else if and (not $autoscaling.metrics) (not $autoscaling.targetMemoryUtilizationPercentage) }}
     # Default to CPU-based scaling if no metrics specified
     - type: Resource
       resource:
@@ -39,22 +40,20 @@ spec:
           type: Utilization
           averageUtilization: 70
     {{- end }}
-    {{- if $scoped.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if $autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ $scoped.autoscaling.targetMemoryUtilizationPercentage }}
+          averageUtilization: {{ $autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
-    {{- if $scoped.autoscaling.metrics }}
-    {{- toYaml $scoped.autoscaling.metrics | nindent 4 }}
+    {{- if $autoscaling.metrics }}
+    {{- toYaml $autoscaling.metrics | nindent 4 }}
     {{- end }}
-  {{- if $scoped.autoscaling.behavior }}
+  {{- if $autoscaling.behavior }}
   behavior:
-    {{- toYaml $scoped.autoscaling.behavior | nindent 4 }}
+    {{- toYaml $autoscaling.behavior | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}
-{{- end }}
-
