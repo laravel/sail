@@ -17,7 +17,7 @@ class HelmCommand extends Command
      * @var string
      */
     protected $signature = 'sail:helm
-                            {--version= : Version to use for the chart}
+                            {--chart-version= : Version to use for the chart}
                             {--bump= : Bump the version (patch, minor, major, no)}
                             {--no-version-update : Skip version update in Chart.yaml}';
 
@@ -40,7 +40,7 @@ class HelmCommand extends Command
         $this->output->writeln('');
 
         // Handle version if provided
-        $versionOption = $this->option('version');
+        $versionOption = $this->option('chart-version');
         $bumpOption = $this->option('bump');
         $updateVersion = ! $this->option('no-version-update');
 
