@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.name | default "website" | lower }}
+  name: {{ include "sail.name" . }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -19,7 +19,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ $.Values.name | default "website" | lower }}
+                name: {{ include "sail.name" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

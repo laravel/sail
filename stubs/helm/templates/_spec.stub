@@ -3,20 +3,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .main.name | default "website" | lower}}-{{ .tier }}
+  name: {{ include "sail.name" . }}-{{ .tier }}
   labels:
-    app: {{ .main.name | default "website" | lower}}
+    app: {{ include "sail.name" . }}
     tier: {{ .tier }}
 spec:
   replicas: {{ .replicaCount | default .main.global.replicaCount | default 1 }}
   selector:
     matchLabels:
-      app: {{ .main.name | default "website" | lower }}
+      app: {{ include "sail.name" . }}
       tier: {{ .tier }}
   template:
     metadata:
       labels:
-        app: {{ .main.name | default "website" | lower }}
+        app: {{ include "sail.name" . }}
         tier: {{ .tier }}
     spec:
       {{- if .securityContext }}
@@ -62,7 +62,7 @@ spec:
           {{ end }}
           envFrom:
             - secretRef:
-                name: {{ .main.name | default "website" | lower }}-environment
+                name: {{ include "sail.name" . }}-environment
             {{- if .main.typesense.enabled }}
             - secretRef:
                 name: {{ .main.typesense.secret | default "typesense" | lower }}
