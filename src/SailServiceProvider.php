@@ -8,6 +8,8 @@ use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sail\Console\AddCommand;
 use Laravel\Sail\Console\BuildCommand;
+use Laravel\Sail\Console\CiCommand;
+use Laravel\Sail\Console\HelmCommand;
 use Laravel\Sail\Console\InstallCommand;
 use Laravel\Sail\Console\PublishCommand;
 use Reyemtech\Sail\Http\Middleware\ForceHttps;
