@@ -37,10 +37,6 @@ class PublishCommand extends Command
 
         $composePath = $this->composePath();
 
-        $this->components->info(
-            "Replacing vendor mounted files with host paths in: [{$composePath}]"
-        );
-
         file_put_contents(
             $composePath,
             str_replace(
