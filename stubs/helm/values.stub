@@ -130,7 +130,7 @@ worker:
         command:
           - php
           - artisan
-          - queue:status
+          - horizon:status
       initialDelaySeconds: 30  # Workers take longer to start
       periodSeconds: 30
       timeoutSeconds: 10
@@ -142,7 +142,7 @@ worker:
         command:
           - php
           - artisan
-          - queue:status
+          - horizon:status
       initialDelaySeconds: 60  # Give workers more time before checking liveness
       periodSeconds: 60        # Less frequent than readiness
       timeoutSeconds: 10
@@ -154,7 +154,7 @@ worker:
     #     command:
     #       - php
     #       - artisan
-    #       - queue:status
+    #       - horizon:status
     #   initialDelaySeconds: 0
     #   periodSeconds: 10
     #   timeoutSeconds: 10
