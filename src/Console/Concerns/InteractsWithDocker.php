@@ -458,24 +458,9 @@ trait InteractsWithDocker
 
         $startTime = time();
         $lastProgress = 0;
-        $hasError = false;
-        $errorOutput = '';
 
-        $exitCode = $process->run(function ($type, $line) use (&$lastProgress, $startTime, &$hasError, &$errorOutput) {
+        $exitCode = $process->run(function ($type, $line) use (&$lastProgress, $startTime) {
             $elapsed = time() - $startTime;
-
-            // Capture error output - check for various error patterns
-            $lineLower = strtolower($line);
-            if ($type === Process::ERR ||
-                stripos($line, 'ERROR') !== false ||
-                stripos($line, 'error:') !== false ||
-                stripos($line, 'failed to') !== false ||
-                stripos($line, 'Invalid value') !== false ||
-                stripos($line, 'failed to parse') !== false ||
-                stripos($line, 'failed to solve') !== false) {
-                $hasError = true;
-                $errorOutput .= $line;
-            }
 
             // Show progress indicator every 5 seconds
             if ($elapsed - $lastProgress >= 5) {
@@ -485,44 +470,45 @@ trait InteractsWithDocker
                 $lastProgress = $elapsed;
             }
 
-            // Show important build output
-            if (stripos($line, 'error') !== false || stripos($line, 'warning') !== false || stripos($line, '#') !== false || stripos($line, 'ERROR') !== false) {
+            // Show important build output (build steps and actual errors)
+            if (str_starts_with(trim($line), '#') || $this->isDockerBuildError($line)) {
                 $this->output->writeln('');
                 $this->output->write('    '.$line);
             }
         });
 
-        // Check for errors in stderr as well
-        $stderr = $process->getErrorOutput();
-        $stdout = $process->getOutput();
-
-        // Check both stdout and stderr for errors (docker-bake errors can appear in either)
-        $allOutput = $stdout.$stderr;
-        if (! empty($allOutput) && (
-            stripos($allOutput, 'ERROR') !== false ||
-            stripos($allOutput, 'error:') !== false ||
-            stripos($allOutput, 'failed to solve') !== false ||
-            stripos($allOutput, 'failed to parse') !== false ||
-            stripos($allOutput, 'Invalid value') !== false
-        )) {
-            $hasError = true;
-            $errorOutput .= $allOutput;
-        }
-
-        // If process failed or had errors, return non-zero
-        if ($exitCode !== 0) {
-            return $exitCode;
-        }
-
-        if ($hasError) {
-            // Process returned 0 but had errors in output - this shouldn't happen but handle it
-            $this->output->writeln('');
-            $this->components->error('Build completed but errors were detected:');
-            $this->output->writeln($errorOutput);
-
-            return 1;
-        }
-
+        // The process exit code is the definitive signal for build success/failure
         return $exitCode;
+    }
+
+    /**
+     * Determine if a build output line contains an actual Docker/buildx error.
+     */
+    protected function isDockerBuildError(string $line): bool
+    {
+        $trimmed = trim($line);
+
+        // Match lines that start with "ERROR" (Docker buildx error prefix)
+        if (preg_match('/^ERROR\b/i', $trimmed)) {
+            return true;
+        }
+
+        // Match specific Docker buildx failure patterns
+        $patterns = [
+            'failed to solve',
+            'failed to parse',
+            'failed to compute',
+            'failed to create',
+            'failed to connect',
+            'Invalid value',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (stripos($trimmed, $pattern) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
