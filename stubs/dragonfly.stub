@@ -1,0 +1,12 @@
+dragonfly:
+    image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
+    ports:
+        - '${FORWARD_VALKEY_PORT:-6379}:6379'
+    volumes:
+        - 'sail-dragonfly:/data'
+    networks:
+        - sail
+    healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        retries: 3
+        timeout: 5s
