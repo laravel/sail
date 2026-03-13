@@ -29,13 +29,26 @@ spec:
         tier: presync
     spec:
       restartPolicy: Never
-      {{- if or .Values.global.imagePullSecret }}
+      {{- if .Values.global.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.global.imagePullSecret }}
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: {{ .Values.global.imagePullSecret }}
+            items:
+              - key: .dockerconfigjson
+                path: config.json
       {{- end }}
       containers:
         - name: image-check
           image: gcr.io/go-containerregistry/crane:debug
+          {{- if .Values.global.imagePullSecret }}
+          volumeMounts:
+            - name: docker-config
+              mountPath: /root/.docker
+              readOnly: true
+          {{- end }}
           command:
             - /busybox/sh
             - -c
