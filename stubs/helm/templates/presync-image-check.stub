@@ -1,0 +1,71 @@
+{{- $tag := .Values.global.tag | default "latest" }}
+{{- $images := list }}
+{{- if .Values.web.enabled }}
+{{- $images = append $images (printf "%s:%s" .Values.web.image.repository $tag) }}
+{{- end }}
+{{- if .Values.worker.enabled }}
+{{- $images = append $images (printf "%s:%s" .Values.worker.image.repository $tag) }}
+{{- end }}
+{{- if $images }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "sail.name" . }}-presync-image-check
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    helm.sh/hook: pre-upgrade,pre-install
+    helm.sh/hook-weight: "-10"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: 5
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        {{- include "sail.selectorLabels" . | nindent 8 }}
+        tier: presync
+    spec:
+      restartPolicy: Never
+      {{- if or .Values.global.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.global.imagePullSecret }}
+      {{- end }}
+      containers:
+        - name: image-check
+          image: gcr.io/go-containerregistry/crane:debug
+          command:
+            - /busybox/sh
+            - -c
+            - |
+              set -e
+              RETRY_DELAY=10
+              MAX_ATTEMPTS=10
+
+              check_image() {
+                local image="$1"
+                local attempt=1
+
+                echo "Checking image: ${image}"
+                while [ $attempt -le $MAX_ATTEMPTS ]; do
+                  if crane manifest "${image}" > /dev/null 2>&1; then
+                    echo "Image available: ${image}"
+                    return 0
+                  fi
+                  echo "Attempt ${attempt}/${MAX_ATTEMPTS}: image not found, retrying in ${RETRY_DELAY}s..."
+                  sleep $RETRY_DELAY
+                  attempt=$((attempt + 1))
+                done
+
+                echo "FAILED: Image not available after ${MAX_ATTEMPTS} attempts: ${image}"
+                return 1
+              }
+
+              {{- range $images }}
+              check_image "{{ . }}"
+              {{- end }}
+
+              echo "All images verified successfully."
+{{- end }}
