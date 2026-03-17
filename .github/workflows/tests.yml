@@ -46,6 +46,7 @@ jobs:
 
       - name: Link Sail repository
         run: |
+          composer remove laravel/sail --dev --no-interaction -W
           composer config minimum-stability dev
           composer config repositories.sail path ../sail
           composer require reyemtech/sail:* --dev -W

@@ -1,0 +1,41 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Laravel\\\\Sail\\\\Console\\\\AddCommand\\:\\:replaceEnvVariables\\(\\) invoked with 1 parameter, 2 required\\.$#"
+			count: 1
+			path: src/Console/AddCommand.php
+
+		-
+			message: "#^Method Laravel\\\\Sail\\\\Console\\\\AddCommand\\:\\:runSetup\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: src/Console/AddCommand.php
+
+		-
+			message: "#^Method Laravel\\\\Sail\\\\Console\\\\BuildCommand\\:\\:choosePush\\(\\) should return array but return statement is missing\\.$#"
+			count: 1
+			path: src/Console/BuildCommand.php
+
+		-
+			message: "#^Result of static method Illuminate\\\\Support\\\\Facades\\\\Config\\:\\:set\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Console/BuildCommand.php
+
+		-
+			message: "#^Method Laravel\\\\Sail\\\\Console\\\\HelmCommand\\:\\:choosePush\\(\\) should return array but return statement is missing\\.$#"
+			count: 1
+			path: src/Console/HelmCommand.php
+
+		-
+			message: "#^Result of static method Illuminate\\\\Support\\\\Facades\\\\Config\\:\\:set\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Console/HelmCommand.php
+
+		-
+			message: "#^Method Laravel\\\\Sail\\\\Console\\\\InstallCommand\\:\\:runSetup\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: src/Console/InstallCommand.php
+
+		-
+			message: "#^Method Laravel\\\\Sail\\\\Console\\\\PublishCommand\\:\\:runSetup\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: src/Console/PublishCommand.php
