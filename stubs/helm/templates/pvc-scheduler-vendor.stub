@@ -1,4 +1,4 @@
-{{- if and (.Values.scheduler.enabled) (.Values.scheduler.vendorPvc.enabled | default true) -}}
+{{- if and (.Values.scheduler.enabled) (.Values.scheduler.vendorPvc.enabled | default false) -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

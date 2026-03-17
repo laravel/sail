@@ -175,11 +175,20 @@ scheduler:
   successfulJobsHistoryLimit: 5
   failedJobsHistoryLimit: 5
   vendorPvc:
-    enabled: true
+    enabled: false
     accessModes:
       - ReadWriteOnce
     size: 5Gi
     storageClassName: "sata"
+
+# Pre-deploy image verification
+imageCheck:
+  enabled: true
+
+# Pre-deploy database migrations
+migrations:
+  enabled: true
+  activeDeadlineSeconds: 300
 
 # Base name used for resources (e.g., service, ingress)
 name: <project-name>
