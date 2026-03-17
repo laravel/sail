@@ -1,27 +1,34 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.56.0...1.x)
+## [2.0.0](https://github.com/reyemtech/sail/compare/v1.51.1...v2.0.0) (2026-03-17)
 
-## [v1.56.0](https://github.com/laravel/sail/compare/v1.55.0...v1.56.0) - 2026-04-01
 
-* Enable php8.5-swoole in Dockerfile by [@mihaileu](https://github.com/mihaileu) in https://github.com/laravel/sail/pull/859
+### ⚠ BREAKING CHANGES
 
-## [v1.55.0](https://github.com/laravel/sail/compare/v1.54.0...v1.55.0) - 2026-03-23
+* SAIL_BUILD_REMOVE_VENDOR_NODE_MODULES env var renamed to SAIL_BUILD_REMOVE_NODE_MODULES. --remove-vendor-node-modules CLI flag renamed to --remove-node-modules.
+* REMOVE_VENDOR_NODE_MODULES renamed to REMOVE_NODE_MODULES
 
-* introduce new SAIL_DOCKER_BINARY env for podman support by [@Vringe](https://github.com/Vringe) in https://github.com/laravel/sail/pull/857
+### Features
 
-## [v1.54.0](https://github.com/laravel/sail/compare/v1.53.0...v1.54.0) - 2026-03-11
+* add ArgoCD PreSync hook to verify images before deployment ([ceb49a0](https://github.com/reyemtech/sail/commit/ceb49a088c5dcbaae60ae4c3b53026903767dcdb))
+* add presync migration Job template ([f8c4f27](https://github.com/reyemtech/sail/commit/f8c4f27c291571e9bf74494ea9e1a4e30dc43386))
+* default vendorPvc disabled, add migrations and imageCheck config ([72d5890](https://github.com/reyemtech/sail/commit/72d5890b27e3d8ab0a326da130be5208b6dcdb32))
+* gate image check presync Job on imageCheck.enabled config ([bcc8fdb](https://github.com/reyemtech/sail/commit/bcc8fdb0d9e2812ac2bcc4fc04a0b19bd2bb0886))
+* keep vendor in production images, only strip node_modules ([a04d86d](https://github.com/reyemtech/sail/commit/a04d86d4cc48a021d94715c6829d6b773040bafb))
+* remove composer install and migrate from production s6 startup ([0e29815](https://github.com/reyemtech/sail/commit/0e2981539bdca69c7502a5d033d5e70f95a2d6b1))
+* simplify scheduler CronJob, remove composer install and PVC mount ([7868f4e](https://github.com/reyemtech/sail/commit/7868f4efd5878a8f8ad44bcc64e4381c90f28edf))
 
-* Use UTF-8 locale inside container by [@MrMeshok](https://github.com/MrMeshok) in https://github.com/laravel/sail/pull/849
 
-## [v1.53.0](https://github.com/laravel/sail/compare/v1.52.0...v1.53.0) - 2026-02-06
+### Bug Fixes
 
-* Switch Yarn installation to Corepack in Dockerfiles by [@arjankapteijn](https://github.com/arjankapteijn) in https://github.com/laravel/sail/pull/846
-* Supports Laravel 13 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/sail/pull/847
+* **ci:** remove laravel/sail before linking reyemtech/sail, add PHPStan baseline ([9730332](https://github.com/reyemtech/sail/commit/9730332afe735cb4bab2d42b513ce5459639e56b))
+* **ci:** replace upstream Laravel workflows with fork-specific CI ([6b58646](https://github.com/reyemtech/sail/commit/6b5864602117bec66780f78bd84ebfef73477431))
+* mount docker config for crane registry authentication ([bc506a2](https://github.com/reyemtech/sail/commit/bc506a26970d4533c390118541ed6d9eec781c5d))
 
-## [v1.52.0](https://github.com/laravel/sail/compare/v1.51.0...v1.52.0) - 2026-01-01
 
-* Replace MariaDB vendor paths with published paths in compose file by [@hosni](https://github.com/hosni) in https://github.com/laravel/sail/pull/845
+### Code Refactoring
+
+* rename remove_vendor_node_modules to remove_node_modules ([47fd17b](https://github.com/reyemtech/sail/commit/47fd17b19e6bcf2912e398dca2376d43bb995696))
 
 ## [v1.51.0](https://github.com/laravel/sail/compare/v1.50.0...v1.51.0) - 2025-12-09
 
