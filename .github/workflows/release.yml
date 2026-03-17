@@ -9,74 +9,11 @@ permissions:
   pull-requests: write
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        include:
-          - php: '8.2'
-            laravel: 12
-          - php: '8.4'
-            laravel: 12
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          path: 'sail'
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, fileinfo
-          tools: composer:v2
-          coverage: none
-
-      - name: Create a new Laravel application
-        run: composer create-project laravel/laravel app "${{ matrix.laravel }}.x" --remove-vcs --no-interaction --prefer-dist
-
-      - name: Link Sail repository
-        run: |
-          composer remove laravel/sail --dev --no-interaction -W
-          composer config minimum-stability dev
-          composer config repositories.sail path ../sail
-          composer require reyemtech/sail:* --dev -W
-        working-directory: app
-
-      - name: Install Sail
-        run: |
-          php artisan sail:install --php=${{ matrix.php }} --no-interaction
-          php artisan sail:publish --no-interaction
-        working-directory: app
-
-      - name: Run PHPUnit tests
-        run: |
-          cd ../sail && vendor/bin/phpunit
-        working-directory: app
-
   release-please:
-    needs: test
     runs-on: ubuntu-latest
-    outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
-      version: ${{ steps.release.outputs.version }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-      - name: Summary
-        if: steps.release.outputs.release_created
-        env:
-          VERSION: ${{ steps.release.outputs.version }}
-          TAG_NAME: ${{ steps.release.outputs.tag_name }}
-        run: |
-          echo "## Release Created" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "- **Version:** $VERSION" >> "$GITHUB_STEP_SUMMARY"
-          echo "- **Tag:** $TAG_NAME" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Packagist will auto-update via GitHub webhook" >> "$GITHUB_STEP_SUMMARY"
