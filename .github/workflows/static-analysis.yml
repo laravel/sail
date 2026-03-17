@@ -1,15 +1,30 @@
-name: static analysis
+name: Static Analysis
 
 on:
   push:
-    branches:
-      - master
-      - '*.x'
+    branches: [1.x]
   pull_request:
 
 permissions:
   contents: read
 
 jobs:
-  tests:
-    uses: laravel/.github/.github/workflows/static-analysis.yml@main
+  phpstan:
+    runs-on: ubuntu-latest
+    name: PHPStan
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse src
