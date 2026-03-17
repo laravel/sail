@@ -1,17 +1,6 @@
 #!/usr/bin/execlineb
 with-contenv
-importas -i APP_ENV APP_ENV
 cd /var/www
-
-foreground {
-  if { test "$APP_ENV" = "production" }
-  composer install --optimize-autoloader --prefer-dist --no-dev
-}
-foreground {
-  if { test "$APP_ENV" != "production" }
-  composer install --optimize-autoloader --prefer-dist
-}
-foreground { php artisan migrate --force }
 
 foreground { php artisan optimize }
 
