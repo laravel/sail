@@ -34,7 +34,7 @@ variable "ARCHS" {
     default = "linux/amd64,linux/arm64"
 }
 
-variable "REMOVE_VENDOR_NODE_MODULES" {
+variable "REMOVE_NODE_MODULES" {
     default = "true"
 }
 
@@ -75,7 +75,7 @@ target "app-build" {
         tgt = ["cli", "fpm"]
     }
     args = {
-        REMOVE_VENDOR_NODE_MODULES = "${REMOVE_VENDOR_NODE_MODULES}"
+        REMOVE_NODE_MODULES = "${REMOVE_NODE_MODULES}"
     }
 }
 

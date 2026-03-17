@@ -1,6 +1,6 @@
 FROM base
 
-ARG REMOVE_VENDOR_NODE_MODULES=true
+ARG REMOVE_NODE_MODULES=true
 
 # Clean application directory
 RUN rm -rf /var/www/*
@@ -10,8 +10,8 @@ COPY --from=package preload/opcache.preload.php /var/www/bootstrap/opcache.prelo
 
 # Recreate empty storage structure
 RUN find /var/www/storage ! -name '*.json' -mindepth 1 -delete \
-    && if [ "$REMOVE_VENDOR_NODE_MODULES" = "true" ]; then \
-        rm -rf /var/www/vendor /var/www/node_modules; \
+    && if [ "$REMOVE_NODE_MODULES" = "true" ]; then \
+        rm -rf /var/www/node_modules; \
     fi \
     && rm -rf /var/www/.env* /var/www/public/hot \
     && mkdir -p /var/www/storage/app \
@@ -25,9 +25,8 @@ RUN find /var/www/storage ! -name '*.json' -mindepth 1 -delete \
 RUN chown -R sail:sail /var/www
 RUN chmod -R 755 /var/www/
 
-# Install PHP dependencies using Composer
-# Skip scripts during build to avoid database connection requirements
-RUN composer install --optimize-autoloader --no-scripts
+# Install PHP dependencies (production only, with scripts)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install and build frontend assets using npm
 RUN npm ci
@@ -35,9 +34,8 @@ RUN npm ci
 RUN npm run build
 
 # Clean up build artifacts to reduce final image size
-RUN if [ "$REMOVE_VENDOR_NODE_MODULES" = "true" ]; then \
+RUN if [ "$REMOVE_NODE_MODULES" = "true" ]; then \
         rm -rf /var/www/node_modules; \
-        rm -rf /var/www/vendor; \
     fi
 
 RUN rm -rf /var/www/storage/framework/cache/*
