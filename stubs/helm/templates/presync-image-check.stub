@@ -1,3 +1,4 @@
+{{- if .Values.imageCheck.enabled | default true -}}
 {{- $tag := .Values.global.tag | default "latest" }}
 {{- $images := list }}
 {{- if .Values.web.enabled }}
@@ -16,6 +17,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/sync-wave: "-10"
     helm.sh/hook: pre-upgrade,pre-install
     helm.sh/hook-weight: "-10"
     helm.sh/hook-delete-policy: before-hook-creation
@@ -82,3 +84,4 @@ spec:
 
               echo "All images verified successfully."
 {{- end }}
+{{- end -}}
