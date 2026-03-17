@@ -9,7 +9,8 @@ return [
         'push' => env('SAIL_BUILD_PUSH', false),
         'organization' => env('SAIL_BUILD_ORGANIZATION', 'reyemtech'),
         'version' => env('SAIL_BUILD_VERSION', "1.0.0"),
-        'remove_vendor_node_modules' => env('SAIL_BUILD_REMOVE_VENDOR_NODE_MODULES', true),
+        'remove_node_modules' => env('SAIL_BUILD_REMOVE_NODE_MODULES',
+            env('SAIL_BUILD_REMOVE_VENDOR_NODE_MODULES', true)),
     ],
     'deploy' => [
         'domains' => env('SAIL_DEPLOY_DOMAINS', '.reyemtech.com'),

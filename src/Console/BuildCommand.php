@@ -29,8 +29,8 @@ class BuildCommand extends Command
                             {--use-previous : Reuse the last saved build configuration without prompts}
                             {--bump= : Bump the version (patch, minor, major, no)}
                             {--dry-run : Preview what would be built without executing}
-                            {--remove-vendor-node-modules : Remove vendor/ and node_modules/ from final image (default: true)}
-                            {--keep-vendor-node-modules : Keep vendor/ and node_modules/ in final image}';
+                            {--remove-node-modules : Remove node_modules/ from final image (default: true)}
+                            {--keep-node-modules : Keep node_modules/ in final image}';
 
     /**
      * Execute the console command.
@@ -85,9 +85,9 @@ class BuildCommand extends Command
             if ($bump && $config['version'] !== null) {
                 $config['version'] = $this->bumpVersion($config['version'], $bump);
             }
-            // Ensure removeVendorNodeModules is set from config if not already set
-            if (! isset($this->removeVendorNodeModules) && isset($config['remove_vendor_node_modules'])) {
-                $this->removeVendorNodeModules = (bool) $config['remove_vendor_node_modules'];
+            // Ensure removeNodeModules is set from config if not already set
+            if (! isset($this->removeNodeModules) && isset($config['remove_node_modules'])) {
+                $this->removeNodeModules = (bool) $config['remove_node_modules'];
             }
             $this->writeConfig($environments, $architectures, $repository);
         }
@@ -161,8 +161,8 @@ class BuildCommand extends Command
         $domainsOption = $this->option('domains');
         $versionOption = $this->option('build-version');
         $pushOption = $this->option('push');
-        $removeVendorNodeModulesOption = $this->option('remove-vendor-node-modules');
-        $keepVendorNodeModulesOption = $this->option('keep-vendor-node-modules');
+        $removeNodeModulesOption = $this->option('remove-node-modules');
+        $keepNodeModulesOption = $this->option('keep-node-modules');
 
         $overridesProvided = $envOption !== null
             || $archOption !== null
@@ -171,8 +171,8 @@ class BuildCommand extends Command
             || $domainsOption !== null
             || $versionOption !== null
             || $pushOption === true
-            || $removeVendorNodeModulesOption === true
-            || $keepVendorNodeModulesOption === true;
+            || $removeNodeModulesOption === true
+            || $keepNodeModulesOption === true;
 
         if (! $overridesProvided) {
             return null;
@@ -209,13 +209,13 @@ class BuildCommand extends Command
             Config::set('sail.build.version', $version);
         }
 
-        // Handle remove/keep vendor and node_modules options
-        if ($keepVendorNodeModulesOption === true) {
-            $this->removeVendorNodeModules = false;
-        } elseif ($removeVendorNodeModulesOption === true) {
-            $this->removeVendorNodeModules = true;
+        // Handle remove/keep node_modules options
+        if ($keepNodeModulesOption === true) {
+            $this->removeNodeModules = false;
+        } elseif ($removeNodeModulesOption === true) {
+            $this->removeNodeModules = true;
         } else {
-            $this->removeVendorNodeModules = $config['remove_vendor_node_modules'] ?? true;
+            $this->removeNodeModules = $config['remove_node_modules'] ?? true;
         }
 
         if ($this->hasInvalidOptions($environments, $architectures, $repository)) {
@@ -231,7 +231,7 @@ class BuildCommand extends Command
             'organization' => $this->organization,
             'push' => $this->push,
             'version' => $version,
-            'remove_vendor_node_modules' => $this->removeVendorNodeModules,
+            'remove_node_modules' => $this->removeNodeModules,
         ];
     }
 

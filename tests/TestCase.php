@@ -23,6 +23,7 @@ class TestCase extends Orchestra
         // Setup default config
         $app['config']->set('app.name', 'TestApp');
         $app['config']->set('sail.domain', 'localhost');
+        $app['config']->set('sail.build.remove_node_modules', true);
         $app['config']->set('sail.build.environments', 'local');
         $app['config']->set('sail.build.architectures', 'linux/amd64');
         $app['config']->set('sail.build.repository', 'none');
