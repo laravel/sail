@@ -1,0 +1,41 @@
+{{- if .Values.migrations.enabled | default true -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "sail.name" . }}-presync-migrate
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/sync-wave: "-5"
+    helm.sh/hook: pre-upgrade,pre-install
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: {{ .Values.migrations.activeDeadlineSeconds | default 300 }}
+  template:
+    metadata:
+      labels:
+        {{- include "sail.selectorLabels" . | nindent 8 }}
+        tier: presync
+    spec:
+      restartPolicy: Never
+      {{- if or .Values.worker.imagePullSecret .Values.global.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.worker.imagePullSecret | default .Values.global.imagePullSecret }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: "{{ .Values.worker.image.repository | lower }}:{{ .Values.worker.image.tag | default .Values.global.tag | default "latest" | lower }}"
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy | default .Values.global.pullPolicy | default "IfNotPresent" }}
+          command: ["php", "artisan", "migrate", "--force"]
+          envFrom:
+            - secretRef:
+                name: {{ include "sail.name" . }}-environment
+            {{- if .Values.typesense.enabled }}
+            - secretRef:
+                name: {{ .Values.typesense.secret | default "typesense" | lower }}
+            {{- end }}
+{{- end -}}
