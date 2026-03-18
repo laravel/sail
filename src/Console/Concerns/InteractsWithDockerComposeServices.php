@@ -290,6 +290,13 @@ trait InteractsWithDockerComposeServices
      */
     protected function prepareInstallation($services)
     {
+        // Skip pulling and building on Windows as the sail script requires WSL...
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $this->components->warn('Please run [./vendor/bin/sail up] from within WSL to complete the installation.');
+
+            return;
+        }
+
         // Ensure docker is installed...
         if ($this->runCommands(['docker info > /dev/null 2>&1']) !== 0) {
             return;

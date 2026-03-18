@@ -6,6 +6,15 @@ UNAMEOUT="$(uname -s)"
 case "${UNAMEOUT}" in
     Linux*)             MACHINE=linux;;
     Darwin*)            MACHINE=mac;;
+    MINGW*|MSYS*|CYGWIN*)
+        echo "Sail must be run from within WSL2, not from ${UNAMEOUT}." >&2
+        echo "" >&2
+        echo "Please open a WSL terminal and run Sail from there:" >&2
+        echo "  wsl" >&2
+        echo "  cd /mnt/c/path/to/your/project" >&2
+        echo "  ./vendor/bin/sail up" >&2
+
+        exit 1;;
     *)                  MACHINE="UNKNOWN"
 esac
 
