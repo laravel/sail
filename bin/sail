@@ -329,7 +329,7 @@ elif [ "$1" == "pest" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u "$APP_USER")
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php vendor/bin/pest)
+        ARGS+=("$APP_SERVICE" xvfb-run php vendor/bin/pest)
     else
         sail_is_not_running
     fi
