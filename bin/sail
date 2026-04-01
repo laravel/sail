@@ -329,7 +329,7 @@ elif [ "$1" == "pest" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u "$APP_USER")
         [ ! -t 0 ] && ARGS+=(-T)
-        if "${DOCKER_COMPOSE[@]}" exec -T "$APP_SERVICE" command -v xvfb-run &> /dev/null; then
+        if "${COMPOSE_CMD[@]}" exec -T "$APP_SERVICE" command -v xvfb-run &> /dev/null; then
             ARGS+=("$APP_SERVICE" xvfb-run php vendor/bin/pest)
         else
             ARGS+=("$APP_SERVICE" php vendor/bin/pest)
