@@ -50,7 +50,7 @@ RUN apt-get update && apt-get upgrade -y \
         php8.5-msgpack \
         php8.5-igbinary \
         php8.5-redis \
-        #php8.5-swoole \
+        php8.5-swoole \
         php8.5-memcached \
         php8.5-pcov \
         php8.5-imagick \
