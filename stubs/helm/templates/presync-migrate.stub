@@ -31,6 +31,36 @@ spec:
           image: "{{ .Values.worker.image.repository | lower }}:{{ .Values.worker.image.tag | default .Values.global.tag | default "latest" | lower }}"
           imagePullPolicy: {{ .Values.worker.image.pullPolicy | default .Values.global.pullPolicy | default "IfNotPresent" }}
           command: ["php", "artisan", "migrate", "--force"]
+          {{- if .Values.database.secret }}
+          env:
+            - name: DB_CONNECTION
+              value: {{ .Values.database.connection | default "mysql" }}
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret }}
+                  key: host
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret }}
+                  key: port
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret }}
+                  key: database
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret }}
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret }}
+                  key: password
+          {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "sail.name" . }}-environment
