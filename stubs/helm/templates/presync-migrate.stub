@@ -34,8 +34,4 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ include "sail.name" . }}-environment
-            {{- if .Values.typesense.enabled }}
-            - secretRef:
-                name: {{ .Values.typesense.secret | default (printf "%s-typesense" (include "sail.name" .)) }}
-            {{- end }}
 {{- end -}}
