@@ -1,0 +1,115 @@
+{{- if .Values.typesense.enabled }}
+{{- $appName := include "sail.name" . }}
+{{- $tsName := printf "%s-typesense" $appName }}
+{{- $secretName := .Values.typesense.secret | default $tsName }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+    app.kubernetes.io/component: typesense
+  annotations:
+    helm.sh/resource-policy: keep
+type: Opaque
+{{- $existingSecret := (lookup "v1" "Secret" .Release.Namespace $secretName) }}
+{{- if $existingSecret }}
+data:
+  {{- toYaml $existingSecret.data | nindent 2 }}
+{{- else }}
+stringData:
+  TYPESENSE_API_KEY: {{ .Values.typesense.apiKey | default (randAlphaNum 32) | quote }}
+  TYPESENSE_HOST: {{ $tsName }}
+  TYPESENSE_PORT: "8108"
+  TYPESENSE_PROTOCOL: http
+  SCOUT_DRIVER: typesense
+{{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $tsName }}
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+    app.kubernetes.io/component: typesense
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $tsName }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $tsName }}
+        app.kubernetes.io/component: typesense
+    spec:
+      containers:
+        - name: typesense
+          image: {{ .Values.typesense.image | default "typesense/typesense:28.0" }}
+          ports:
+            - containerPort: 8108
+              name: http
+          env:
+            - name: TYPESENSE_DATA_DIR
+              value: /data
+            - name: TYPESENSE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: TYPESENSE_API_KEY
+            - name: TYPESENSE_ENABLE_CORS
+              value: "true"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            {{- toYaml (.Values.typesense.resources | default (dict "requests" (dict "cpu" "100m" "memory" "256Mi") "limits" (dict "cpu" "500m" "memory" "512Mi"))) | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ $tsName }}-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $tsName }}
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+    app.kubernetes.io/component: typesense
+spec:
+  selector:
+    app.kubernetes.io/name: {{ $tsName }}
+  ports:
+    - port: 8108
+      targetPort: 8108
+      name: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $tsName }}-data
+  labels:
+    {{- include "sail.labels" . | nindent 4 }}
+    app.kubernetes.io/component: typesense
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: {{ .Values.typesense.storageSize | default "2Gi" }}
+  {{- if .Values.typesense.storageClassName }}
+  storageClassName: {{ .Values.typesense.storageClassName }}
+  {{- end }}
+{{- end }}

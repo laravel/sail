@@ -164,12 +164,92 @@ spec:
           command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--no-interaction"]
             {{ end }}
           {{ end }}
+          {{- $hasInfraSecrets := or .main.database.secret .main.redis.secret .main.s3.secret }}
+          {{- if $hasInfraSecrets }}
+          env:
+            {{- if .main.database.secret }}
+            - name: DB_CONNECTION
+              value: {{ .main.database.connection | default "mysql" }}
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.database.secret }}
+                  key: host
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.database.secret }}
+                  key: port
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.database.secret }}
+                  key: database
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.database.secret }}
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.database.secret }}
+                  key: password
+            {{- end }}
+            {{- if .main.redis.secret }}
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.redis.secret }}
+                  key: host
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.redis.secret }}
+                  key: port
+            - name: REDIS_CLIENT
+              value: phpredis
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.redis.secret }}
+                  key: password
+            {{- end }}
+            {{- if .main.s3.secret }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.s3.secret }}
+                  key: accessKeyId
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.s3.secret }}
+                  key: secretAccessKey
+            - name: AWS_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.s3.secret }}
+                  key: bucket
+            - name: AWS_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.s3.secret }}
+                  key: endpoint
+            - name: AWS_DEFAULT_REGION
+              value: {{ .main.s3.region | default "us-east-1" }}
+            - name: AWS_USE_PATH_STYLE_ENDPOINT
+              value: {{ .main.s3.pathStyle | default "true" | quote }}
+            - name: FILESYSTEM_DISK
+              value: s3
+            {{- end }}
+          {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "sail.name" . }}-environment
             {{- if .main.typesense.enabled }}
             - secretRef:
-                name: {{ .main.typesense.secret | default "typesense" | lower }}
+                name: {{ .main.typesense.secret | default (printf "%s-typesense" (include "sail.name" .)) }}
             {{- end }}
 {{ end }}
 {{ end }}

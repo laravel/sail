@@ -267,9 +267,26 @@ podDisruptionBudget:
 # Annotations to add to pods
 # podAnnotations: {}
 
-# Typesense
+# Infrastructure secrets (nimbus-replicated secrets → Laravel env vars)
+# When set, env vars from these secrets take precedence over envFrom (Vault)
+database:
+    secret: ""            # nimbus MariaDB/PG replicated secret (host, port, username, password, database, uri)
+    connection: mysql     # DB_CONNECTION value
+redis:
+    secret: ""            # nimbus Redis replicated secret (host, port, password, uri)
+s3:
+    secret: ""            # nimbus MinIO replicated secret (accessKeyId, secretAccessKey, bucket, endpoint)
+    region: us-east-1     # AWS_DEFAULT_REGION
+    pathStyle: "true"     # AWS_USE_PATH_STYLE_ENDPOINT
+
+# Typesense search (deploys Typesense when enabled)
 typesense:
-  enabled: false
+    enabled: false
+    image: typesense/typesense:28.0
+    secret: ""            # defaults to {appname}-typesense
+    apiKey: ""            # auto-generated if empty
+    storageSize: 2Gi
+    storageClassName: ""
 
 # Ingress settings (e.g., for Traefik or NGINX)
 ingress:
