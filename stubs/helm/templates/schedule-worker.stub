@@ -28,7 +28,7 @@ spec:
                     name: {{ include "sail.name" . }}-environment
                 {{- if .Values.typesense.enabled }}
                 - secretRef:
-                    name: {{ .Values.typesense.secret | default "typesense" | lower }}
+                    name: {{ .Values.typesense.secret | default (printf "%s-typesense" (include "sail.name" .)) }}
                 {{- end }}
           restartPolicy: OnFailure
 {{- end -}}
