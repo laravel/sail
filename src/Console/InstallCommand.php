@@ -54,6 +54,10 @@ class InstallCommand extends Command
         $this->replaceEnvVariables($services);
         $this->configurePhpUnit();
 
+        if (file_exists($this->laravel->getCachedConfigPath())) {
+            $this->call('config:clear');
+        }
+
         if ($this->option('devcontainer')) {
             $this->installDevContainer();
         }
