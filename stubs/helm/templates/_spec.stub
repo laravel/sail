@@ -242,6 +242,10 @@ spec:
               value: {{ .main.s3.pathStyle | default "true" | quote }}
             - name: FILESYSTEM_DISK
               value: s3
+            {{- if .main.s3.url }}
+            - name: AWS_URL
+              value: {{ .main.s3.url }}
+            {{- end }}
             {{- end }}
           {{- end }}
           envFrom:
