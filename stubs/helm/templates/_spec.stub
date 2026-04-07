@@ -214,6 +214,21 @@ spec:
                 secretKeyRef:
                   name: {{ .main.redis.secret }}
                   key: password
+            - name: REDIS_SENTINEL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.redis.secret }}
+                  key: sentinel_host
+            - name: REDIS_SENTINEL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.redis.secret }}
+                  key: sentinel_port
+            - name: REDIS_SENTINEL_SERVICE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .main.redis.secret }}
+                  key: sentinel_service
             {{- end }}
             {{- if .main.s3.secret }}
             - name: AWS_ACCESS_KEY_ID
