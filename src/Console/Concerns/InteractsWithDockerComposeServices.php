@@ -290,17 +290,19 @@ trait InteractsWithDockerComposeServices
      */
     protected function prepareInstallation($services)
     {
+        $docker = env('SAIL_DOCKER_BINARY', 'docker');
+
         // Ensure docker is installed...
-        if ($this->runCommands(['docker info > /dev/null 2>&1']) !== 0) {
+        if ((new Process([$docker, 'info']))->run() !== 0) {
             return;
         }
 
         // Ensure the WWWGROUP environment variable is set for the Compose build...
-        if (empty(getenv('WWWGROUP'))) {
+        if (getenv('WWWGROUP') === false) {
             putenv('WWWGROUP='.(function_exists('posix_getgid') ? posix_getgid() : 1000));
         }
 
-        $composeCmd = $this->dockerComposeCommand();
+        $composeCmd = $this->dockerComposeCommand($docker);
         $composePath = escapeshellarg($this->composePath());
 
         if (count($services) > 0) {
@@ -317,17 +319,18 @@ trait InteractsWithDockerComposeServices
     /**
      * Get the appropriate Docker Compose command.
      *
+     * @param  string  $docker
      * @return string
      */
-    protected function dockerComposeCommand()
+    protected function dockerComposeCommand($docker = 'docker')
     {
-        $docker = env('SAIL_DOCKER_BINARY', 'docker');
-
-        if ($this->runCommands([$docker.' compose > /dev/null 2>&1']) === 0) {
-            return $docker.' compose';
+        // Check for Docker Compose V2 (docker compose plugin)...
+        if ((new Process([$docker, 'compose', 'version']))->run() === 0) {
+            return escapeshellarg($docker).' compose';
         }
 
-        return $docker.'-compose';
+        // Fall back to Docker Compose V1 (docker-compose standalone)...
+        return escapeshellarg($docker.'-compose');
     }
 
     /**
