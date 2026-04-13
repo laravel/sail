@@ -270,7 +270,7 @@ spec:
             - secretRef:
                 name: {{ .main.typesense.secret | default (printf "%s-typesense" (include "sail.name" .)) }}
             {{- end }}
-        {{- if .main.global.nightwatch }}
+        {{- if and .main.global.nightwatch (kindIs "map" .main.global.nightwatch) }}
         {{- if .main.global.nightwatch.enabled }}
         - name: nightwatch-agent
           image: {{ .main.global.nightwatch.image | default "laravelphp/nightwatch-agent:v1" }}
