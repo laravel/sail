@@ -147,6 +147,9 @@ function sail_is_not_running {
     exit 1
 }
 
+# Define Docker binary (supports podman via SAIL_DOCKER_BINARY)...
+export SAIL_DOCKER_BINARY=${SAIL_DOCKER_BINARY:-"docker"}
+
 # AI agent environment variables to forward into containers...
 AGENT_ENV_VARS=(
     AI_AGENT
