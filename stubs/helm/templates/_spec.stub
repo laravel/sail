@@ -284,9 +284,9 @@ spec:
                   name: {{ include "sail.name" . }}-environment
                   key: NIGHTWATCH_TOKEN
           livenessProbe:
-            exec:
-              command: ["php", "artisan", "nightwatch:status"]
-            initialDelaySeconds: 10
+            tcpSocket:
+              port: 2407
+            initialDelaySeconds: 5
             periodSeconds: 30
           {{- with .main.global.nightwatch.resources }}
           resources:
