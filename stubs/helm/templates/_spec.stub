@@ -270,5 +270,29 @@ spec:
             - secretRef:
                 name: {{ .main.typesense.secret | default (printf "%s-typesense" (include "sail.name" .)) }}
             {{- end }}
+        {{- if .main.global.nightwatch }}
+        {{- if .main.global.nightwatch.enabled }}
+        - name: nightwatch-agent
+          image: {{ .main.global.nightwatch.image | default "laravelphp/nightwatch-agent:v1" }}
+          ports:
+            - containerPort: 2407
+              protocol: TCP
+          env:
+            - name: NIGHTWATCH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sail.name" . }}-environment
+                  key: NIGHTWATCH_TOKEN
+          livenessProbe:
+            exec:
+              command: ["php", "artisan", "nightwatch:status"]
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          {{- with .main.global.nightwatch.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- end }}
 {{ end }}
 {{ end }}

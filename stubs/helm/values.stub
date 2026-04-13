@@ -9,6 +9,18 @@ global:
   tag: latest
   pullPolicy: IfNotPresent
   imagePullSecret: ghcr-auth
+  # Laravel Nightwatch agent sidecar (https://nightwatch.laravel.com)
+  # Runs alongside each pod to collect telemetry on 127.0.0.1:2407
+  nightwatch:
+    enabled: false
+    image: laravelphp/nightwatch-agent:v1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 50m
+        memory: 64Mi
   # Global probe defaults (can be overridden per tier)
   probes:
     # readinessProbe:
