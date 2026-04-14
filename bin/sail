@@ -182,6 +182,8 @@ AGENT_ENV_VARS=(
     REPL_ID
     ANTIGRAVITY_AGENT
     COPILOT_MODEL
+    COPILOT_CLI
+    PI_CODING_AGENT
 )
 
 function forward_agent_env() {
