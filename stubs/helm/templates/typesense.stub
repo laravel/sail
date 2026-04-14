@@ -40,6 +40,10 @@ spec:
       app.kubernetes.io/name: {{ $tsName }}
   template:
     metadata:
+      annotations:
+        {{- if $existingSecret }}
+        checksum/typesense-secret: {{ $existingSecret.data | toJson | sha256sum }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ $tsName }}
         app.kubernetes.io/component: typesense
