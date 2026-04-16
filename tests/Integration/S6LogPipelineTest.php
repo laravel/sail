@@ -230,4 +230,19 @@ class S6LogPipelineTest extends TestCase
             '/etc/s6-overlay/s6-rc.d/user/contents.d/logger still present'
         );
     }
+
+    public function test_nginx_log_depends_on_its_prepare(): void
+    {
+        $cid = $this->runContainer();
+        $p = new Process([
+            'docker', 'exec', $cid,
+            'test', '-f',
+            '/etc/s6-overlay/s6-rc.d/nginx-log/dependencies.d/nginx-log-prepare',
+        ]);
+        $p->run();
+        $this->assertTrue(
+            $p->isSuccessful(),
+            'nginx-log service is missing its dependency on nginx-log-prepare'
+        );
+    }
 }
