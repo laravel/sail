@@ -141,6 +141,29 @@ class HelmTemplateTest extends TestCase
         $this->assertSame('cookie', $data['SESSION_DRIVER']);
     }
 
+    public function test_envfrom_order_defaults_then_environment(): void
+    {
+        $out = $this->renderChart();
+
+        // Three envFrom blocks must have this ordering: web Deployment, worker
+        // Deployment, scheduler CronJob. A single-match assertion would miss a
+        // regression in the scheduler stub.
+        $matches = preg_match_all(
+            '/envFrom:\s*'
+                .'\n\s*-\s*secretRef:\s*'
+                .'\n\s*name:\s*testapp-defaults\s*'
+                .'\n\s*-\s*secretRef:\s*'
+                .'\n\s*name:\s*testapp-environment/',
+            $out
+        );
+
+        $this->assertSame(
+            3,
+            $matches,
+            'Expected envFrom order (defaults then environment) in all 3 rendered locations (web, worker, scheduler)'
+        );
+    }
+
     /**
      * Extract key-value pairs from the stringData block of a named Secret document
      * inside a multi-document rendered chart output.

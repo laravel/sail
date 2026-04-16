@@ -265,6 +265,8 @@ spec:
           {{- end }}
           envFrom:
             - secretRef:
+                name: {{ include "sail.name" . }}-defaults
+            - secretRef:
                 name: {{ include "sail.name" . }}-environment
             {{- if .main.typesense.enabled }}
             - secretRef:

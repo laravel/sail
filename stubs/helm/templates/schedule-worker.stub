@@ -25,6 +25,8 @@ spec:
               command: ["php", "artisan", "schedule:run"]
               envFrom:
                 - secretRef:
+                    name: {{ include "sail.name" . }}-defaults
+                - secretRef:
                     name: {{ include "sail.name" . }}-environment
                 {{- if .Values.typesense.enabled }}
                 - secretRef:
