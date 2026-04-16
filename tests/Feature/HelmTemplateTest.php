@@ -99,4 +99,15 @@ class HelmTemplateTest extends TestCase
             $out
         );
     }
+
+    public function test_defaults_secret_renders_when_app_values_is_null(): void
+    {
+        // Regression: `app: null` in consumer values would panic helm template
+        // if the template didn't defend against a nil .Values.app map.
+        $out = $this->renderChart(['app' => null]);
+        $this->assertMatchesRegularExpression(
+            '/name:\s*testapp-defaults.*?LOG_CHANNEL:\s*"?stderr"?/s',
+            $out
+        );
+    }
 }
