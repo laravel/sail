@@ -187,6 +187,60 @@ class HelmTemplateTest extends TestCase
         $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_ROTATE_SIZE\s*\n\s*value:\s*"20000000"/', $out));
     }
 
+    public function test_default_resources_when_nothing_set(): void
+    {
+        $out = $this->renderChart(['resources' => null]);
+        $this->assertMatchesRegularExpression(
+            '/resources:\s*\n\s*requests:\s*\n\s*cpu:\s*100m\s*\n\s*memory:\s*256Mi/',
+            $out
+        );
+    }
+
+    public function test_top_level_resources_used_when_tier_unset(): void
+    {
+        $out = $this->renderChart([
+            'resources' => [
+                'requests' => ['cpu' => '250m', 'memory' => '512Mi'],
+                'limits' => ['cpu' => '750m', 'memory' => '1Gi'],
+            ],
+        ]);
+
+        // Top-level resources fallback should apply to BOTH web and worker deployments
+        $this->assertSame(
+            2,
+            preg_match_all('/name:\s*testapp-(?:web|worker).*?resources:.*?cpu:\s*250m/s', $out),
+            'Top-level resources fallback should be rendered in both web and worker Deployments'
+        );
+    }
+
+    public function test_tier_resources_win_over_top_level(): void
+    {
+        $out = $this->renderChart([
+            'resources' => [
+                'requests' => ['cpu' => '250m', 'memory' => '512Mi'],
+            ],
+            'web' => [
+                'resources' => [
+                    'requests' => ['cpu' => '500m', 'memory' => '768Mi'],
+                ],
+            ],
+        ]);
+
+        // Web tier override wins
+        $this->assertMatchesRegularExpression(
+            '/name:\s*testapp-web.*?resources:\s*\n\s*requests:\s*\n\s*cpu:\s*500m/s',
+            $out,
+            'web.resources should override top-level'
+        );
+
+        // Worker tier (not overridden) keeps top-level fallback
+        $this->assertMatchesRegularExpression(
+            '/name:\s*testapp-worker.*?resources:.*?cpu:\s*250m/s',
+            $out,
+            'worker should still use top-level fallback when no worker.resources set'
+        );
+    }
+
     /**
      * Extract key-value pairs from the stringData block of a named Secret document
      * inside a multi-document rendered chart output.

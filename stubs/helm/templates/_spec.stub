@@ -54,10 +54,8 @@ spec:
         - name: {{ .tier }}
           image: {{ .image.repository | default "ghcr.io/example/app" | lower }}:{{ .image.tag | default .main.global.tag | default "latest" | lower }}
           imagePullPolicy: {{ .image.pullPolicy | default .main.global.pullPolicy | default "IfNotPresent" }}
-          {{- with .resources }}
           resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- include "sail.resources" (dict "tier" .resources "fallback" .main.resources) | nindent 12 }}
           {{- if eq .tier "web" }}
           ports:
             - containerPort: 80
