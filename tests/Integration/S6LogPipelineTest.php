@@ -186,4 +186,23 @@ class S6LogPipelineTest extends TestCase
         $this->assertStringNotContainsString('nginx.access.log', $listing);
         $this->assertStringNotContainsString('nginx.error.log', $listing);
     }
+
+    public function test_php_fpm_conf_points_to_fd2(): void
+    {
+        $cid = $this->runContainer();
+        $conf = $this->execInContainer($cid, ['cat', '/etc/php/php-fpm.d/docker.conf']);
+        $this->assertMatchesRegularExpression('#error_log\s*=\s*/proc/self/fd/2#', $conf);
+        $this->assertMatchesRegularExpression('#access\.log\s*=\s*/proc/self/fd/2#', $conf);
+        $this->assertStringNotContainsString('/var/log/php/php-fpm.err.log', $conf);
+        $this->assertStringNotContainsString('/var/log/php/php-fpm.out.log', $conf);
+    }
+
+    public function test_php_fpm_does_not_create_old_log_files(): void
+    {
+        $cid = $this->runContainer();
+        sleep(3);
+        $listing = $this->execInContainer($cid, ['ls', '-la', '/var/log/php/']);
+        $this->assertStringNotContainsString('php-fpm.err.log', $listing);
+        $this->assertStringNotContainsString('php-fpm.out.log', $listing);
+    }
 }
