@@ -158,9 +158,9 @@ class HelmTemplateTest extends TestCase
         );
 
         $this->assertSame(
-            3,
+            4,
             $matches,
-            'Expected envFrom order (defaults then environment) in all 3 rendered locations (web, worker, scheduler)'
+            'Expected envFrom order (defaults then environment) in all 4 rendered locations (web, worker, scheduler, presync-migrate)'
         );
     }
 
