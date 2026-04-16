@@ -24,5 +24,3 @@ cat > /etc/s6-overlay/s6-rc.d/php-fpm-log/run <<RUN_SCRIPT
 exec s6-log -b n${ARCHIVES} s${SIZE} T !"gzip -nq9" ${DEST}
 RUN_SCRIPT
 chmod +x /etc/s6-overlay/s6-rc.d/php-fpm-log/run
-
-echo php-fpm-log-prepare completed > /tmp/php-fpm-log-prepare-ran

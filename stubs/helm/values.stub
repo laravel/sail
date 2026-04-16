@@ -217,10 +217,15 @@ service:
   port: 80
   # annotations: {}  # Annotations to add to the service
 
-# Default Kubernetes resource requests/limits applied to all deployment
+# Suggested Kubernetes resource requests/limits applied to all deployment
 # tiers unless overridden per-tier (e.g. web.resources or worker.resources).
-# If both this block and a per-tier override are unset, hardcoded defaults
-# from the sail.resources helper fire (100m/256Mi requests, 1000m/1Gi limits).
+# These values are the recommended starting point for a Laravel web/worker
+# pod; override per consumer as needed.
+#
+# If this block is set to null or omitted entirely, the sail.resources
+# helper falls back to hardcoded defaults (requests 100m/256Mi, limits
+# 1000m/1Gi), which are intentionally more generous than the suggested
+# values below to tolerate unoptimized workloads.
 resources:
   requests:
     cpu: 100m
