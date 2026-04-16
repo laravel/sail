@@ -167,4 +167,23 @@ class S6LogPipelineTest extends TestCase
         $p->run();
         $this->assertTrue($p->isSuccessful());
     }
+
+    public function test_nginx_conf_points_to_stdout_stderr(): void
+    {
+        $cid = $this->runContainer();
+        $conf = $this->execInContainer($cid, ['cat', '/etc/nginx/http.d/default.conf']);
+        $this->assertMatchesRegularExpression('#access_log\s+/dev/stdout\b#', $conf);
+        $this->assertMatchesRegularExpression('#error_log\s+/dev/stderr\b#', $conf);
+        $this->assertStringNotContainsString('/var/log/nginx/nginx.access.log', $conf);
+        $this->assertStringNotContainsString('/var/log/nginx/nginx.error.log', $conf);
+    }
+
+    public function test_nginx_does_not_create_old_log_files(): void
+    {
+        $cid = $this->runContainer();
+        sleep(2);
+        $listing = $this->execInContainer($cid, ['ls', '-la', '/var/log/nginx/']);
+        $this->assertStringNotContainsString('nginx.access.log', $listing);
+        $this->assertStringNotContainsString('nginx.error.log', $listing);
+    }
 }
