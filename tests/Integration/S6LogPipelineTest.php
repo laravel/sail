@@ -245,4 +245,51 @@ class S6LogPipelineTest extends TestCase
             'nginx-log service is missing its dependency on nginx-log-prepare'
         );
     }
+
+    public function test_nginx_log_both_mode_args(): void
+    {
+        $cid = $this->runContainer();
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/nginx-log/run']);
+        $this->assertMatchesRegularExpression(
+            '#s6-log\s+-b\s+n20\s+s10000000\s+T\s+!"gzip -nq9"\s+/var/log/nginx\s+p\[nginx\]\s+1#',
+            $run
+        );
+    }
+
+    public function test_nginx_log_stdout_mode_args(): void
+    {
+        $cid = $this->runContainer(['SAIL_LOG_MODE' => 'stdout']);
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/nginx-log/run']);
+        $this->assertMatchesRegularExpression(
+            '#s6-log\s+-b\s+n20\s+s10000000\s+T\s+!"gzip -nq9"\s+p\[nginx\]\s+1#',
+            $run
+        );
+        $this->assertStringNotContainsString('/var/log/nginx', $run);
+    }
+
+    public function test_nginx_log_file_mode_args(): void
+    {
+        $cid = $this->runContainer(['SAIL_LOG_MODE' => 'file']);
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/nginx-log/run']);
+        $this->assertMatchesRegularExpression(
+            '#s6-log\s+-b\s+n20\s+s10000000\s+T\s+!"gzip -nq9"\s+/var/log/nginx\s+p\[nginx\]$#m',
+            $run
+        );
+        $this->assertDoesNotMatchRegularExpression('/p\[nginx\]\s+1$/m', $run);
+    }
+
+    public function test_nginx_log_custom_rotation_args(): void
+    {
+        $cid = $this->runContainer([
+            'SAIL_LOG_MODE' => 'both',
+            'SAIL_LOG_MAX_ARCHIVES' => '5',
+            'SAIL_LOG_ROTATE_SIZE' => '5000000',
+        ]);
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/nginx-log/run']);
+        $this->assertMatchesRegularExpression('#s6-log\s+-b\s+n5\s+s5000000\s+T#', $run);
+    }
 }

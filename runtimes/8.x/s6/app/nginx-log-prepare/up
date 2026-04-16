@@ -1,4 +1,2 @@
-#!/bin/sh
-mkdir -p /var/log/nginx
-chown root:root /var/log/nginx
-chmod 02755 /var/log/nginx
+#!/usr/bin/execlineb -P
+with-contenv /bin/sh /etc/s6-overlay/s6-rc.d/nginx-log-prepare/prepare.sh
