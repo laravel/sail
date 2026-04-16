@@ -291,6 +291,18 @@ s3:
     region: us-east-1     # AWS_DEFAULT_REGION
     pathStyle: "true"     # AWS_USE_PATH_STYLE_ENDPOINT
 
+# Laravel application behavior defaults. These become a chart-owned
+# Secret (<name>-defaults) prepended to envFrom; the consumer's
+# <name>-environment secret takes precedence (envFrom later-entry-wins).
+app:
+  # LOG_CHANNEL default - stderr flows logs through php-fpm stderr to
+  # the s6-log pipeline (stdout + rotated file per sail.logging.mode).
+  logChannel: stderr
+  # CACHE_DRIVER / SESSION_DRIVER are only written to the defaults
+  # secret when redis.secret is set. Unset (file default) otherwise.
+  cacheDriver: redis
+  sessionDriver: redis
+
 # Typesense search (deploys Typesense when enabled)
 typesense:
     enabled: false

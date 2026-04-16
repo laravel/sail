@@ -71,4 +71,32 @@ class HelmTemplateTest extends TestCase
         $this->assertStringContainsString('kind: Deployment', $out);
         $this->assertStringContainsString('name: testapp-web', $out);
     }
+
+    public function test_defaults_secret_is_rendered(): void
+    {
+        $out = $this->renderChart();
+        $this->assertMatchesRegularExpression(
+            '/kind:\s*Secret\n[^-]+name:\s*testapp-defaults/',
+            $out,
+            'Expected a Secret named testapp-defaults to be rendered'
+        );
+    }
+
+    public function test_log_channel_defaults_to_stderr(): void
+    {
+        $out = $this->renderChart();
+        $this->assertMatchesRegularExpression(
+            '/name:\s*testapp-defaults.*?LOG_CHANNEL:\s*"?stderr"?/s',
+            $out
+        );
+    }
+
+    public function test_log_channel_can_be_overridden(): void
+    {
+        $out = $this->renderChart(['app' => ['logChannel' => 'daily']]);
+        $this->assertMatchesRegularExpression(
+            '/name:\s*testapp-defaults.*?LOG_CHANNEL:\s*"?daily"?/s',
+            $out
+        );
+    }
 }
