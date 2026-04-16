@@ -292,4 +292,39 @@ class S6LogPipelineTest extends TestCase
         $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/nginx-log/run']);
         $this->assertMatchesRegularExpression('#s6-log\s+-b\s+n5\s+s5000000\s+T#', $run);
     }
+
+    public function test_php_fpm_log_both_mode_args(): void
+    {
+        $cid = $this->runContainer();
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/php-fpm-log/run']);
+        $this->assertMatchesRegularExpression(
+            '#s6-log\s+-b\s+n20\s+s10000000\s+T\s+!"gzip -nq9"\s+/var/log/php-fpm\s+p\[php-fpm\]\s+1#',
+            $run
+        );
+    }
+
+    public function test_php_fpm_log_stdout_mode_args(): void
+    {
+        $cid = $this->runContainer(['SAIL_LOG_MODE' => 'stdout']);
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/php-fpm-log/run']);
+        $this->assertMatchesRegularExpression('#s6-log\s+-b\s+n20\s+s10000000\s+T\s+!"gzip -nq9"\s+p\[php-fpm\]\s+1#', $run);
+        $this->assertStringNotContainsString('/var/log/php-fpm', $run);
+    }
+
+    public function test_invalid_mode_fails_fast(): void
+    {
+        $p = new Process([
+            'docker', 'run', '--rm',
+            '--entrypoint', '/init',
+            '-e', 'SAIL_LOG_MODE=bogus',
+            '-e', 'S6_BEHAVIOUR_IF_STAGE2_FAILS=2',
+            self::$imageTag,
+        ], null, null, null, 30);
+        $p->run();
+        $this->assertNotSame(0, $p->getExitCode());
+        $combined = $p->getOutput().$p->getErrorOutput();
+        $this->assertStringContainsString("invalid SAIL_LOG_MODE='bogus'", $combined);
+    }
 }
