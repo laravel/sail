@@ -110,4 +110,67 @@ class HelmTemplateTest extends TestCase
             $out
         );
     }
+
+    public function test_cache_session_absent_without_redis(): void
+    {
+        $out = $this->renderChart();
+        $data = $this->extractSecretStringData($out, 'testapp-defaults');
+        $this->assertArrayHasKey('LOG_CHANNEL', $data, 'testapp-defaults Secret not found or stringData not parsed');
+        $this->assertArrayNotHasKey('CACHE_DRIVER', $data);
+        $this->assertArrayNotHasKey('SESSION_DRIVER', $data);
+    }
+
+    public function test_cache_session_present_with_redis(): void
+    {
+        $out = $this->renderChart(['redis' => ['secret' => 'my-redis']]);
+        $data = $this->extractSecretStringData($out, 'testapp-defaults');
+        $this->assertArrayHasKey('CACHE_DRIVER', $data);
+        $this->assertArrayHasKey('SESSION_DRIVER', $data);
+        $this->assertSame('redis', $data['CACHE_DRIVER']);
+        $this->assertSame('redis', $data['SESSION_DRIVER']);
+    }
+
+    public function test_cache_driver_override(): void
+    {
+        $out = $this->renderChart([
+            'redis' => ['secret' => 'my-redis'],
+            'app' => ['cacheDriver' => 'database', 'sessionDriver' => 'cookie'],
+        ]);
+        $data = $this->extractSecretStringData($out, 'testapp-defaults');
+        $this->assertSame('database', $data['CACHE_DRIVER']);
+        $this->assertSame('cookie', $data['SESSION_DRIVER']);
+    }
+
+    /**
+     * Extract key-value pairs from the stringData block of a named Secret document
+     * inside a multi-document rendered chart output.
+     *
+     * Uses regex rather than Symfony\Yaml::parse because sail.labels emits duplicate
+     * app.kubernetes.io/instance keys (pre-existing _helpers.tpl bug) that the YAML
+     * parser rejects with "Duplicate key detected".
+     *
+     * @return array<string, string>
+     */
+    protected function extractSecretStringData(string $yaml, string $name): array
+    {
+        $docs = preg_split('/^---$/m', $yaml);
+        foreach ($docs as $doc) {
+            if (! preg_match('/kind:\s*Secret\b/', $doc)) {
+                continue;
+            }
+            if (! preg_match('/name:\s*'.preg_quote($name, '/').'(\s|$)/m', $doc)) {
+                continue;
+            }
+            if (! preg_match('/^stringData:\s*\n((?:[ \t]+\S[^\n]*\n?)*)/m', $doc, $blockMatch)) {
+                return [];
+            }
+            $result = [];
+            preg_match_all('/^[ \t]+([\w_]+):\s*"?([^"\n]*)"?$/m', $blockMatch[1], $kvMatches, PREG_SET_ORDER);
+            foreach ($kvMatches as $kv) {
+                $result[trim($kv[1])] = trim($kv[2]);
+            }
+            return $result;
+        }
+        return [];
+    }
 }
