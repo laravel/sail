@@ -327,4 +327,39 @@ class S6LogPipelineTest extends TestCase
         $combined = $p->getOutput().$p->getErrorOutput();
         $this->assertStringContainsString("invalid SAIL_LOG_MODE='bogus'", $combined);
     }
+
+    public function test_http_request_appears_in_stdout_and_on_disk_by_default(): void
+    {
+        $p = new Process([
+            'docker', 'run', '-d',
+            '--entrypoint', '/init',
+            self::$imageTag,
+        ]);
+        $p->mustRun();
+        $cid = trim($p->getOutput());
+        $this->runningContainers[] = $cid;
+
+        $this->waitForProcess($cid, 'nginx', 15);
+
+        $marker = '/e2e-marker-'.uniqid();
+        // Make the HTTP request via the container's own loopback so we avoid
+        // host-side networking quirks (proxy env vars, macOS port forwarding).
+        $wgetProc = new Process([
+            'docker', 'exec', $cid,
+            'wget', '-q', '-O', '/dev/null',
+            '--timeout=3',
+            "http://127.0.0.1$marker",
+        ]);
+        $wgetProc->run();
+
+        sleep(2);
+
+        $logsProc = new Process(['docker', 'logs', $cid]);
+        $logsProc->run();
+        $logs = $logsProc->getOutput().$logsProc->getErrorOutput();
+        $this->assertStringContainsString($marker, $logs, 'stdout did not contain the request path');
+
+        $onDisk = $this->execInContainer($cid, ['cat', '/var/log/nginx/current']);
+        $this->assertStringContainsString($marker, $onDisk, 's6-log /var/log/nginx/current did not contain the request path');
+    }
 }
