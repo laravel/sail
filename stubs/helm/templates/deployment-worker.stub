@@ -14,6 +14,8 @@
     "affinity" (.Values.affinity | default dict)
     "tolerations" (.Values.tolerations | default list)
     "nodeSelector" (.Values.nodeSelector | default dict)
+    "logging" (.Values.logging | default dict)
+    "resources" (.Values.resources | default dict)
 }}
 {{- $ctx := merge (dict "tier" $tier "main" $main "Chart" .Chart "Release" .Release "Values" .Values "Capabilities" .Capabilities) $scoped }}
 {{- include "sail.laravelSpec" $ctx }}

@@ -164,6 +164,29 @@ class HelmTemplateTest extends TestCase
         );
     }
 
+    public function test_sail_log_env_vars_defaults(): void
+    {
+        $out = $this->renderChart();
+
+        $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_MODE\s*\n\s*value:\s*"both"/', $out),
+            'SAIL_LOG_MODE=both must appear in both web and worker Deployments');
+        $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_MAX_ARCHIVES\s*\n\s*value:\s*"20"/', $out),
+            'SAIL_LOG_MAX_ARCHIVES=20 must appear in both web and worker Deployments');
+        $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_ROTATE_SIZE\s*\n\s*value:\s*"10000000"/', $out),
+            'SAIL_LOG_ROTATE_SIZE=10000000 must appear in both web and worker Deployments');
+    }
+
+    public function test_sail_log_env_vars_override(): void
+    {
+        $out = $this->renderChart([
+            'logging' => ['mode' => 'stdout', 'maxArchives' => 5, 'maxFileSize' => 20000000],
+        ]);
+
+        $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_MODE\s*\n\s*value:\s*"stdout"/', $out));
+        $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_MAX_ARCHIVES\s*\n\s*value:\s*"5"/', $out));
+        $this->assertSame(2, preg_match_all('/name:\s*SAIL_LOG_ROTATE_SIZE\s*\n\s*value:\s*"20000000"/', $out));
+    }
+
     /**
      * Extract key-value pairs from the stringData block of a named Secret document
      * inside a multi-document rendered chart output.

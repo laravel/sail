@@ -303,6 +303,20 @@ app:
   cacheDriver: redis
   sessionDriver: redis
 
+# Logging pipeline behavior (web tier nginx/php-fpm logs).
+# Worker/scheduler pods bypass s6 entirely; their logs always go to stdout.
+logging:
+  # stdout - logs only to container stdout, kubelet rotates (~12Mi/pod).
+  # file   - logs only to /var/log/{nginx,php-fpm}/ rotated by s6-log.
+  # both   - logs to rotated files AND stdout tee (default).
+  mode: both
+  # s6-log -n argument: number of rotated archives retained per service.
+  maxArchives: 20
+  # s6-log -s argument: bytes per file before rotation. Raw integer (no suffix,
+  # no K/M/G). Large values are safe; the chart prevents Helm's default
+  # scientific-notation coercion.
+  maxFileSize: 10000000
+
 # Typesense search (deploys Typesense when enabled)
 typesense:
     enabled: false

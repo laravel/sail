@@ -164,9 +164,18 @@ spec:
           command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--no-interaction"]
             {{ end }}
           {{ end }}
-          {{- $hasInfraSecrets := or .main.database.secret .main.redis.secret .main.s3.secret }}
-          {{- if $hasInfraSecrets }}
           env:
+            {{- /* SAIL_LOG_* env vars are consumed by the web tier's s6-log oneshots.
+                   Injected unconditionally on worker pods too — harmless (worker
+                   bypasses s6 and never reads these), but keeps the env surface
+                   consistent across tiers. */}}
+            - name: SAIL_LOG_MODE
+              value: {{ .main.logging.mode | default "both" | quote }}
+            {{- /* int64|toString prevents Helm from rendering large integers in scientific notation (e.g. 1e+07). */}}
+            - name: SAIL_LOG_MAX_ARCHIVES
+              value: {{ .main.logging.maxArchives | default 20 | int64 | toString | quote }}
+            - name: SAIL_LOG_ROTATE_SIZE
+              value: {{ .main.logging.maxFileSize | default 10000000 | int64 | toString | quote }}
             {{- if .main.database.secret }}
             - name: DB_CONNECTION
               value: {{ .main.database.connection | default "mysql" }}
@@ -262,7 +271,6 @@ spec:
               value: {{ .main.s3.url }}
             {{- end }}
             {{- end }}
-          {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "sail.name" . }}-defaults
