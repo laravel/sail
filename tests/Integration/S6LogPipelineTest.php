@@ -205,4 +205,29 @@ class S6LogPipelineTest extends TestCase
         $this->assertStringNotContainsString('php-fpm.err.log', $listing);
         $this->assertStringNotContainsString('php-fpm.out.log', $listing);
     }
+
+    public function test_logger_tail_loop_is_absent(): void
+    {
+        $cid = $this->runContainer();
+        sleep(2);
+        $pids = $this->execInContainer(
+            $cid,
+            ['pgrep', '-f', 'find /var/log /var/www/storage/logs -type f -name']
+        );
+        $this->assertEmpty(trim($pids), 'logger tail-loop process is still running');
+    }
+
+    public function test_user_bundle_does_not_reference_logger(): void
+    {
+        $cid = $this->runContainer();
+        $p = new Process([
+            'docker', 'exec', $cid,
+            'test', '-e', '/etc/s6-overlay/s6-rc.d/user/contents.d/logger',
+        ]);
+        $p->run();
+        $this->assertFalse(
+            $p->isSuccessful(),
+            '/etc/s6-overlay/s6-rc.d/user/contents.d/logger still present'
+        );
+    }
 }
