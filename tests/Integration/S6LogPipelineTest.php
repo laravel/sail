@@ -313,6 +313,18 @@ class S6LogPipelineTest extends TestCase
         $this->assertStringNotContainsString('/var/log/php-fpm', $run);
     }
 
+    public function test_php_fpm_log_file_mode_args(): void
+    {
+        $cid = $this->runContainer(['SAIL_LOG_MODE' => 'file']);
+        sleep(3);
+        $run = $this->execInContainer($cid, ['cat', '/etc/s6-overlay/s6-rc.d/php-fpm-log/run']);
+        $this->assertMatchesRegularExpression(
+            '#s6-log\s+-b\s+n20\s+s10000000\s+T\s+!"gzip -nq9"\s+/var/log/php-fpm\s+p\[php-fpm\]$#m',
+            $run
+        );
+        $this->assertDoesNotMatchRegularExpression('/p\[php-fpm\]\s+1$/m', $run);
+    }
+
     public function test_invalid_mode_fails_fast(): void
     {
         $p = new Process([
