@@ -63,7 +63,7 @@ RUN apt-get update && apt-get upgrade -y \
     && npm install -g npm pnpm bun corepack \
     && corepack enable \
     && corepack prepare yarn@stable --activate \
-    && npx playwright install-deps \
+    && npx -y playwright install-deps \
     && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/keyrings/pgdg.gpg > /dev/null \
     && echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt noble-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
