@@ -6,6 +6,7 @@ ARG WWWGROUP
 ARG NODE_VERSION=24
 ARG MYSQL_CLIENT="mysql-client"
 ARG POSTGRES_VERSION=18
+ARG PHP_EXTENSIONS=""
 
 WORKDIR /var/www/html
 
@@ -75,6 +76,14 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN if [ -n "$PHP_EXTENSIONS" ]; then \
+    apt-get update \
+    && apt-get install -y $(for ext in $PHP_EXTENSIONS; do echo "php8.0-$ext"; done) \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+fi
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
