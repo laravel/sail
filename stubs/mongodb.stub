@@ -5,6 +5,7 @@ mongodb:
         - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-}
     volumes:
         - 'sail-mongodb:/data/db'
+        - 'sail-mongodb-config:/data/configdb'
     ports:
         - '${FORWARD_MONGODB_PORT:-27017}:27017'
     networks:
