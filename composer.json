@@ -33,6 +33,11 @@
             "Laravel\\Sail\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Laravel\\Sail\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
