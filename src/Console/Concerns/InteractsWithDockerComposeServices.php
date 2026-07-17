@@ -251,7 +251,7 @@ trait InteractsWithDockerComposeServices
 
         $phpunit = preg_replace('/^.*DB_CONNECTION.*\n/m', '', $phpunit);
         $phpunit = preg_replace(
-            '/(<!--\s*)?<env\s+name="DB_DATABASE"\s+value=":memory:"\s*\/>(\s*-->)?/',
+            '/(<!--[ \t]*)?<env[ \t]+name="DB_DATABASE"[ \t]+value=":memory:"[ \t]*\/>(?(1)[ \t]*-->)/',
             '<env name="DB_DATABASE" value="testing"/>',
             $phpunit
         );
