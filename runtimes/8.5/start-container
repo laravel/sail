@@ -9,6 +9,10 @@ if [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail
 fi
 
+if [ ! -z "$APP_USER" ] && ! id "$APP_USER" > /dev/null 2>&1; then
+    useradd -ms /bin/bash --no-user-group -g sail "$APP_USER"
+fi
+
 if [ ! -d /.composer ]; then
     mkdir /.composer
 fi
