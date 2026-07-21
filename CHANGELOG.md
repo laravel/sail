@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.63.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.64.0...1.x)
+
+## [v1.64.0](https://github.com/laravel/sail/compare/v1.63.0...v1.64.0) - 2026-07-17
+
+* Bump actions/checkout from 6.0.3 to 7.0.0 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/sail/pull/881
+* [1.x] Fix MongoDB failing to restart by persisting the configdb volume by [@lazerg](https://github.com/lazerg) in https://github.com/laravel/sail/pull/883
+* Make phpunit.xml DB_DATABASE replacement whitespace-tolerant by [@d-takeuchi](https://github.com/d-takeuchi) in https://github.com/laravel/sail/pull/885
 
 ## [v1.63.0](https://github.com/laravel/sail/compare/v1.62.0...v1.63.0) - 2026-06-18
 
