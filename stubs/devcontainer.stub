@@ -9,6 +9,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+                // "mhutchie.git-graph",
+                // "EditorConfig.EditorConfig",
+                // "pflannery.vscode-versionlens",
 				// "mikestead.dotenv",
 				// "amiralizadeh9480.laravel-extra-intellisense",
 				// "ryannaddy.laravel-artisan",
