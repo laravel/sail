@@ -194,8 +194,9 @@ trait InteractsWithDockerComposeServices
 
         if (in_array('meilisearch', $services)) {
             $environment .= "\nSCOUT_DRIVER=meilisearch";
-            $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700\n";
-            $environment .= "\nMEILISEARCH_NO_ANALYTICS=false\n";
+            $environment .= "\nMEILISEARCH_HOST=http://meilisearch:7700";
+            $environment .= "\nMEILISEARCH_NO_ANALYTICS=false";
+            $environment .= "\nMEILISEARCH_UPGRADE_DB=true\n";
         }
 
         if (in_array('typesense', $services)) {
