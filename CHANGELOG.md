@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.64.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.65.0...1.x)
+
+## [v1.65.0](https://github.com/laravel/sail/compare/v1.64.0...v1.65.0) - 2026-08-03
+
+* Bump actions/checkout from 7.0.0 to 7.0.1 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/sail/pull/891
+* Enable dumpless upgrades for Meilisearch by [@CasEbb](https://github.com/CasEbb) in https://github.com/laravel/sail/pull/892
+* Fix background scheduled commands when using Sail by [@drewmt](https://github.com/drewmt) in https://github.com/laravel/sail/pull/894
 
 ## [v1.64.0](https://github.com/laravel/sail/compare/v1.63.0...v1.64.0) - 2026-07-17
 
