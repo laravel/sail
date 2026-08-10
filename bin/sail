@@ -56,6 +56,10 @@ function display_help {
     echo "  ${GREEN}sail composer ...${NC}                       Run a Composer command"
     echo "  ${GREEN}sail composer require laravel/sanctum${NC}"
     echo
+    echo "${YELLOW}CPX Commands:${NC}"
+    echo "  ${GREEN}sail cpx ...${NC}                       Run a CPX command (requires PHP 8.2+)"
+    echo "  ${GREEN}sail cpx php-cs-fixer fix ./src${NC}"
+    echo
     echo "${YELLOW}Node Commands:${NC}"
     echo "  ${GREEN}sail node ...${NC}         Run a Node command"
     echo "  ${GREEN}sail node --version${NC}"
@@ -309,6 +313,34 @@ elif [ "$1" == "composer" ]; then
         [ ! -t 0 ] && ARGS+=(-T)
         forward_agent_env
         ARGS+=("$APP_SERVICE" "composer")
+    else
+        sail_is_not_running
+    fi
+
+# Proxy CPX commands to the "cpx" binary on the application container...
+elif [ "$1" == "cpx" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        # Determine the PHP version running in the container...
+        if ! PHP_VERSION=$("${COMPOSE_CMD[@]}" exec -u "$APP_USER" -T "$APP_SERVICE" php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;'); then
+            sail_is_not_running
+        fi
+
+        PHP_MAJOR="${PHP_VERSION%%.*}"
+        PHP_MINOR="${PHP_VERSION#*.}"
+
+        # Ensure cpx is supported on the current PHP version (requires PHP 8.2+)...
+        if [ "$PHP_MAJOR" -lt 8 ] || { [ "$PHP_MAJOR" -eq 8 ] && [ "$PHP_MINOR" -lt 2 ]; }; then
+            echo "${BOLD}cpx is not supported on PHP ${PHP_VERSION}. cpx requires PHP 8.2 or higher.${NC}" >&2
+
+            exit 1
+        fi
+
+        ARGS+=(exec -u "$APP_USER")
+        [ ! -t 0 ] && ARGS+=(-T)
+        forward_agent_env
+        ARGS+=("$APP_SERVICE" "cpx")
     else
         sail_is_not_running
     fi
