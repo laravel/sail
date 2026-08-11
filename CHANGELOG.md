@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.65.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.66.0...1.x)
+
+## [v1.66.0](https://github.com/laravel/sail/compare/v1.65.0...v1.66.0) - 2026-08-10
+
+* Add CPX command support by [@wilsenhc](https://github.com/wilsenhc) in https://github.com/laravel/sail/pull/895
 
 ## [v1.65.0](https://github.com/laravel/sail/compare/v1.64.0...v1.65.0) - 2026-08-03
 
