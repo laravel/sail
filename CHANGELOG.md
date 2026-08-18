@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.66.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.67.0...1.x)
+
+## [v1.67.0](https://github.com/laravel/sail/compare/v1.66.0...v1.67.0) - 2026-08-12
+
+* [1.x] Move from Launchpad PPA to packages.sury.org by [@CasEbb](https://github.com/CasEbb) in https://github.com/laravel/sail/pull/896
 
 ## [v1.66.0](https://github.com/laravel/sail/compare/v1.65.0...v1.66.0) - 2026-08-10
 
