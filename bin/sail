@@ -721,5 +721,10 @@ elif [ "$1" == "open" ]; then
     fi
 fi
 
+# Forward the host terminal's color capability to container commands...
+if [ "${ARGS[0]:-}" == "exec" ] && [ -n "${COLORTERM:-}" ]; then
+    ARGS=(exec -e "COLORTERM=${COLORTERM}" "${ARGS[@]:1}")
+fi
+
 # Run Docker Compose with the defined arguments...
 "${COMPOSE_CMD[@]}" "${ARGS[@]}" "$@"
