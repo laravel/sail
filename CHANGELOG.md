@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.67.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.68.0...1.x)
+
+## [v1.68.0](https://github.com/laravel/sail/compare/v1.67.0...v1.68.0) - 2026-09-18
+
+* [1.x] Correctly pin NodeSource APT repo by [@CasEbb](https://github.com/CasEbb) in https://github.com/laravel/sail/pull/898
+* Forward COLORTERM to Sail container commands by [@thomasdail](https://github.com/thomasdail) in https://github.com/laravel/sail/pull/897
+* Remove the MinIO service stub by [@nbayramberdiyev](https://github.com/nbayramberdiyev) in https://github.com/laravel/sail/pull/899
+* Add the Mailtrap Local service as alternative to Mailpit by [@tsokolovs](https://github.com/tsokolovs) in https://github.com/laravel/sail/pull/900
 
 ## [v1.67.0](https://github.com/laravel/sail/compare/v1.66.0...v1.67.0) - 2026-08-12
 
