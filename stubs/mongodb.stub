@@ -10,11 +10,3 @@ mongodb:
         - '${FORWARD_MONGODB_PORT:-27017}:27017'
     networks:
         - sail
-    healthcheck:
-        test:
-            - CMD
-            - mongosh
-            - 'mongodb://localhost:27017/admin'
-            - '--eval=db.runCommand({ping:1})'
-        retries: 3
-        timeout: 5s
