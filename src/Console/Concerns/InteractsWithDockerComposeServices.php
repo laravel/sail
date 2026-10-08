@@ -113,11 +113,28 @@ trait InteractsWithDockerComposeServices
                 return ! array_key_exists($service, $compose['volumes'] ?? []);
             })->each(function ($service) use (&$compose) {
                 $compose['volumes']["sail-{$service}"] = ['driver' => 'local'];
-
-                if ($service === 'mongodb') {
-                    $compose['volumes']['sail-mongodb-config'] = ['driver' => 'local'];
-                }
             });
+
+        // The MongoDB service also persists the search index in a dedicated volume...
+        if (in_array('mongodb', $services)) {
+            if (! array_key_exists('sail-mongodb-config', $compose['volumes'] ?? [])) {
+                $compose['volumes']['sail-mongodb-config'] = ['driver' => 'local'];
+            }
+
+            // Existing services are not rebuilt from the stub, so mount the volume if it is missing...
+            if (isset($compose['services']['mongodb'])) {
+                $volumes = $compose['services']['mongodb']['volumes'] ?? [];
+
+                $isMounted = collect($volumes)->contains(function ($volume) {
+                    return is_string($volume) && str_starts_with($volume, 'sail-mongodb-config:');
+                });
+
+                if (! $isMounted) {
+                    $volumes[] = 'sail-mongodb-config:/data/configdb';
+                    $compose['services']['mongodb']['volumes'] = $volumes;
+                }
+            }
+        }
 
         // If the list of volumes is empty, we can remove it...
         if (empty($compose['volumes'])) {
