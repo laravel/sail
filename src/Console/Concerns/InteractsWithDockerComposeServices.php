@@ -187,6 +187,10 @@ trait InteractsWithDockerComposeServices
             }
 
             $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
+        } elseif (in_array('mongodb', $services)) {
+            if ($this->laravel->config->has('database.connections.mongodb')) {
+                $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mongodb', $environment);
+            }
         }
 
         $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
