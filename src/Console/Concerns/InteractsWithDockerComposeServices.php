@@ -282,9 +282,10 @@ trait InteractsWithDockerComposeServices
     /**
      * Configure PHPUnit to use the dedicated testing database.
      *
+     * @param  array  $services
      * @return void
      */
-    protected function configurePhpUnit()
+    protected function configurePhpUnit(array $services = [])
     {
         if (! file_exists($path = $this->laravel->basePath('phpunit.xml'))) {
             $path = $this->laravel->basePath('phpunit.xml.dist');
@@ -302,6 +303,17 @@ trait InteractsWithDockerComposeServices
             '<env name="DB_DATABASE" value="testing"/>',
             $phpunit
         );
+
+        // The MongoDB driver reads MONGODB_DATABASE
+        if (in_array('mongodb', $services)) {
+            $phpunit = preg_replace('/^.*<env[ \t]+name="MONGODB_DATABASE".*\n/m', '', $phpunit);
+
+            $phpunit = preg_replace(
+                '/^([ \t]*)<\/php>/m',
+                '        <env name="MONGODB_DATABASE" value="testing"/>'."\n".'$1</php>',
+                $phpunit
+            );
+        }
 
         file_put_contents($this->laravel->basePath('phpunit.xml'), $phpunit);
     }
