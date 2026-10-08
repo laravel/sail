@@ -188,7 +188,16 @@ trait InteractsWithDockerComposeServices
         }
 
         if (in_array('mongodb', $services)) {
-            $environment .= "\nMONGODB_URI=mongodb://mongodb:27017";
+            $username = $this->environmentValue($environment, 'MONGODB_USERNAME');
+            $password = $this->environmentValue($environment, 'MONGODB_PASSWORD');
+
+            // The MongoDB image enables authentication only when both credentials are provided
+            $credentials = ($username !== '' && $password !== '')
+                ? rawurlencode($username).':'.rawurlencode($password).'@'
+                : '';
+
+            $environment .= "\nMONGODB_URI=mongodb://{$credentials}mongodb:27017"
+                .($credentials === '' ? '' : '/?authSource=admin');
             $environment .= "\nMONGODB_DATABASE=laravel";
         }
 
@@ -235,6 +244,22 @@ trait InteractsWithDockerComposeServices
         $environment = str_replace('# PHP_CLI_SERVER_WORKERS=4', 'PHP_CLI_SERVER_WORKERS=4', $environment);
 
         file_put_contents($this->laravel->basePath('.env'), $environment);
+    }
+
+    /**
+     * Get the value of an environment variable from the ".env" file contents.
+     *
+     * @param  string  $environment
+     * @param  string  $key
+     * @return string
+     */
+    protected function environmentValue($environment, $key)
+    {
+        if (preg_match('/^'.preg_quote($key, '/').'=(.*)$/m', $environment, $matches)) {
+            return trim($matches[1], " \t\"'");
+        }
+
+        return '';
     }
 
     /**
