@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.68.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.69.0...1.x)
+
+## [v1.69.0](https://github.com/laravel/sail/compare/v1.68.0...v1.69.0) - 2026-10-08
+
+* Bump redhat-plumbers-in-action/differential-shellcheck from 5.5.6 to 5.5.7 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/sail/pull/901
+* Fix and improve the MongoDB service by [@GromNaN](https://github.com/GromNaN) in https://github.com/laravel/sail/pull/902
 
 ## [v1.68.0](https://github.com/laravel/sail/compare/v1.67.0...v1.68.0) - 2026-09-18
 
