@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.69.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.70.0...1.x)
+
+## [v1.70.0](https://github.com/laravel/sail/compare/v1.69.0...v1.70.0) - 2026-10-15
+
+### What's Changed
+
+* Remove security policy in favor of the org-wide default by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/sail/pull/903
+* Bump shivammathur/setup-php from 2.37.2 to 2.40.0 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/sail/pull/904
+
+**Full Changelog**: https://github.com/laravel/sail/compare/v1.69.0...v1.70.0
 
 ## [v1.69.0](https://github.com/laravel/sail/compare/v1.68.0...v1.69.0) - 2026-10-08
 
