@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/sail/compare/v1.70.0...1.x)
+## [Unreleased](https://github.com/laravel/sail/compare/v1.71.0...1.x)
+
+## [v1.71.0](https://github.com/laravel/sail/compare/v1.70.0...v1.71.0) - 2026-11-11
+
+### What's Changed
+
+* Dependency floor bump by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/sail/pull/906
+
+**Full Changelog**: https://github.com/laravel/sail/compare/v1.70.0...v1.71.0
 
 ## [v1.70.0](https://github.com/laravel/sail/compare/v1.69.0...v1.70.0) - 2026-10-15
 
